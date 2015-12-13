@@ -2,8 +2,6 @@ import curses
 import os
 import platform
 
-import exit_item
-
 
 class CursesMenu():
     def __init__(self, title, subtitle=None, items=list(), exit=True, parent=None):
@@ -30,7 +28,7 @@ class CursesMenu():
         self.options = items
         self.parent = parent
 
-        self.exit_item = exit_item.ExitItem("Exit", self)
+        self.exit_item = ExitItem("Exit", self)
 
         self.current_selected = 0
 
@@ -47,22 +45,14 @@ class CursesMenu():
             if self.options[-1] is self.exit_item:
                 del self.options[-1]
         self.display()
+        if self.options[-1] is self.exit_item:
+            del self.options[-1]
 
     def display(self):
-        oldpos = None  # used to prevent the s lf.screen being redrawn every time
-        x = None  # control for while loop, let's you scroll through options until return key is pressed then returns pos to program
-
-
         self.draw()
         # Loop until return key is pressed
         while self.get_user_input() != ord('\n'):
-            if self.current_selected != oldpos:
-                oldpos = self.current_selected
-                self.draw()
-
-
-        # return index of the selected item
-        return self.current_selected
+            self.draw()
 
     def draw(self):
         self.screen.border(0)
@@ -85,12 +75,12 @@ class CursesMenu():
         # What is user input?
         if ord('1') <= x <= ord(str(len(self.options) + 1)):
             self.current_selected = x - ord('0') - 1  # convert keypress back to a number, then subtract 1 to get index
-        elif x == 258:  # down arrow
+        elif x == curses.KEY_DOWN:
             if self.current_selected < len(self.options) - 1:
                 self.current_selected += 1
             else:
                 self.current_selected = 0
-        elif x == 259:  # up arrow
+        elif x == curses.KEY_UP:  # up arrow
             if self.current_selected > 0:
                 self.current_selected += -1
             else:
@@ -115,11 +105,17 @@ class MenuItem:
         pass
 
 
+class ExitItem(MenuItem):
+    def selected(self):
+        self.menu.exit()
+
+
 def clear_terminal():
     if platform.system().lower() == "windows":
         os.system('cls')
     else:
         os.system('reset')
+
 
 def main():
     menu = CursesMenu("Test Menu", "Subtitle", [MenuItem("hello"), MenuItem("hello2")])

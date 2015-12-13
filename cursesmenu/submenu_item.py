@@ -2,7 +2,7 @@ from curses_menu import MenuItem, CursesMenu
 
 
 class SubmenuItem(MenuItem):
-    def __init__(self, name, submenu, menu=None):
+    def __init__(self, name, submenu, menu):
         """
         :type submenu: CursesMenu
         """

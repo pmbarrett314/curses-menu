@@ -4,7 +4,7 @@ import platform
 
 
 class CursesMenu():
-    def __init__(self, title, subtitle=None, items=list(), exit=True, parent=None):
+    def __init__(self, title, subtitle=None, items=list(), exit_option=True, parent=None):
 
         """
         :type parent: CursesMenu
@@ -12,7 +12,7 @@ class CursesMenu():
         :param subtitle:
         :param items:
         :type items: list[menu_item.MenuItem]
-        :param exit:
+        :param exit_option:
         """
         self.screen = curses.initscr()
         curses.start_color()
@@ -25,8 +25,8 @@ class CursesMenu():
 
         self.title = title
         self.subtitle = subtitle
-        self.show_exit_option = exit
-        self.options = items
+        self.show_exit_option = exit_option
+        self.items = items
         self.parent = parent
 
         if parent is None:
@@ -34,31 +34,37 @@ class CursesMenu():
         else:
             self.exit_item = ExitItem("Return to %s menu" % parent.title, self)
 
-        self.current_hovered = 0
+        self.current_option = 0
         self.selected_index = -1
         self.selected_item = None
 
         self.should_exit = False
 
-    def addItem(self, item):
-        self.options.append(item)
+    def add_item(self, item):
+        self.remove_exit()
+        self.items.append(item)
+        self.items[-1].menu = self
 
-    def show(self, exit=None):
-        if exit is None:
-            exit = self.show_exit_option
+    def add_exit(self):
+        if self.items[-1] is not self.exit_item:
+            self.items.append(self.exit_item)
 
-        if exit:
-            if self.options[-1] is not self.exit_item:
-                self.options.append(self.exit_item)
+    def remove_exit(self):
+        if self.items[-1] is self.exit_item:
+            del self.items[-1]
+
+    def show(self, exit_option=None):
+        if exit_option is None:
+            exit_option = self.show_exit_option
+
+        if exit_option:
+            self.add_exit()
         else:
-            if self.options[-1] is self.exit_item:
-                del self.options[-1]
-
+            self.remove_exit()
         while self.selected_item is not self.exit_item and not self.should_exit:
             self.display()
 
-        if self.options[-1] is self.exit_item:
-            del self.options[-1]
+        self.remove_exit()
 
         curses.endwin()
         clear_terminal()
@@ -67,8 +73,8 @@ class CursesMenu():
         self.draw()
         while self.get_user_input() != ord('\n'):
             self.draw()
-        self.selected_index = self.current_hovered
-        self.selected_item = self.options[self.selected_index]
+        self.selected_index = self.current_option
+        self.selected_item = self.items[self.selected_index]
 
     def draw(self):
         self.screen.border(0)
@@ -76,8 +82,8 @@ class CursesMenu():
         if self.subtitle is not None:
             self.screen.addstr(4, 2, self.subtitle, curses.A_BOLD)
 
-        for index, item in enumerate(self.options):
-            if self.current_hovered == index:
+        for index, item in enumerate(self.items):
+            if self.current_option == index:
                 textstyle = self.highlight
             else:
                 textstyle = self.normal
@@ -87,20 +93,20 @@ class CursesMenu():
     def get_user_input(self):
         x = self.screen.getch()
 
-        if ord('1') <= x <= ord(str(len(self.options) + 1)):
-            self.current_hovered = x - ord('0') - 1
+        if ord('1') <= x <= ord(str(len(self.items) + 1)):
+            self.current_option = x - ord('0') - 1
 
         elif x == curses.KEY_DOWN:
-            if self.current_hovered < len(self.options) - 1:
-                self.current_hovered += 1
+            if self.current_option < len(self.items) - 1:
+                self.current_option += 1
             else:
-                self.current_hovered = 0
+                self.current_option = 0
 
         elif x == curses.KEY_UP:
-            if self.current_hovered > 0:
-                self.current_hovered += -1
+            if self.current_option > 0:
+                self.current_option += -1
             else:
-                self.current_hovered = len(self.options) - 1
+                self.current_option = len(self.items) - 1
 
         return x
 
@@ -113,7 +119,7 @@ class CursesMenu():
 
 
 class MenuItem:
-    def __init__(self, name, menu=None):
+    def __init__(self, name, menu):
         """
         :type name: str
         :type menu: curses_menu.CursesMenu

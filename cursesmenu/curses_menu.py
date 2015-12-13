@@ -125,52 +125,9 @@ class MenuItem:
         pass
 
 
-class SubmenuItem(MenuItem):
-    def __init__(self, name, submenu, menu=None):
-        """
-        :type submenu: CursesMenu
-        """
-        super(SubmenuItem, self).__init__(name, menu)
-        self.submenu = submenu
-        self.submenu.parent = self.menu
-
-    def action(self):
-        self.menu.clear_screen()
-        self.submenu.show()
-        self.menu.clear_screen()
-
-
 class ExitItem(MenuItem):
     def action(self):
         self.menu.exit()
-
-
-class FunctionItem(MenuItem):
-    def __init__(self, name, function, menu=None):
-        super(FunctionItem, self).__init__(name, menu)
-        self.function = function
-
-    def action(self):
-        curses.def_prog_mode()
-        clear_terminal()
-        self.menu.clear_screen()
-        self.function()
-        self.menu.clear_screen()
-        reset_prog_mode()
-
-
-class CommandItem(MenuItem):
-    def __init__(self, name, command, menu=None):
-        super(CommandItem, self).__init__(name, menu)
-        self.command = command
-
-    def action(self):
-        curses.def_prog_mode()
-        clear_terminal()
-        self.menu.clear_screen()
-        os.system(self.command)
-        self.menu.clear_screen()
-        reset_prog_mode()
 
 
 def clear_terminal():

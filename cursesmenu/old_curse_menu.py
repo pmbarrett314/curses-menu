@@ -1,21 +1,4 @@
 
-def runMenu(rootMenu, functions):
-    # Main program
-    number = processMenu(screen, rootMenu, functions)
-
-    return number
-
-
-def display_selection_menu(title, options):
-    menu_data = {
-        'title': title, 'type': menuItem.MENU, 'subtitle': "Please select an option...",
-        'options': []
-    }
-    for item in options:
-        menu_data["options"].append({'title': item, 'type': menuItem.NUMBER})
-    return runMenu(menu_data, None)
-
-
 def main():
     menu_data = {
         'title': "Program Launcher", 'type': menuItem.MENU, 'subtitle': "Please select an option...",
@@ -52,8 +35,5 @@ def main():
 
         ]
     }
-    runMenu(menu_data, {})
 
 
-if __name__ == "__main__":
-    main()

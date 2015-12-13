@@ -40,6 +40,9 @@ class CursesMenu():
 
         self.should_exit = False
 
+    def addItem(self, item):
+        self.options.append(item)
+
     def show(self, exit=None):
         if exit is None:
             exit = self.show_exit_option

@@ -7,6 +7,7 @@ class CursesMenu():
     def __init__(self, title, subtitle=None, items=list(), exit=True, parent=None):
 
         """
+        :type parent: CursesMenu
         :param title: str
         :param subtitle:
         :param items:
@@ -28,7 +29,10 @@ class CursesMenu():
         self.options = items
         self.parent = parent
 
-        self.exit_item = ExitItem("Exit", self)
+        if parent is None:
+            self.exit_item = ExitItem("Exit", self)
+        else:
+            self.exit_item = ExitItem("Return to %s menu" % parent.title, self)
 
         self.current_selected = 0
 
@@ -56,40 +60,44 @@ class CursesMenu():
 
     def draw(self):
         self.screen.border(0)
-        self.screen.addstr(2, 2, self.title, curses.A_STANDOUT)  # Title for this menuData
+        self.screen.addstr(2, 2, self.title, curses.A_STANDOUT)
         if self.subtitle is not None:
-            self.screen.addstr(4, 2, self.subtitle, curses.A_BOLD)  # Subtitle for this menuData
+            self.screen.addstr(4, 2, self.subtitle, curses.A_BOLD)
 
-        # Display all the menuData items, showing the 'pos' item highlighted
-        for index in range(len(self.options)):
-            textstyle = self.normal
+        for index, item in enumerate(self.options):
             if self.current_selected == index:
                 textstyle = self.highlight
-            self.screen.addstr(5 + index, 4, "%d - %s" % (index + 1, self.options[index].name), textstyle)
+            else:
+                textstyle = self.normal
+            self.screen.addstr(5 + index, 4, "%d - %s" % (index + 1, item.name), textstyle)
         self.screen.refresh()
-        # finished updating self.screen
 
     def get_user_input(self):
-        x = self.screen.getch()  # Gets user input
+        x = self.screen.getch()
 
-        # What is user input?
         if ord('1') <= x <= ord(str(len(self.options) + 1)):
-            self.current_selected = x - ord('0') - 1  # convert keypress back to a number, then subtract 1 to get index
+            self.current_selected = x - ord('0') - 1
+
         elif x == curses.KEY_DOWN:
             if self.current_selected < len(self.options) - 1:
                 self.current_selected += 1
             else:
                 self.current_selected = 0
-        elif x == curses.KEY_UP:  # up arrow
+
+        elif x == curses.KEY_UP:
             if self.current_selected > 0:
                 self.current_selected += -1
             else:
                 self.current_selected = len(self.options) - 1
+
         return x
 
     def exit(self):
         clear_terminal()
         self.should_exit = True
+
+    def clear_screen(self):
+        self.screen.clear()
 
 
 class MenuItem:
@@ -104,9 +112,27 @@ class MenuItem:
     def show(self):
         pass
 
+    def action(self):
+        pass
+
+
+class SubmenuItem(MenuItem):
+    def __init__(self, name, submenu, menu=None):
+        """
+        :type submenu: CursesMenu
+        """
+        super(SubmenuItem, self).__init__(name, menu)
+        self.submenu = submenu
+        self.submenu.parent = self.menu
+
+    def action(self):
+        self.menu.clear_screen()
+        self.submenu.show()
+        self.menu.clear_screen()
+
 
 class ExitItem(MenuItem):
-    def selected(self):
+    def action(self):
         self.menu.exit()
 
 

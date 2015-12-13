@@ -34,7 +34,9 @@ class CursesMenu():
         else:
             self.exit_item = ExitItem("Return to %s menu" % parent.title, self)
 
-        self.current_selected = 0
+        self.current_hovered = 0
+        self.selected_index = -1
+        self.selected_item = None
 
         self.should_exit = False
 
@@ -48,15 +50,22 @@ class CursesMenu():
         else:
             if self.options[-1] is self.exit_item:
                 del self.options[-1]
-        self.display()
+
+        while self.selected_item is not self.exit_item and not self.should_exit:
+            self.display()
+
         if self.options[-1] is self.exit_item:
             del self.options[-1]
 
+        curses.endwin()
+        clear_terminal()
+
     def display(self):
         self.draw()
-        # Loop until return key is pressed
         while self.get_user_input() != ord('\n'):
             self.draw()
+        self.selected_index = self.current_hovered
+        self.selected_item = self.options[self.selected_index]
 
     def draw(self):
         self.screen.border(0)
@@ -65,7 +74,7 @@ class CursesMenu():
             self.screen.addstr(4, 2, self.subtitle, curses.A_BOLD)
 
         for index, item in enumerate(self.options):
-            if self.current_selected == index:
+            if self.current_hovered == index:
                 textstyle = self.highlight
             else:
                 textstyle = self.normal
@@ -76,19 +85,19 @@ class CursesMenu():
         x = self.screen.getch()
 
         if ord('1') <= x <= ord(str(len(self.options) + 1)):
-            self.current_selected = x - ord('0') - 1
+            self.current_hovered = x - ord('0') - 1
 
         elif x == curses.KEY_DOWN:
-            if self.current_selected < len(self.options) - 1:
-                self.current_selected += 1
+            if self.current_hovered < len(self.options) - 1:
+                self.current_hovered += 1
             else:
-                self.current_selected = 0
+                self.current_hovered = 0
 
         elif x == curses.KEY_UP:
-            if self.current_selected > 0:
-                self.current_selected += -1
+            if self.current_hovered > 0:
+                self.current_hovered += -1
             else:
-                self.current_selected = len(self.options) - 1
+                self.current_hovered = len(self.options) - 1
 
         return x
 

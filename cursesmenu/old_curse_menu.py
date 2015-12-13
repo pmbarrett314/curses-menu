@@ -1,54 +1,8 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
-import curses
-import os  # curses is the interface for capturing key presses on the menuData, os launches the files
-import platform
-from enum import Enum
-
-
-class menuItem(Enum):
-    EXITMENU = "exitmenu"
-    FUNCTIONMENU = "functionmenu"
-    NUMBER = "number"
-
-
-# This function calls showmenu and then acts on the selected item
-
-
-def processMenu(screen, menu, functions, parent=None):
-    optioncount = len(menu['options'])
-    exitmenu = False
-
-    getin = None
-
-    while not exitmenu:  # Loop until the user exits the menuData
-        getin = displayMenu(screen, menu, parent)
-        if getin == optioncount:
-            exitmenu = True
-
-        elif menu['options'][getin]['type'] == menuItem.FUNCTIONMENU:
-            curses.def_prog_mode()
-            # clear_screen()
-            screen.clear()
-            functions[menu['options'][getin]['function']]()
-            screen.clear()  # clears previous screen on key press and updates display based on pos
-            curses.reset_prog_mode()  # reset to 'current' curses environment
-            curses.curs_set(1)  # reset doesn't do this right
-            curses.curs_set(0)
-            screen.clear()  # clears previous screen on key press and updates display based on pos
-            processMenu(screen, menu['options'][getin], functions, menu)  # display the submenu
-            screen.clear()  # clears previous screen on key press and updates display based on pos
-        elif menu['options'][getin]['type'] == menuItem.EXITMENU or menu['options'][getin]['type'] == menuItem.NUMBER:
-            exitmenu = True
-    return getin
-
 
 def runMenu(rootMenu, functions):
     # Main program
     number = processMenu(screen, rootMenu, functions)
-    curses.endwin()  # VITAL! This closes out the menuData system and returns you to the bash prompt
-    clear_screen()
+
     return number
 
 

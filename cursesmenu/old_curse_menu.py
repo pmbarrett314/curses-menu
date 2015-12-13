@@ -8,9 +8,7 @@ from enum import Enum
 
 
 class menuItem(Enum):
-    COMMAND = "command"
     EXITMENU = "exitmenu"
-    FUNCTION = "function"
     FUNCTIONMENU = "functionmenu"
     NUMBER = "number"
 
@@ -28,24 +26,7 @@ def processMenu(screen, menu, functions, parent=None):
         getin = displayMenu(screen, menu, parent)
         if getin == optioncount:
             exitmenu = True
-        elif menu['options'][getin]['type'] == menuItem.FUNCTION:
-            curses.def_prog_mode()
-            # clear_screen()
-            screen.clear()
-            functions[menu['options'][getin]['function']]()
-            screen.clear()  # clears previous screen on key press and updates display based on pos
-            curses.reset_prog_mode()  # reset to 'current' curses environment
-            curses.curs_set(1)  # reset doesn't do this right
-            curses.curs_set(0)
-        elif menu['options'][getin]['type'] == menuItem.COMMAND:
-            curses.def_prog_mode()  # save curent curses environment
-            # clear_screen()
-            screen.clear()  # clears previous screen
-            os.system(menu['options'][getin]['command'])  # run the command
-            screen.clear()  # clears previous screen on key press and updates display based on pos
-            curses.reset_prog_mode()  # reset to 'current' curses environment
-            curses.curs_set(1)  # reset doesn't do this right
-            curses.curs_set(0)
+
         elif menu['options'][getin]['type'] == menuItem.FUNCTIONMENU:
             curses.def_prog_mode()
             # clear_screen()

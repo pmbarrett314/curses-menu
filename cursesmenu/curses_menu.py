@@ -136,11 +136,45 @@ class ExitItem(MenuItem):
         self.menu.exit()
 
 
+class FunctionItem(MenuItem):
+    def __init__(self, name, function, menu=None):
+        super(FunctionItem, self).__init__(name, menu)
+        self.function = function
+
+    def action(self):
+        curses.def_prog_mode()
+        clear_terminal()
+        self.menu.clear_screen()
+        self.function()
+        self.menu.clear_screen()
+        reset_prog_mode()
+
+
+class CommandItem(MenuItem):
+    def __init__(self, name, command, menu=None):
+        super(CommandItem, self).__init__(name, menu)
+        self.command = command
+
+    def action(self):
+        curses.def_prog_mode()
+        clear_terminal()
+        self.menu.clear_screen()
+        os.system(self.command)
+        self.menu.clear_screen()
+        reset_prog_mode()
+
+
 def clear_terminal():
     if platform.system().lower() == "windows":
         os.system('cls')
     else:
         os.system('reset')
+
+
+def reset_prog_mode():
+    curses.reset_prog_mode()  # reset to 'current' curses environment
+    curses.curs_set(1)  # reset doesn't do this right
+    curses.curs_set(0)
 
 
 def main():

@@ -2,8 +2,12 @@ from curses_menu import CursesMenu, MenuItem
 
 
 class SelectionMenu(CursesMenu):
-    def __init__(self, title, subtitle=None, items=list(), exit_option=True, parent=None):
-        super().__init__(title, subtitle, list(), exit_option, parent)
+    def __init__(self, title, subtitle=None, items=None, exit_option=True, parent=None):
+        if items is None:
+            self.items = list()
+        else:
+            self.items = items
+        super().__init__(title, subtitle, items, exit_option, parent)
         for item in items():
             self.add_item(SelectionItem(item, self))
 

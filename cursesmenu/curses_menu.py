@@ -4,8 +4,7 @@ import platform
 
 
 class CursesMenu():
-    def __init__(self, title, subtitle=None, items=list(), exit_option=True, parent=None):
-
+    def __init__(self, title, subtitle=None, items=None, exit_option=True, parent=None):
         """
         :type parent: CursesMenu
         :param title: str
@@ -26,7 +25,10 @@ class CursesMenu():
         self.title = title
         self.subtitle = subtitle
         self.show_exit_option = exit_option
-        self.items = items
+        if items is None:
+            self.items = list()
+        else:
+            self.items = items
         self.parent = parent
 
         if parent is None:
@@ -43,15 +45,16 @@ class CursesMenu():
     def add_item(self, item):
         self.remove_exit()
         self.items.append(item)
-        self.items[-1].menu = self
 
     def add_exit(self):
-        if self.items[-1] is not self.exit_item:
-            self.items.append(self.exit_item)
+        if self.items:
+            if self.items[-1] is not self.exit_item:
+                self.items.append(self.exit_item)
 
     def remove_exit(self):
-        if self.items[-1] is self.exit_item:
-            del self.items[-1]
+        if self.items:
+            if self.items[-1] is self.exit_item:
+                del self.items[-1]
 
     def show(self, exit_option=None):
         if exit_option is None:
@@ -75,6 +78,7 @@ class CursesMenu():
             self.draw()
         self.selected_index = self.current_option
         self.selected_item = self.items[self.selected_index]
+        self.selected_item.action()
 
     def draw(self):
         self.screen.border(0)

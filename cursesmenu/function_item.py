@@ -2,7 +2,7 @@ from external_item import ExternalItem
 
 
 class FunctionItem(ExternalItem):
-    def __init__(self, name, function, menu=None):
+    def __init__(self, name, function, menu):
         super(FunctionItem, self).__init__(name, menu)
         self.function = function
 

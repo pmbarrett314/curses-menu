@@ -64,13 +64,15 @@ class CursesMenu():
             self.add_exit()
         else:
             self.remove_exit()
+        return_value = None
         while self.selected_item is not self.exit_item and not self.should_exit:
-            self.display()
+            return_value = self.display()
 
         self.remove_exit()
 
         curses.endwin()
         clear_terminal()
+        return return_value
 
     def display(self):
         self.draw()
@@ -78,7 +80,7 @@ class CursesMenu():
             self.draw()
         self.selected_index = self.current_option
         self.selected_item = self.items[self.selected_index]
-        self.selected_item.action()
+        return self.selected_item.action()
 
     def draw(self):
         self.screen.border(0)

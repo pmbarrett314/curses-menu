@@ -8,9 +8,10 @@ class ExternalItem(MenuItem):
         curses.def_prog_mode()
         clear_terminal()
         self.menu.clear_screen()
-        self.external_action()
+        return_value = self.external_action()
         self.menu.clear_screen()
         reset_prog_mode()
+        return return_value
 
     def external_action(self):
         pass

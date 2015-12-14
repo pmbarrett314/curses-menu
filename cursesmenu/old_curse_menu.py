@@ -1,39 +1,38 @@
+from enum import Enum
 
-def main():
-    menu_data = {
-        'title': "Program Launcher", 'type': menuItem.MENU, 'subtitle': "Please select an option...",
-        'items': [
-            {'title': "XBMC", 'type': menuItem.COMMAND, 'command': 'xbmc'},
-            {'title': "Emulation Station - Hit F4 to return to menuData, Esc to exit game", 'type': menuItem.COMMAND,
-             'command': 'emulationstation'},
-            {'title': "Ur-Quan Masters", 'type': menuItem.COMMAND, 'command': 'uqm'},
-            {'title': "Dosbox Games", 'type': menuItem.MENU, 'subtitle': "Please select an option...",
-             'items': [
-                 {'title': "Midnight Rescue", 'type': menuItem.COMMAND,
-                  'command': 'dosbox /media/samba/Apps/dosbox/doswin/games/SSR/SSR.EXE -exit'},
-                 {'title': "Outnumbered", 'type': menuItem.COMMAND,
-                  'command': 'dosbox /media/samba/Apps/dosbox/doswin/games/SSO/SSO.EXE -exit'},
-                 {'title': "Treasure Mountain", 'type': menuItem.COMMAND,
-                  'command': 'dosbox /media/samba/Apps/dosbox/doswin/games/SST/SST.EXE -exit'},
-             ]
-             },
-            {'title': "Pianobar", 'type': menuItem.COMMAND, 'command': 'clear && pianobar'},
-            {'title': "Windows 3.1", 'type': menuItem.COMMAND,
-             'command': 'dosbox /media/samba/Apps/dosbox/doswin/WINDOWS/WIN.COM -conf /home/pi/scripts/dosbox2.conf -exit'},
-            {'title': "Reboot", 'type': menuItem.MENU, 'subtitle': "Select Yes to Reboot",
-             'items': [
-                 {'title': "NO", 'type': menuItem.EXITMENU, },
-                 {'title': "", 'type': menuItem.COMMAND, 'command': ''},
-                 {'title': "", 'type': menuItem.COMMAND, 'command': ''},
-                 {'title': "", 'type': menuItem.COMMAND, 'command': ''},
-                 {'title': "YES", 'type': menuItem.COMMAND, 'command': 'sudo shutdown -r -time now'},
-                 {'title': "", 'type': menuItem.COMMAND, 'command': ''},
-                 {'title': "", 'type': menuItem.COMMAND, 'command': ''},
-                 {'title': "", 'type': menuItem.COMMAND, 'command': ''},
-             ]
-             },
-
-        ]
-    }
+from command_item import CommandItem
+from curses_menu import CursesMenu, ExitItem
+from function_item import FunctionItem
+from selection_menu import SelectionItem
+from submenu_item import SubmenuItem
 
 
+class menuItem(Enum):
+    MENU = "menu"
+    COMMAND = "command"
+    EXITMENU = "exitmenu"
+    FUNCTION = "function"
+    NUMBER = "number"
+
+
+def parse_old_menu(menu_data):
+    menu_title = menu_data['title']
+    menu = CursesMenu(menu_title)
+    for item in menu_data["options"]:
+        item_type = item["type"]
+        item_title = item["title"]
+        if item_type == menuItem.COMMAND:
+            item_command = item["command"]
+            menu.add_item(CommandItem(item_title, item_command, menu))
+        elif item_type == menuItem.FUNCTION:
+            item_function = item["function"]
+            menu.add_item(FunctionItem(item_title, item_function, menu))
+        elif item_type == menuItem.EXITMENU:
+            menu.add_item(ExitItem(item_title, menu))
+        elif item_type == menuItem.NUMBER:
+            menu.add_item(SelectionItem(item_title, menu))
+        elif item_type == menuItem.MENU:
+            new_menu = parse_old_menu(item)
+            menu.add_item(SubmenuItem(item_title, new_menu, menu))
+
+    return menu

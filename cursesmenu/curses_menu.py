@@ -97,10 +97,10 @@ class CursesMenu():
 
         for index, item in enumerate(self.items):
             if self.current_option == index:
-                textstyle = self.highlight
+                text_style = self.highlight
             else:
-                textstyle = self.normal
-            self.screen.addstr(5 + index, 4, "%d - %s" % (index + 1, item.name), textstyle)
+                text_style = self.normal
+            self.screen.addstr(5 + index, 4, "%d - %s" % (index + 1, item.name), text_style)
         self.screen.refresh()
 
     def get_user_input(self):

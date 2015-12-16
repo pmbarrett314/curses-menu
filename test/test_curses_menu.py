@@ -14,6 +14,9 @@ def fun2():
 
 class TestCursesMenu(unittest.TestCase):
     def setUp(self):
+        CursesMenu.set_up_screen = lambda _: None
+        CursesMenu.draw = lambda _: None
+        CursesMenu.set_up_colors = lambda _: None
         self.menu = CursesMenu("Test menu 1", "Subtitle 1")
         self.menu.get_input = lambda: ord('a')
         self.item1 = MenuItem("Item1", self.menu)

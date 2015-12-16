@@ -15,14 +15,11 @@ class CursesMenu():
         :param parent:
         :return:
         """
-        self.screen = curses.initscr()
-        curses.start_color()
-        curses.noecho()
-        curses.cbreak()
-        self.screen.keypad(1)
-        curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
-        self.highlight = curses.color_pair(1)
-        self.normal = curses.A_NORMAL
+        self.screen = None
+        self.highlight = None
+        self.normal = None
+        self.set_up_screen()
+        self.set_up_colors()
 
         self.title = title
         self.subtitle = subtitle
@@ -69,6 +66,18 @@ class CursesMenu():
         if self.items:
             if self.items[-1] is self.exit_item:
                 del self.items[-1]
+
+    def set_up_screen(self):
+        self.screen = curses.initscr()
+        curses.start_color()
+        curses.noecho()
+        curses.cbreak()
+        self.screen.keypad(1)
+        
+    def set_up_colors(self):
+        curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
+        self.highlight = curses.color_pair(1)
+        self.normal = curses.A_NORMAL
 
     def show(self, exit_option=None):
         if exit_option is None:

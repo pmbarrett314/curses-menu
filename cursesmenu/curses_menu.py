@@ -194,12 +194,3 @@ def reset_prog_mode():
     curses.reset_prog_mode()  # reset to 'current' curses environment
     curses.curs_set(1)  # reset doesn't do this right
     curses.curs_set(0)
-
-
-def main():
-    menu = CursesMenu("Test Menu", "Subtitle", [MenuItem("hello"), MenuItem("hello2")])
-    menu.show()
-
-
-if __name__ == "__main__":
-    main()

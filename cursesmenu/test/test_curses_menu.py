@@ -23,21 +23,6 @@ class TestCursesMenu(unittest.TestCase):
         self.menu_thread = Thread(target=self.menu.show, daemon=True)
         self.menu_thread.start()
 
-    """
-    @classmethod
-    def setUpClass(cls):
-        super().setUpClass()
-        root_menu = CursesMenu("Test menu 1", "Subtitle 1")
-        root_menu.add_item(FunctionItem("Function 1", fun1, root_menu))
-        root_menu.add_item(CommandItem("Command 1", "echo 1 >> testoutput.txt", root_menu))
-
-        submenu = CursesMenu("Test menu 2", "Subtitle 2", parent=root_menu)
-        submenu.add_item(FunctionItem("Fun2", fun2, submenu))
-        root_menu.add_item(SubmenuItem("Submenu 1", submenu, root_menu))
-
-        cls.menu = root_menu
-        """
-
     def test_init(self):
         self.assertEqual(self.menu.current_option, 0)
         self.assertEqual(self.menu.current_item, self.item1)

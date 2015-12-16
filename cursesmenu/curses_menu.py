@@ -6,12 +6,14 @@ import platform
 class CursesMenu():
     def __init__(self, title, subtitle=None, items=None, exit_option=True, parent=None):
         """
-        :type parent: CursesMenu
-        :param title: str
-        :param subtitle:
+        :param title: the title of the menu
+        :type title: str
+        :param subtitle: the subtitle of the menu
+        :type subtitle: str
         :param items:
-        :type items: list[menu_item.MenuItem]
         :param exit_option:
+        :param parent:
+        :return:
         """
         self.screen = curses.initscr()
         curses.start_color()
@@ -37,7 +39,8 @@ class CursesMenu():
             self.exit_item = ExitItem("Return to %s menu" % parent.title, self)
 
         self.current_option = 0
-        self.selected_index = -1
+        self.current_item = None
+        self.selected_option = -1
         self.selected_item = None
 
         self.should_exit = False
@@ -64,6 +67,10 @@ class CursesMenu():
             self.add_exit()
         else:
             self.remove_exit()
+
+        if self.current_item is None and self.items:
+            self.current_item = self.items[0]
+
         return_value = None
         while self.selected_item is not self.exit_item and not self.should_exit:
             return_value = self.display()
@@ -78,8 +85,8 @@ class CursesMenu():
         self.draw()
         while self.get_user_input() != ord('\n'):
             self.draw()
-        self.selected_index = self.current_option
-        self.selected_item = self.items[self.selected_index]
+        self.selected_option = self.current_option
+        self.selected_item = self.items[self.selected_option]
         return self.selected_item.action()
 
     def draw(self):
@@ -113,6 +120,7 @@ class CursesMenu():
                 self.current_option += -1
             else:
                 self.current_option = len(self.items) - 1
+        self.current_item = self.items[self.current_option]
 
         return x
 
@@ -132,6 +140,9 @@ class MenuItem:
         """
         self.name = name
         self.menu = menu
+
+    def __str__(self):
+        return "%s %s" % (self.menu.title, self.name)
 
     def show(self):
         pass

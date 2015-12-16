@@ -2,6 +2,7 @@ from cursesmenu.curses_menu import CursesMenu, MenuItem
 import unittest
 from threading import Thread
 import time
+import sys
 
 
 def fun1():
@@ -23,7 +24,11 @@ class TestCursesMenu(unittest.TestCase):
         self.item2 = MenuItem("Item2", self.menu)
         self.menu.add_item(self.item1)
         self.menu.add_item(self.item2)
-        self.menu_thread = Thread(target=self.menu.show, daemon=True)
+        if sys.hexversion >= 0x03030000:
+            self.menu_thread = Thread(target=self.menu.show, daemon=True)
+        else:
+            self.menu_thread = Thread(target=self.menu.show)
+            self.menu_thread.daemon = True
         self.menu_thread.start()
 
     def test_init(self):

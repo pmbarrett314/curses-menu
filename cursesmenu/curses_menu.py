@@ -38,12 +38,23 @@ class CursesMenu():
         else:
             self.exit_item = ExitItem("Return to %s menu" % parent.title, self)
 
-        self.current_option = 0
+        self._current_option = 0
         self.current_item = None
         self.selected_option = -1
         self.selected_item = None
 
+        self.returned_value = None
+
         self.should_exit = False
+
+    @property
+    def current_option(self):
+        return self._current_option
+
+    @current_option.setter
+    def current_option(self, value):
+        self._current_option = value
+        self.current_item = self.items[self.current_option]
 
     def add_item(self, item):
         self.remove_exit()
@@ -71,23 +82,15 @@ class CursesMenu():
         if self.current_item is None and self.items:
             self.current_item = self.items[0]
 
-        return_value = None
+        self.draw()
         while self.selected_item is not self.exit_item and not self.should_exit:
-            return_value = self.display()
+            self.process_user_input()
 
         self.remove_exit()
 
         curses.endwin()
         clear_terminal()
-        return return_value
-
-    def display(self):
-        self.draw()
-        while self.get_user_input() != ord('\n'):
-            self.draw()
-        self.selected_option = self.current_option
-        self.selected_item = self.items[self.selected_option]
-        return self.selected_item.action()
+        return self.returned_value
 
     def draw(self):
         self.screen.border(0)
@@ -103,26 +106,43 @@ class CursesMenu():
             self.screen.addstr(5 + index, 4, "%d - %s" % (index + 1, item.name), text_style)
         self.screen.refresh()
 
-    def get_user_input(self):
-        x = self.screen.getch()
+    def process_user_input(self):
+        user_input = self.screen.getch()
 
-        if ord('1') <= x <= ord(str(len(self.items) + 1)):
-            self.current_option = x - ord('0') - 1
+        if ord('1') <= user_input <= ord(str(len(self.items) + 1)):
+            self.go_to(user_input - ord('0') - 1)
+        elif user_input == curses.KEY_DOWN:
+            self.go_down()
+        elif user_input == curses.KEY_UP:
+            self.go_up()
+        elif user_input == ord("\n"):
+            self.select()
 
-        elif x == curses.KEY_DOWN:
-            if self.current_option < len(self.items) - 1:
-                self.current_option += 1
-            else:
-                self.current_option = 0
+        return user_input
 
-        elif x == curses.KEY_UP:
-            if self.current_option > 0:
-                self.current_option += -1
-            else:
-                self.current_option = len(self.items) - 1
-        self.current_item = self.items[self.current_option]
+    def go_to(self, option):
+        self.current_option = option
+        self.draw()
 
-        return x
+    def go_down(self):
+        if self.current_option < len(self.items) - 1:
+            self.current_option += 1
+        else:
+            self.current_option = 0
+        self.draw()
+
+    def go_up(self):
+        if self.current_option > 0:
+            self.current_option += -1
+        else:
+            self.current_option = len(self.items) - 1
+        self.draw()
+
+    def select(self):
+        self.selected_option = self.current_option
+        self.selected_item = self.items[self.selected_option]
+        self.returned_value = self.selected_item.action()
+        self.draw()
 
     def exit(self):
         clear_terminal()

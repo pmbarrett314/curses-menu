@@ -12,10 +12,6 @@ def fun2():
     pass
 
 
-class TestTesting(unittest.TestCase):
-    def test_test(self):
-        assert False
-
 class TestCursesMenu(unittest.TestCase):
     def setUp(self):
         self.menu = CursesMenu("Test menu 1", "Subtitle 1")
@@ -72,8 +68,6 @@ class TestCursesMenu(unittest.TestCase):
         self.menu.exit()
         self.menu_thread.join(timeout=0.5)
         self.assertFalse(self.menu_thread.is_alive())
-    def test_test(self):
-        assert False
 
 
 if __name__ == "__main__":

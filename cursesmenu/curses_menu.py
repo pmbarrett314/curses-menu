@@ -106,8 +106,15 @@ class CursesMenu():
             self.screen.addstr(5 + index, 4, "%d - %s" % (index + 1, item.name), text_style)
         self.screen.refresh()
 
+    def get_input(self):
+        """
+        allows for changing to a different input method
+        :return:
+        """
+        return self.screen.getch()
+
     def process_user_input(self):
-        user_input = self.screen.getch()
+        user_input = self.get_input()
 
         if ord('1') <= user_input <= ord(str(len(self.items) + 1)):
             self.go_to(user_input - ord('0') - 1)

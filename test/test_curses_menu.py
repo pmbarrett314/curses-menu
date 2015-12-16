@@ -61,12 +61,12 @@ class TestCursesMenu(unittest.TestCase):
         self.menu.select()
         self.assertEqual(self.menu.selected_option, 2)
         self.assertIs(self.menu.selected_item, self.menu.exit_item)
-        self.menu_thread.join(timeout=0.5)
+        self.menu_thread.join(timeout=5)
         self.assertFalse(self.menu_thread.is_alive())
 
     def test_exit(self):
         self.menu.exit()
-        self.menu_thread.join(timeout=0.5)
+        self.menu_thread.join(timeout=5)
         self.assertFalse(self.menu_thread.is_alive())
 
 

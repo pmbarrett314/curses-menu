@@ -103,7 +103,7 @@ class CursesMenu():
                 text_style = self.highlight
             else:
                 text_style = self.normal
-            self.screen.addstr(5 + index, 4, "%d - %s" % (index + 1, item.show()), text_style)
+            self.screen.addstr(5 + index, 4, item.show(), text_style)
         self.screen.refresh()
 
     def get_input(self):
@@ -171,8 +171,8 @@ class MenuItem:
     def __str__(self):
         return "%s %s" % (self.menu.title, self.name)
 
-    def show(self):
-        return self.name
+    def show(self, index):
+        return "%d - %s" % (index + 1, self.name)
 
     def action(self):
         pass

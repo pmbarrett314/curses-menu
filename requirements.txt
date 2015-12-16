@@ -1,0 +1,9 @@
+colorama==0.3.5
+coverage==4.0.3
+curses==2.2
+pluggy==0.3.1
+py==1.4.31
+pytest==2.8.5
+pytest-runner==2.6.2
+tox==2.3.1
+virtualenv==13.1.2

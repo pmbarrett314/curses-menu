@@ -5,3 +5,4 @@ do something about going offscreen
 handle multiple digit numerical input
 do something about exit item. it's ugly
 support 2.7?
+figure out init.py

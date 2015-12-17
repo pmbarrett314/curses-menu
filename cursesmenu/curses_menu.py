@@ -73,7 +73,7 @@ class CursesMenu():
         curses.noecho()
         curses.cbreak()
         self.screen.keypad(1)
-        
+
     def set_up_colors(self):
         curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
         self.highlight = curses.color_pair(1)
@@ -96,10 +96,12 @@ class CursesMenu():
             self.process_user_input()
 
         self.remove_exit()
+        self.clean_up_screen()
+        return self.returned_value
 
+    def clean_up_screen(self):
         curses.endwin()
         clear_terminal()
-        return self.returned_value
 
     def draw(self):
         self.screen.border(0)

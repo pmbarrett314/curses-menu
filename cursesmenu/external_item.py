@@ -19,6 +19,5 @@ class ExternalItem(MenuItem):
         self.menu.clear_screen()
         reset_prog_mode()
 
-
     def external_action(self):
         pass

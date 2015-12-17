@@ -4,6 +4,8 @@ import platform
 
 
 class CursesMenu():
+    currently_active_menu = None
+
     def __init__(self, title, subtitle=None, items=None, exit_option=True, parent=None):
         """
         :param title: the title of the menu
@@ -90,6 +92,8 @@ class CursesMenu():
 
         if self.current_item is None and self.items:
             self.current_item = self.items[0]
+
+        CursesMenu.currently_active_menu = self
 
         self.draw()
         while not self.should_exit:

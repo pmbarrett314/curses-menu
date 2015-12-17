@@ -1,4 +1,4 @@
-from curses_menu import MenuItem, CursesMenu
+from cursesmenu.curses_menu import MenuItem, CursesMenu
 
 
 class SubmenuItem(MenuItem):
@@ -13,4 +13,5 @@ class SubmenuItem(MenuItem):
     def action(self):
         self.menu.clear_screen()
         self.submenu.show()
+        CursesMenu.currently_active_menu = self.menu
         self.menu.clear_screen()

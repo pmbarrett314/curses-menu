@@ -1,3 +1,4 @@
+import cursesmenu.curses_menu
 from cursesmenu.curses_menu import CursesMenu, MenuItem
 import unittest
 from threading import Thread
@@ -10,6 +11,7 @@ class TestCursesMenu(unittest.TestCase):
         CursesMenu.draw = lambda _: None
         CursesMenu.set_up_colors = lambda _: None
         CursesMenu.clean_up_screen = lambda _: None
+        cursesmenu.curses_menu.clear_terminal = lambda : None
         self.menu = CursesMenu("Test menu 1", "Subtitle 1")
         self.menu.get_input = lambda: ord('a')
         self.item1 = MenuItem("Item1", self.menu)

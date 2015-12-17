@@ -92,7 +92,7 @@ class CursesMenu():
             self.current_item = self.items[0]
 
         self.draw()
-        while self.selected_item is not self.exit_item and not self.should_exit:
+        while not self.should_exit:
             self.process_user_input()
 
         self.remove_exit()

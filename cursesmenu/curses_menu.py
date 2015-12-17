@@ -96,12 +96,8 @@ class CursesMenu():
             self.process_user_input()
 
         self.remove_exit()
-        self.clean_up_screen()
+        clean_up_screen()
         return self.returned_value
-
-    def clean_up_screen(self):
-        curses.endwin()
-        clear_terminal()
 
     def draw(self):
         self.screen.border(0)
@@ -199,6 +195,11 @@ def clear_terminal():
         os.system('cls')
     else:
         os.system('reset')
+
+
+def clean_up_screen():
+    curses.endwin()
+    clear_terminal()
 
 
 def reset_prog_mode():

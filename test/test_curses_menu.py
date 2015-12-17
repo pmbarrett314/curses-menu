@@ -10,8 +10,8 @@ class TestCursesMenu(unittest.TestCase):
         CursesMenu.set_up_screen = lambda _: None
         CursesMenu.draw = lambda _: None
         CursesMenu.set_up_colors = lambda _: None
-        CursesMenu.clean_up_screen = lambda _: None
-        cursesmenu.curses_menu.clear_terminal = lambda : None
+        cursesmenu.curses_menu.clean_up_screen = lambda: None
+        cursesmenu.curses_menu.clear_terminal = lambda: None
         self.menu = CursesMenu("Test menu 1", "Subtitle 1")
         self.menu.get_input = lambda: ord('a')
         self.item1 = MenuItem("Item1", self.menu)

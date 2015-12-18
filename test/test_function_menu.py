@@ -1,4 +1,4 @@
-from base_test_case import BaseTestCase
+from test_external_item import TestExternalItem
 from cursesmenu.function_item import FunctionItem
 
 
@@ -10,13 +10,11 @@ def fun2(x):
     return x + 2
 
 
-class TestCommandItem(BaseTestCase):
+class TestCommandItem(TestExternalItem):
     def setUp(self):
         super().setUp()
-        FunctionItem.set_up_terminal = lambda _: None
-        FunctionItem.clean_up_terminal = lambda _: None
-        self.item1 = FunctionItem("Function 1", fun1, None)
-        self.item2 = FunctionItem("Function 2", fun2, None, 2)
+        self.item1 = FunctionItem("Function 1", fun1, self.menu)
+        self.item2 = FunctionItem("Function 2", fun2, self.menu, 2)
 
     def test_run(self):
         self.assertEqual(self.item1.action(), 10)

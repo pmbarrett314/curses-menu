@@ -10,7 +10,7 @@ def fun2(x):
     return x + 2
 
 
-class TestCommandItem(TestExternalItem):
+class TestFunctionItem(TestExternalItem):
     def setUp(self):
         super().setUp()
         self.item1 = FunctionItem("Function 1", fun1, self.menu)

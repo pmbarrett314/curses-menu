@@ -1,4 +1,4 @@
-import unittest
+from base_test_case import BaseTestCase
 from cursesmenu.function_item import FunctionItem
 
 
@@ -10,8 +10,9 @@ def fun2(x):
     return x + 2
 
 
-class TestCommandItem(unittest.TestCase):
+class TestCommandItem(BaseTestCase):
     def setUp(self):
+        super().setUp()
         FunctionItem.set_up_terminal = lambda _: None
         FunctionItem.clean_up_terminal = lambda _: None
         self.item1 = FunctionItem("Function 1", fun1, None)

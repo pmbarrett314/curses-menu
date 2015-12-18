@@ -1,19 +1,22 @@
-import cursesmenu.curses_menu
-from cursesmenu.curses_menu import CursesMenu, MenuItem
+import curses
 import unittest
 from threading import Thread
-import sys
+from unittest.mock import patch, Mock
+
+from cursesmenu.curses_menu import CursesMenu, MenuItem
 
 
 class TestCursesMenu(unittest.TestCase):
     def setUp(self):
-        CursesMenu.set_up_screen = lambda _: None
-        CursesMenu.draw = lambda _: None
-        CursesMenu.set_up_colors = lambda _: None
-        cursesmenu.curses_menu.clean_up_screen = lambda: None
-        cursesmenu.curses_menu.clear_terminal = lambda: None
+        mock_curses = Mock(spec=curses)
+        mock_window = Mock(spec=['keypad', 'addstr', 'border', 'getch', 'refresh'])
+        mock_window.getch.return_value = ord('a')
+        mock_curses.initscr.return_value = mock_window
+        self.patcher = patch(target='cursesmenu.curses_menu.curses', new=mock_curses)
+        self.patcher.start()
+        self.addCleanup(self.patcher.stop)
+
         self.menu = CursesMenu("Test menu 1", "Subtitle 1")
-        self.menu.get_input = lambda: ord('a')
         self.item1 = MenuItem("Item1", self.menu)
         self.item2 = MenuItem("Item2", self.menu)
         self.menu.add_item(self.item1)

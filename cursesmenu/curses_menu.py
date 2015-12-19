@@ -37,7 +37,7 @@ class CursesMenu():
         else:
             self.exit_item = ExitItem("Return to %s menu" % parent.title, self)
 
-        self._current_option = 0
+        self.current_option = 0
         self.current_item = None
         self.selected_option = -1
         self.selected_item = None
@@ -45,15 +45,6 @@ class CursesMenu():
         self.returned_value = None
 
         self.should_exit = False
-
-    @property
-    def current_option(self):
-        return self._current_option
-
-    @current_option.setter
-    def current_option(self, value):
-        self._current_option = value
-        self.current_item = self.items[self.current_option]
 
     def add_item(self, item):
         self.remove_exit()
@@ -140,6 +131,7 @@ class CursesMenu():
 
     def go_to(self, option):
         self.current_option = option
+        self.current_item = self.items[self.current_option]
         self.draw()
 
     def go_down(self):
@@ -147,6 +139,7 @@ class CursesMenu():
             self.current_option += 1
         else:
             self.current_option = 0
+        self.current_item = self.items[self.current_option]
         self.draw()
 
     def go_up(self):
@@ -154,6 +147,7 @@ class CursesMenu():
             self.current_option += -1
         else:
             self.current_option = len(self.items) - 1
+        self.current_item = self.items[self.current_option]
         self.draw()
 
     def select(self):

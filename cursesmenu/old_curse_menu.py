@@ -1,10 +1,10 @@
 from enum import Enum
 
-from command_item import CommandItem
-from curses_menu import CursesMenu, ExitItem
-from function_item import FunctionItem
-from selection_menu import SelectionItem
-from submenu_item import SubmenuItem
+from cursesmenu.command_item import CommandItem
+from cursesmenu.curses_menu import CursesMenu, ExitItem
+from cursesmenu.function_item import FunctionItem
+from cursesmenu.selection_menu import SelectionItem
+from cursesmenu.submenu_item import SubmenuItem
 
 
 class menuItem(Enum):

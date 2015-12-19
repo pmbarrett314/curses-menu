@@ -20,8 +20,8 @@ class CursesMenu():
         self.screen = None
         self.highlight = None
         self.normal = None
-        self.set_up_screen()
-        self.set_up_colors()
+        self._set_up_screen()
+        self._set_up_colors()
 
         self.title = title
         self.subtitle = subtitle
@@ -38,13 +38,31 @@ class CursesMenu():
             self.exit_item = ExitItem("Return to %s menu" % parent.title, self)
 
         self.current_option = 0
-        self.current_item = None
         self.selected_option = -1
-        self.selected_item = None
 
         self.returned_value = None
 
         self.should_exit = False
+
+    @property
+    def current_item(self):
+        """
+        :rtype: MenuItem or None
+        """
+        if self.items:
+            return self.items[self.current_option]
+        else:
+            return None
+
+    @property
+    def selected_item(self):
+        """
+        :rtype: MenuItem or None
+        """
+        if self.items and self.selected_option != -1:
+            return self.items[self.current_option]
+        else:
+            return None
 
     def add_item(self, item):
         self.remove_exit()
@@ -60,14 +78,14 @@ class CursesMenu():
             if self.items[-1] is self.exit_item:
                 del self.items[-1]
 
-    def set_up_screen(self):
+    def _set_up_screen(self):
         self.screen = curses.initscr()
         curses.start_color()
         curses.noecho()
         curses.cbreak()
         self.screen.keypad(1)
 
-    def set_up_colors(self):
+    def _set_up_colors(self):
         curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
         self.highlight = curses.color_pair(1)
         self.normal = curses.A_NORMAL
@@ -80,9 +98,6 @@ class CursesMenu():
             self.add_exit()
         else:
             self.remove_exit()
-
-        if self.current_item is None and self.items:
-            self.current_item = self.items[0]
 
         CursesMenu.currently_active_menu = self
 
@@ -132,7 +147,6 @@ class CursesMenu():
 
     def go_to(self, option):
         self.current_option = option
-        self.current_item = self.items[self.current_option]
         self.draw()
 
     def go_down(self):
@@ -140,7 +154,6 @@ class CursesMenu():
             self.current_option += 1
         else:
             self.current_option = 0
-        self.current_item = self.items[self.current_option]
         self.draw()
 
     def go_up(self):
@@ -148,12 +161,10 @@ class CursesMenu():
             self.current_option += -1
         else:
             self.current_option = len(self.items) - 1
-        self.current_item = self.items[self.current_option]
         self.draw()
 
     def select(self):
         self.selected_option = self.current_option
-        self.selected_item = self.items[self.selected_option]
         self.returned_value = self.selected_item.action()
         self.draw()
 

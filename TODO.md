@@ -11,4 +11,6 @@ support
     <3.5?
 packaging
     figure out init.py
+   
+I don't like how selection menu is initialized right now 
 

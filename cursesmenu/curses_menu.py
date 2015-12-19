@@ -6,7 +6,7 @@ import platform
 class CursesMenu():
     currently_active_menu = None
 
-    def __init__(self, title, subtitle=None, items=None, exit_option=True, parent=None):
+    def __init__(self, title=None, subtitle=None, items=None, exit_option=True, parent=None):
         """
         :param title: the title of the menu
         :type title: str
@@ -96,7 +96,8 @@ class CursesMenu():
 
     def draw(self):
         self.screen.border(0)
-        self.screen.addstr(2, 2, self.title, curses.A_STANDOUT)
+        if self.title is not None:
+            self.screen.addstr(2, 2, self.title, curses.A_STANDOUT)
         if self.subtitle is not None:
             self.screen.addstr(4, 2, self.subtitle, curses.A_BOLD)
 

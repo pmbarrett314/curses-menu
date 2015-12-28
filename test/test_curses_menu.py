@@ -1,5 +1,6 @@
 from threading import Thread
-from cursesmenu.curses_menu import CursesMenu, MenuItem
+from cursesmenu import CursesMenu
+from cursesmenu.items import MenuItem
 from base_test_case import BaseTestCase
 
 

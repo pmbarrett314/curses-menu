@@ -1,7 +1,7 @@
 from base_test_case import BaseTestCase, ThreadedReturnGetter
-from cursesmenu.selection_menu import SelectionMenu
+from cursesmenu import SelectionMenu
 from threading import Thread
-from cursesmenu.curses_menu import CursesMenu
+from cursesmenu import CursesMenu
 
 
 class TestSelectionMenu(BaseTestCase):

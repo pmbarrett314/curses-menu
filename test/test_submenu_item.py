@@ -1,7 +1,8 @@
-from base_test_case import BaseTestCase
-from cursesmenu.submenu_item import SubmenuItem
-from cursesmenu.curses_menu import CursesMenu
 from threading import Thread
+
+from base_test_case import BaseTestCase
+from cursesmenu import CursesMenu
+from cursesmenu.items import SubmenuItem
 
 
 class TestSubmenuItem(BaseTestCase):

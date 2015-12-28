@@ -1,5 +1,5 @@
+from cursesmenu.items import FunctionItem
 from test_external_item import TestExternalItem
-from cursesmenu.function_item import FunctionItem
 
 
 def fun1():

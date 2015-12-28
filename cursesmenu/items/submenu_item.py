@@ -1,4 +1,5 @@
-from cursesmenu.curses_menu import MenuItem, CursesMenu
+from cursesmenu import CursesMenu
+from cursesmenu.items import MenuItem
 
 
 class SubmenuItem(MenuItem):

@@ -1,5 +1,5 @@
-from cursesmenu.curses_menu import MenuItem
-from cursesmenu.curses_menu import clear_terminal, reset_prog_mode
+from cursesmenu.items import MenuItem
+from cursesmenu import clear_terminal, reset_prog_mode
 import curses
 
 

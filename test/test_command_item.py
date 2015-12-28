@@ -1,7 +1,7 @@
-from test_external_item import TestExternalItem
-from cursesmenu.command_item import CommandItem
 import platform
-from cursesmenu.curses_menu import CursesMenu
+
+from cursesmenu.items import CommandItem
+from test_external_item import TestExternalItem
 
 
 class TestCommandItem(TestExternalItem):

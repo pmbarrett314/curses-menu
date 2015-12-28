@@ -1,4 +1,4 @@
-from cursesmenu.external_item import ExternalItem
+from cursesmenu.items import ExternalItem
 
 
 class FunctionItem(ExternalItem):

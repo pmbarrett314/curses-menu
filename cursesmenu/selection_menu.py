@@ -1,4 +1,5 @@
-from cursesmenu.curses_menu import CursesMenu, MenuItem
+from cursesmenu import CursesMenu
+from cursesmenu.items import SelectionItem
 
 
 class SelectionMenu(CursesMenu):
@@ -12,8 +13,3 @@ class SelectionMenu(CursesMenu):
         menu = cls(title, subtitle, options, exit_option, parent)
         menu.show()
         return menu.selected_option
-
-
-class SelectionItem(MenuItem):
-    def action(self):
-        self.menu.exit()

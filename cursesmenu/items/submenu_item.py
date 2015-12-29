@@ -3,11 +3,11 @@ from cursesmenu.items import MenuItem
 
 
 class SubmenuItem(MenuItem):
-    def __init__(self, name, submenu, menu):
+    def __init__(self, name, menu, submenu, should_exit=False):
         """
         :type submenu: CursesMenu
         """
-        super(SubmenuItem, self).__init__(name, menu)
+        super().__init__(name, menu, should_exit)
         self.submenu = submenu
         self.submenu.parent = self.menu
 

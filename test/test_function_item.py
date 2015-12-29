@@ -13,8 +13,8 @@ def fun2(x):
 class TestFunctionItem(TestExternalItem):
     def setUp(self):
         super().setUp()
-        self.item1 = FunctionItem("Function 1", fun1, self.menu)
-        self.item2 = FunctionItem("Function 2", fun2, self.menu, 2)
+        self.item1 = FunctionItem("Function 1", self.menu, fun1)
+        self.item2 = FunctionItem("Function 2", self.menu, fun2, [2])
 
     def test_run(self):
         self.assertEqual(self.item1.action(), 10)

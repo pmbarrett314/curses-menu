@@ -11,8 +11,8 @@ class TestCursesMenu(BaseTestCase):
         self.menu = CursesMenu("Test menu 1", "Subtitle 1")
         self.item1 = MenuItem("Item1", self.menu)
         self.item2 = MenuItem("Item2", self.menu)
-        self.menu.add_item(self.item1)
-        self.menu.add_item(self.item2)
+        self.menu.append_item(self.item1)
+        self.menu.append_item(self.item2)
         self.menu_thread = Thread(target=self.menu.show, daemon=True)
         self.menu_thread.start()
 

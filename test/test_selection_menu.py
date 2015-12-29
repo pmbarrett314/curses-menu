@@ -9,7 +9,7 @@ class TestSelectionMenu(BaseTestCase):
         super().setUp()
 
     def test_select(self):
-        selection_menu = SelectionMenu("Select a letter", strings=["a", "b", "c"])
+        selection_menu = SelectionMenu(strings=["a", "b", "c"], title="Select a letter")
 
         menu_thread = Thread(target=selection_menu.show, daemon=True)
         menu_thread.start()

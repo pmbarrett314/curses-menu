@@ -280,7 +280,7 @@ class MenuItem:
             1 - Item 1
             2 - Another Item
 
-        :param int index: The index of the item
+        :param int index: The index of the item in the items list of the menu
         :return: The representation of the item to be shown in a menu
         :rtype: str
         """

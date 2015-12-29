@@ -17,8 +17,21 @@ class TestCursesMenu(BaseTestCase):
         self.menu_thread.start()
 
     def test_init(self):
-        self.assertEqual(self.menu.current_option, 0)
-        self.assertEqual(self.menu.current_item, self.item1)
+        menu_1 = CursesMenu()
+        menu_2 = CursesMenu("title", "subtitle", True, None)
+        menu_3 = CursesMenu(title="title2", subtitle="subtitle2", show_exit_option=False, parent=self.menu)
+        self.assertIsNone(menu_1.title)
+        self.assertEqual(menu_2.title, "title")
+        self.assertEqual(menu_3.title, "title2")
+        self.assertIsNone(menu_1.subtitle)
+        self.assertEqual(menu_2.subtitle, "subtitle")
+        self.assertEqual(menu_3.subtitle, "subtitle2")
+        self.assertTrue(menu_1.show_exit_option)
+        self.assertTrue(menu_2.show_exit_option)
+        self.assertFalse(menu_3.show_exit_option)
+        self.assertIsNone(menu_1.parent)
+        self.assertIsNone(menu_2.parent)
+        self.assertEqual(menu_3.parent, self.menu)
 
     def test_go_down(self):
         self.menu.go_down()

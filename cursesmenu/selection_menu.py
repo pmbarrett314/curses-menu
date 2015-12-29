@@ -7,16 +7,16 @@ class SelectionMenu(CursesMenu):
     A menu that simplifies item creation, just give it a list of strings and it builds the menu for you
     """
 
-    def __init__(self, strings, title=None, subtitle=None, exit_option=True, parent=None):
+    def __init__(self, strings, title=None, subtitle=None, show_exit_option=True, parent=None):
         """
         :param strings: The list of strings this menu should be built from
         :type title: str
         :type subtitle: str
         :type strings: list[str]
-        :type exit_option: bool
+        :type show_exit_option: bool
         :type parent: CursesMenu
         """
-        super().__init__(title, subtitle, exit_option, parent)
+        super().__init__(title, subtitle, show_exit_option, parent)
         for item in strings:
             self.append_item(SelectionItem(item, self))
 

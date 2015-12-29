@@ -12,11 +12,11 @@ class CursesMenu():
     """
     currently_active_menu = None
 
-    def __init__(self, title=None, subtitle=None, exit_option=True, parent=None):
+    def __init__(self, title=None, subtitle=None, show_exit_option=True, parent=None):
         """
         :type title: str
         :type subtitle: str
-        :type exit_option: bool
+        :type show_exit_option: bool
         :type parent: CursesMenu
 
         :ivar str self.title: The title of the menu
@@ -40,7 +40,7 @@ class CursesMenu():
 
         self.title = title
         self.subtitle = subtitle
-        self.show_exit_option = exit_option
+        self.show_exit_option = show_exit_option
 
         self.items = list()
 

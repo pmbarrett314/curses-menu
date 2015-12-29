@@ -15,6 +15,7 @@ class CommandItem(ExternalItem):
 
         :param str command: The console command to be executed
         :param list[str] arguments: String arguments to be passed to the command
+        :ivar int self.status: the exit status of the command, None if it hasn't been run yet
         """
         super().__init__(name, menu, should_exit)
         self.command = command
@@ -22,7 +23,7 @@ class CommandItem(ExternalItem):
             self.arguments = arguments
         else:
             self.arguments = []
-        self.status = 0
+        self.status = None
 
     def external_action(self):
         """

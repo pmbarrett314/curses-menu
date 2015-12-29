@@ -1,3 +1,5 @@
+from unittest.mock import MagicMock
+
 from cursesmenu.items import FunctionItem
 from test_external_item import TestExternalItem
 
@@ -11,14 +13,18 @@ def fun2(x):
 
 
 class TestFunctionItem(TestExternalItem):
-    def setUp(self):
-        super().setUp()
-        self.item1 = FunctionItem("Function 1", self.menu, fun1)
-        self.item2 = FunctionItem("Function 2", self.menu, fun2, [2])
-
     def test_run(self):
-        self.assertEqual(self.item1.action(), 10)
-        self.assertEqual(self.item2.action(), 4)
+        mock1 = MagicMock(name="fun1", return_value=5)
+        mock2 = MagicMock(name="fun2", return_value=10)
+
+        args = [1, 2, 3]
+        kwargs = {"end": "\n", "sep": " "}
+        item1 = FunctionItem("Fun1", self.menu, mock1)
+        item2 = FunctionItem("Fun1", self.menu, mock2, args, kwargs)
+        self.assertEqual(item1.action(), 5)
+        self.assertEqual(item2.action(), 10)
+        mock1.assert_any_call()
+        mock2.assert_called_once_with(*args, **kwargs)
 
     def test_init(self):
         menu_item_1 = FunctionItem("test1", self.menu, fun1)

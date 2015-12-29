@@ -18,6 +18,14 @@ class menuItem(Enum):
 
 
 def parse_old_menu(menu_data):
+    """
+    Take an old-style menuData dictionary and return a CursesMenu
+
+    :param dict menu_data:
+    :return: A new CursesMenu
+    :rtype: CursesMenu
+    """
+    menu_title = menu_data['title']
     menu = CursesMenu(menu_title)
     for item in menu_data["options"]:
         item_type = item["type"]

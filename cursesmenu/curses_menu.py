@@ -4,19 +4,35 @@ import platform
 
 
 class CursesMenu():
+    """
+    A class that displays a menu and allows the user to select an option
+
+    :cvar cls.currently_active_menu: The currently active menu
+    :type currently_active_menu: CursesMenu
+    """
     currently_active_menu = None
 
     def __init__(self, title=None, subtitle=None, items=None, exit_option=True, parent=None):
         """
-        :param title: the title of the menu
         :type title: str
-        :param subtitle: the subtitle of the menu
         :type subtitle: str
-        :param items:
-        :param exit_option:
-        :param parent:
-        :return:
+        :type items: list[MenuItem]
+        :type exit_option: bool
+        :type parent: CursesMenu
+
+        :ivar str self.title: The title of the menu
+        :ivar str self.subtitle: The subtitle of the menu
+        :ivar self.items: The list of MenuItems that the menu will display
+        :vartype self.items: list[MenuItem]
+        :ivar bool self.show_exit_option: Whether this menu should show an exit item by default. can be overridden in :meth:`CursesMenu.show`
+        :ivar CursesMenu self.parent: The parent of this menu
+        :ivar int self.current_option: The currently highlighted menu option
+        :ivar MenuItem self.current_item: The item corresponding to the menu option that is currently highlighted
+        :ivar int self.selected_option: The option that the user has most recently selected
+        :ivar MenuItem self.selected_item: The item in :attr:`self.items` that the user most recently selected
+        :ivar self.returned_value: The value returned by the most recently selected item
         """
+
         self.screen = None
         self.highlight = None
         self.normal = None
@@ -65,12 +81,24 @@ class CursesMenu():
             return None
 
     def append_item(self, item):
+        """
+        Append an item to the menu
+
+        :param item: The item to be added
+        :type item: MenuItem
+        """
         did_remove = self.remove_exit()
         self.items.append(item)
         if did_remove:
             self.add_exit()
 
     def add_exit(self):
+        """
+        Add the exit item if necessary
+
+        :return: True if item needed to be added, False otherwise
+        :rtype: bool
+        """
         if self.items:
             if self.items[-1] is not self.exit_item:
                 self.items.append(self.exit_item)
@@ -78,6 +106,12 @@ class CursesMenu():
         return False
 
     def remove_exit(self):
+        """
+        Remove the exit item if necessary
+
+        :return: True if item needed to be removed, False otherwise
+        :rtype: bool
+        """
         if self.items:
             if self.items[-1] is self.exit_item:
                 del self.items[-1]
@@ -97,6 +131,13 @@ class CursesMenu():
         self.normal = curses.A_NORMAL
 
     def show(self, exit_option=None):
+        """
+        Start the menu and allow the user to interact with it
+
+        :param exit_option: Whether the exit item should be shown, defaults to the value set in the constructor
+        :type exit_option: bool
+        :return: Whatever was returned by the last selected item
+        """
         if exit_option is None:
             exit_option = self.show_exit_option
 
@@ -116,6 +157,9 @@ class CursesMenu():
         return self.returned_value
 
     def draw(self):
+        """
+        Redraws the menu and refreshes the screen. Should be called whenever something changes.
+        """
         self.screen.border(0)
         if self.title is not None:
             self.screen.addstr(2, 2, self.title, curses.A_STANDOUT)
@@ -132,12 +176,19 @@ class CursesMenu():
 
     def get_input(self):
         """
-        allows for changing to a different input method
-        :return:
+        Can be overridden to change the input method
+        Called in process_user_input
+
+        :return: a single character at a time
+        :rtype: str
         """
         return self.screen.getch()
 
     def process_user_input(self):
+        """
+        Gets user input and decides what to do with it
+        Called in show.
+        """
         user_input = self.get_input()
 
         if ord('1') <= user_input <= ord(str(len(self.items) + 1)):
@@ -152,10 +203,19 @@ class CursesMenu():
         return user_input
 
     def go_to(self, option):
+        """
+        Go to the option entered by the user as a number
+
+        :param option: the option to go to
+        :type option: int
+        """
         self.current_option = option
         self.draw()
 
     def go_down(self):
+        """
+        Go down one, wrap to beginning if necessary
+        """
         if self.current_option < len(self.items) - 1:
             self.current_option += 1
         else:
@@ -163,6 +223,9 @@ class CursesMenu():
         self.draw()
 
     def go_up(self):
+        """
+        Go up one, wrap to end if necessary
+        """
         if self.current_option > 0:
             self.current_option += -1
         else:
@@ -170,9 +233,15 @@ class CursesMenu():
         self.draw()
 
     def select(self):
+        """
+        Select the current item and run its action() method
+        """
         self.selected_option = self.current_option
         self.returned_value = self.selected_item.action()
-        self.draw()
+        if self.selected_item.should_exit:
+            self.exit()
+        else:
+            self.draw()
 
     def exit(self):
         clear_terminal()
@@ -236,6 +305,9 @@ class ExitItem(MenuItem):
 
 
 def clear_terminal():
+    """
+    Call the platform specific function to clear the terminal: cls on windows, reset otherwise
+    """
     if platform.system().lower() == "windows":
         os.system('cls')
     else:
@@ -243,11 +315,17 @@ def clear_terminal():
 
 
 def clean_up_screen():
+    """
+    Final cleanup after the menu is finished
+    """
     curses.endwin()
     clear_terminal()
 
 
 def reset_prog_mode():
+    """
+    Restore the terminal mode
+    """
     curses.reset_prog_mode()  # reset to 'current' curses environment
     curses.curs_set(1)  # reset doesn't do this right
     curses.curs_set(0)

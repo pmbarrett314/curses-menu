@@ -21,6 +21,26 @@ class TestSubmenuItem(BaseTestCase):
         self.menu_thread = Thread(target=self.menu.show, daemon=True)
         self.menu_thread.start()
 
+    def test_init(self):
+        menu_item_1 = SubmenuItem("test1", self.menu, self.submenu1)
+        menu_item_2 = SubmenuItem("test2", self.menu, self.submenu2, True)
+        menu_item_3 = SubmenuItem(name="test3", menu=self.menu, submenu=self.submenu2, should_exit=False)
+        self.assertEqual(menu_item_1.name, "test1")
+        self.assertEqual(menu_item_2.name, "test2")
+        self.assertEqual(menu_item_3.name, "test3")
+        self.assertEqual(menu_item_1.menu, self.menu)
+        self.assertEqual(menu_item_2.menu, self.menu)
+        self.assertEqual(menu_item_3.menu, self.menu)
+        self.assertFalse(menu_item_1.should_exit)
+        self.assertTrue(menu_item_2.should_exit)
+        self.assertFalse(menu_item_3.should_exit)
+        self.assertEqual(menu_item_1.submenu, self.submenu1)
+        self.assertEqual(menu_item_2.submenu, self.submenu2)
+        self.assertEqual(menu_item_3.submenu, self.submenu2)
+        self.assertEqual(menu_item_1.submenu.parent, self.menu)
+        self.assertEqual(menu_item_2.submenu.parent, self.menu)
+        self.assertEqual(menu_item_3.submenu.parent, self.menu)
+
     def test_action(self):
         self.submenu1_thread.start()
         self.assertIs(CursesMenu.currently_active_menu, self.submenu1)

@@ -299,7 +299,7 @@ class ExitItem(MenuItem):
     """
 
     def __init__(self, name, menu):
-        super(ExitItem, self).__init__(name, menu, True)
+        super(ExitItem, self).__init__(name, menu, should_exit=True)
 
 
 def clear_terminal():

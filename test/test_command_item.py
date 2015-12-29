@@ -1,7 +1,6 @@
 import os.path
 import platform
-import subprocess
-from unittest.mock import Mock, patch
+from unittest.mock import patch
 
 from cursesmenu.items import CommandItem
 from test_external_item import TestExternalItem
@@ -54,7 +53,6 @@ class TestCommandItem(TestExternalItem):
 
     @patch('cursesmenu.items.command_item.subprocess')
     def test_call(self, mock_class):
-        mock_subprocess = Mock(spec=subprocess)
         command_item = CommandItem("Command item", self.menu, "ls", ["-l", "-a", "~"])
         command_item.action()
         mock_class.run.assert_called_with("ls -l -a ~", shell=True)

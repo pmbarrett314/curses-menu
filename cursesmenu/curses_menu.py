@@ -12,11 +12,10 @@ class CursesMenu():
     """
     currently_active_menu = None
 
-    def __init__(self, title=None, subtitle=None, items=None, exit_option=True, parent=None):
+    def __init__(self, title=None, subtitle=None, exit_option=True, parent=None):
         """
         :type title: str
         :type subtitle: str
-        :type items: list[MenuItem]
         :type exit_option: bool
         :type parent: CursesMenu
 
@@ -42,10 +41,9 @@ class CursesMenu():
         self.title = title
         self.subtitle = subtitle
         self.show_exit_option = exit_option
-        if items is None:
-            self.items = list()
-        else:
-            self.items = items
+
+        self.items = list()
+
         self.parent = parent
 
         if parent is None:

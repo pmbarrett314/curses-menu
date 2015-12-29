@@ -16,7 +16,7 @@ class SelectionMenu(CursesMenu):
         :type exit_option: bool
         :type parent: CursesMenu
         """
-        super().__init__(title, subtitle, None, exit_option, parent)
+        super().__init__(title, subtitle, exit_option, parent)
         for item in strings:
             self.append_item(SelectionItem(item, self))
 

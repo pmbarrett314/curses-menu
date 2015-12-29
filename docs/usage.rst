@@ -27,7 +27,7 @@ Maybe even a submenu::
 
     submenu_item = SubmenuItem("submenu", menu, submenu)
 
-Add the items::
+Add the items to the menu::
 
     menu.append_item(command_item)
 
@@ -40,3 +40,15 @@ Then show the menu::
     menu.show()
 
 And let the user take over from there.
+
+Getting a selection
+-------------------
+
+If you'd like to get a selection from a list, that's even easier::
+
+    from cursesmenu import SelectionMenu
+
+    a_list=["red", "blue", "green"]
+
+    selection=SelectionMenu.get_selection(a_list)
+

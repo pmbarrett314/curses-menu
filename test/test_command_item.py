@@ -1,9 +1,10 @@
-import platform
 import os.path
+import platform
+import subprocess
+from unittest.mock import Mock, patch
+
 from cursesmenu.items import CommandItem
 from test_external_item import TestExternalItem
-from unittest.mock import Mock, patch
-import subprocess
 
 
 class TestCommandItem(TestExternalItem):
@@ -18,13 +19,15 @@ class TestCommandItem(TestExternalItem):
         create_item = CommandItem("Create", self.menu, 'echo hello>test.txt')
         if platform.system().lower() == "windows":
             delete_item = CommandItem("Delete", self.menu, "del test.txt")
+            expected_contents = "hello \n"
         else:
             delete_item = CommandItem("Delete", self.menu, "rm test.txt")
+            expected_contents = "hello\n"
 
         self.assertEqual(create_item.action(), 0)
         self.assertTrue(os.path.isfile("test.txt"))
         with open("test.txt", 'r') as text:
-            self.assertEqual(text.read(), "hello \n")
+            self.assertEqual(text.read(), expected_contents)
         self.assertEqual(delete_item.action(), 0)
 
     @patch('cursesmenu.items.command_item.subprocess')

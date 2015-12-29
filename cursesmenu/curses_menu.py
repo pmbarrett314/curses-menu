@@ -183,25 +183,54 @@ class CursesMenu():
 
 
 class MenuItem:
+    """
+    A generic menu item
+    """
+
     def __init__(self, name, menu, should_exit=False):
         """
         :type name: str
-        :type menu: curses_menu.CursesMenu
+        :type menu: CursesMenu
+
+        :ivar str self.name: The name shown for this menu item
+        :ivar CursesMenu self.menu: The menu to which this item belongs
+        :ivar bool self.should_exit: whether the menu should exit once this item's action is done
         """
         self.name = name
         self.menu = menu
+        self.should_exit = should_exit
 
     def __str__(self):
         return "%s %s" % (self.menu.title, self.name)
 
     def show(self, index):
+        """
+        How this item should be displayed in the menu. Can be overridden as desired as long as it returns a string
+        and takes an int as its first parameter.
+
+        Default is:
+
+            1 - Item 1
+            2 - Another Item
+
+        :param int index: The index of the item
+        :return: The representation of the item to be shown in a menu
+        :rtype: str
+        """
         return "%d - %s" % (index + 1, self.name)
 
     def action(self):
+        """
+        What should be done when this item is selected. Should be overridden as needed.
+        """
         pass
 
 
 class ExitItem(MenuItem):
+    """
+    The last item in the menu, used to exit the current menu.
+    """
+
     def __init__(self, name, menu):
         super(ExitItem, self).__init__(name, menu, True)
 

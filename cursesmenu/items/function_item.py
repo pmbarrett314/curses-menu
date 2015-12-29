@@ -2,7 +2,19 @@ from cursesmenu.items import ExternalItem
 
 
 class FunctionItem(ExternalItem):
+    """
+    A menu item to call a Python function
+    """
+
     def __init__(self, name, menu, function, args=None, kwargs=None, should_exit=False):
+        """
+        :type name: str
+        :type menu: cursesemnu.CursesMenu
+
+        :param function: The function to be called
+        :param list args: The list of args to be passed to the function
+        :param dict kwargs: The dictionary of kwargs to be passed to the function
+        """
         super().__init__(name, menu, should_exit)
         if args is not None:
             self.args = args
@@ -16,5 +28,10 @@ class FunctionItem(ExternalItem):
         self.returned = None
 
     def external_action(self):
+        """
+        Call the function with the given args and kwargs
+
+        :return: the return value of the function
+        """
         self.returned = self.function(*self.args, **self.kwargs)
         return self.returned

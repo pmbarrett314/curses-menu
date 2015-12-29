@@ -14,6 +14,8 @@ class FunctionItem(ExternalItem):
         :param function: The function to be called
         :param list args: The list of args to be passed to the function
         :param dict kwargs: The dictionary of kwargs to be passed to the function
+
+        :ivar self.returned: the value returned by the function
         """
         super().__init__(name, menu, should_exit)
         if args is not None:

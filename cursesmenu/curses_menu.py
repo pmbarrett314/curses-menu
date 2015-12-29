@@ -64,19 +64,25 @@ class CursesMenu():
         else:
             return None
 
-    def add_item(self, item):
-        self.remove_exit()
+    def append_item(self, item):
+        did_remove = self.remove_exit()
         self.items.append(item)
+        if did_remove:
+            self.add_exit()
 
     def add_exit(self):
         if self.items:
             if self.items[-1] is not self.exit_item:
                 self.items.append(self.exit_item)
+                return True
+        return False
 
     def remove_exit(self):
         if self.items:
             if self.items[-1] is self.exit_item:
                 del self.items[-1]
+                return True
+        return False
 
     def _set_up_screen(self):
         self.screen = curses.initscr()
@@ -177,7 +183,7 @@ class CursesMenu():
 
 
 class MenuItem:
-    def __init__(self, name, menu):
+    def __init__(self, name, menu, should_exit=False):
         """
         :type name: str
         :type menu: curses_menu.CursesMenu
@@ -196,8 +202,8 @@ class MenuItem:
 
 
 class ExitItem(MenuItem):
-    def action(self):
-        self.menu.exit()
+    def __init__(self, name, menu):
+        super(ExitItem, self).__init__(name, menu, True)
 
 
 def clear_terminal():

@@ -5,7 +5,6 @@ curses
     pd/unicurses?
 documentation
     docstrings
-testing
 support
     2.7?
     <3.5?

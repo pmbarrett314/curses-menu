@@ -39,20 +39,18 @@ else:
 setup(
         name='curses-menu',
         version=__version__,
-        url='',
+        url='http://github.com/pmbarrett314/curses-menu',
         license='',
         author='Paul Barrett',
-        author_email='',
+        author_email='pmbarrett314@gmail.com',
         description='A simple console menu system using curses',
         classifiers=[
-            'Development Status :: 3 - Alpha',
-
+            'Development Status :: 4 - Beta',
+            'Programming Language :: Python :: 3.5',
             'Intended Audience :: Developers'
         ],
 
         packages=find_packages(),
-        # package_dir={'': 'cursesmenu'},
-
         setup_requires=['pytest-runner'],
         tests_require=['tox'],
         cmdclass={'test': Tox},

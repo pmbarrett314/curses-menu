@@ -9,9 +9,5 @@ testing
 support
     2.7?
     <3.5?
-   
-I don't like how selection menu is initialized right now
-    probably actually want to copy items
 
-Add arguments to commanditem
 license

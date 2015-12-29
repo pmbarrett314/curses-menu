@@ -8,15 +8,20 @@ class CommandItem(ExternalItem):
     A menu item to execute a console command
     """
 
-    def __init__(self, name, menu, command, should_exit=False):
+    def __init__(self, name, menu, command, arguments=None, should_exit=False):
         """
         :type name: str
         :type menu: cursesmenu.CursesMenu
 
         :param str command: The console command to be executed
+        :param list[str] arguments: String arguments to be passed to the command
         """
         super().__init__(name, menu, should_exit)
         self.command = command
+        if arguments:
+            self.arguments = arguments
+        else:
+            self.arguments = []
         self.status = 0
 
     def external_action(self):
@@ -25,6 +30,6 @@ class CommandItem(ExternalItem):
 
         :return: the exit status of the command process
         """
-        completed_process = subprocess.run(self.command, shell=True)
+        completed_process = subprocess.run(self.command + " " + " ".join(self.arguments), shell=True)
         self.status = completed_process.returncode
         return self.status

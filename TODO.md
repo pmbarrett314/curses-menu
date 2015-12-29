@@ -12,5 +12,5 @@ support
 packaging
     figure out init.py
    
-I don't like how selection menu is initialized right now 
-
+I don't like how selection menu is initialized right now
+    probably actually want to copy items

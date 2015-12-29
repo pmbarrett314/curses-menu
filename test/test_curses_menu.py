@@ -1,7 +1,8 @@
 from threading import Thread
+
+from base_test_case import BaseTestCase
 from cursesmenu import CursesMenu
 from cursesmenu.items import MenuItem
-from base_test_case import BaseTestCase
 
 
 class TestCursesMenu(BaseTestCase):
@@ -54,6 +55,11 @@ class TestCursesMenu(BaseTestCase):
         self.menu.go_up()
         self.assertEqual(self.menu.current_option, 0)
         self.assertIs(self.menu.current_item, self.item1)
+
+    def test_go_to(self):
+        self.menu.go_to(1)
+        self.assertEqual(self.menu.current_option, 1)
+        self.assertEqual(self.menu.current_item, self.item2)
 
     def test_select(self):
         self.menu.select()

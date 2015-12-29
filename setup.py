@@ -1,6 +1,7 @@
 from setuptools import setup, find_packages
 from setuptools.command.test import test as TestCommand
 import sys
+import re
 
 
 class Tox(TestCommand):
@@ -26,25 +27,34 @@ class Tox(TestCommand):
         sys.exit(errno)
 
 
+version_file_name = "cursesmenu/version.py"
+version_file_contents = open("cursesmenu/version.py", "rt").read()
+version_regex = r"^__version__ = ['\"]([^'\"]*)['\"]"
+match = re.search(version_regex, version_file_contents, re.M)
+if match:
+    __version__ = match.group(1)
+else:
+    raise RuntimeError("Unable to find version string in %s." % (version_file_name,))
+
 setup(
-    name='curses-menu',
-    version='1.0.0',
-    url='',
-    license='',
-    author='Paul Barrett',
-    author_email='',
-    description='A simple console menu system using curses',
-    classifiers=[
-        'Development Status :: 3 - Alpha',
+        name='curses-menu',
+        version=__version__,
+        url='',
+        license='',
+        author='Paul Barrett',
+        author_email='',
+        description='A simple console menu system using curses',
+        classifiers=[
+            'Development Status :: 3 - Alpha',
 
-        'Intended Audience :: Developers'
-    ],
+            'Intended Audience :: Developers'
+        ],
 
-    packages=find_packages(),
-    # package_dir={'': 'cursesmenu'},
+        packages=find_packages(),
+        # package_dir={'': 'cursesmenu'},
 
-    setup_requires=['pytest-runner'],
-    tests_require=['tox'],
-    cmdclass={'test': Tox},
+        setup_requires=['pytest-runner'],
+        tests_require=['tox'],
+        cmdclass={'test': Tox},
 
 )

@@ -29,6 +29,8 @@ class TestCommandItem(TestExternalItem):
         with open("test.txt", 'r') as text:
             self.assertEqual(text.read(), expected_contents)
         self.assertEqual(delete_item.action(), 0)
+        self.assertFalse(os.path.isfile("test.txt"))
+
 
     @patch('cursesmenu.items.command_item.subprocess')
     def test_call(self, mock_class):

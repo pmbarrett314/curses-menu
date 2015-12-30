@@ -45,7 +45,7 @@ setup(
         author_email='pmbarrett314@gmail.com',
         description='A simple console menu system using curses',
         classifiers=[
-            'Development Status :: 4 - Beta',
+            'Development Status :: 3 - Alpha',
             'Programming Language :: Python :: 3.5',
             'Intended Audience :: Developers'
         ],

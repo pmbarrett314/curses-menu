@@ -37,7 +37,3 @@ menu.append_item(submenu_item)
 # finally, we call show to show the menu and allow the user to interact
 menu.show()
 ```
-
-
-### Acknowledgements
-

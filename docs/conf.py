@@ -51,9 +51,9 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = 'cursesmenu'
-copyright = '2015, Author'
-author = 'Author'
+project = 'curses-menu'
+copyright = '2015, Paul Barrett'
+author = 'Paul Barrett'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -65,7 +65,7 @@ try:
     # The full version, including alpha/beta/rc tags.
     release = pkg_resources.get_distribution('curses-menu').version
 except pkg_resources.DistributionNotFound:
-    print('To build the documentation, The distribution information of cursesmenu')
+    print('To build the documentation, The distribution information of curses-menu')
     print('Has to be available.  Either install the package into your')
     print('development environment or run "setup.py develop" to setup the')
     print('metadata.  A virtualenv is recommended!')

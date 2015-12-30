@@ -6,7 +6,7 @@ A simple Python menu-based GUI system on the terminal using curses. Perfect for 
 ### Installation
 Currently only supports Python 3.5.
 
-The curses library comes bundled with python on Linux and MacOS. Windows users can visit http://www.lfd.uci.edu/~gohlke/pythonlibs/#curses and get the build for your platform and Python version.
+The curses library comes bundled with python on Linux and MacOS. Windows users can visit http://www.lfd.uci.edu/~gohlke/pythonlibs/#curses and get a third-party build for your platform and Python version.
 
 Then just run python setup.py install from the project directory. PyPi coming soon.
 

@@ -7,7 +7,7 @@ from cursesmenu.items import SubmenuItem
 
 class TestSubmenuItem(BaseTestCase):
     def setUp(self):
-        super().setUp()
+        super(TestSubmenuItem, self).setUp()
 
         self.menu = CursesMenu("Test menu 1", "Subtitle 1")
         self.submenu1 = CursesMenu("Test submenu 1", "Subtitle 2")

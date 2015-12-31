@@ -6,9 +6,6 @@ from cursesmenu import SelectionMenu
 
 
 class TestSelectionMenu(BaseTestCase):
-    def setUp(self):
-        super().setUp()
-
     def test_select(self):
         selection_menu = SelectionMenu(strings=["a", "b", "c"], title="Select a letter")
 

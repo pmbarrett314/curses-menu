@@ -17,7 +17,7 @@ class CommandItem(ExternalItem):
         :param list[str] arguments: String arguments to be passed to the command
         :ivar int self.status: the exit status of the command, None if it hasn't been run yet
         """
-        super().__init__(name, menu, should_exit)
+        super(CommandItem, self).__init__(name, menu, should_exit)
         self.command = command
         if arguments:
             self.arguments = arguments

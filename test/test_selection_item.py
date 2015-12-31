@@ -3,9 +3,9 @@ from cursesmenu import CursesMenu
 from cursesmenu.items import SelectionItem
 
 
-class TestExitItem(BaseTestCase):
+class TestSelectionItem(BaseTestCase):
     def setUp(self):
-        super().setUp()
+        super(TestSelectionItem, self).setUp()
         self.menu = CursesMenu("Test menu 1", "Subtitle 1")
 
     def test_init(self):

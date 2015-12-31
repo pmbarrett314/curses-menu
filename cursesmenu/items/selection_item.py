@@ -7,4 +7,4 @@ class SelectionItem(MenuItem):
     """
 
     def __init__(self, name, menu):
-        super().__init__(name, menu, should_exit=True)
+        super(SelectionItem, self).__init__(name, menu, should_exit=True)

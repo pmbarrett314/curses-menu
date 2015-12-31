@@ -11,7 +11,7 @@ class SubmenuItem(MenuItem):
         """
         :param CursesMenu submenu: The submenu to be opened when this item is selected
         """
-        super().__init__(name, menu, should_exit)
+        super(SubmenuItem, self).__init__(name, menu, should_exit)
         self.submenu = submenu
         self.submenu.parent = self.menu
 

@@ -7,7 +7,7 @@ from cursesmenu.items import ExternalItem
 
 class TestExternalItem(BaseTestCase):
     def setUp(self):
-        super().setUp()
+        super(TestExternalItem, self).setUp()
 
         self.mock_set_up = MagicMock()
         self.mock_external = MagicMock(return_value=0)

@@ -3,7 +3,7 @@ import os
 import platform
 
 
-class CursesMenu():
+class CursesMenu(object):
     """
     A class that displays a menu and allows the user to select an option
 
@@ -249,7 +249,7 @@ class CursesMenu():
         self.screen.clear()
 
 
-class MenuItem:
+class MenuItem(object):
     """
     A generic menu item
     """

@@ -17,7 +17,7 @@ class FunctionItem(ExternalItem):
 
         :ivar self.returned: the value returned by the function
         """
-        super().__init__(name, menu, should_exit)
+        super(FunctionItem, self).__init__(name, menu, should_exit)
         if args is not None:
             self.args = args
         else:

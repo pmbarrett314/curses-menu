@@ -1,12 +1,14 @@
-[![Build Status](https://travis-ci.com/pmbarrett314/curses-menu.svg?token=eWX7zFvhdYRJVxPoXia3&branch=master)](https://travis-ci.com/pmbarrett314/curses-menu)
+[![Build Status](https://travis-ci.com/pmbarrett314/curses-menu.svg?token=eWX7zFvhdYRJVxPoXia3&branch=master)](https://travis-ci.com/pmbarrett314/curses-menu)[![Documentation Status](https://readthedocs.org/projects/curses-menu/badge/?version=latest)](http://curses-menu.readthedocs.org/en/latest/?badge=latest)
 
 # curses-menu
 A simple Python menu-based GUI system on the terminal using curses. Perfect for those times when you need a GUI, but don't want the overhead or learning curve of a full-fledged GUI framework.
 
+http://curses-menu.readthedocs.org/en/latest/
+
 ### Installation
 Currently only supports Python 3.5.
 
-The curses library comes bundled with python on Linux and MacOS. Windows users can visit http://www.lfd.uci.edu/~gohlke/pythonlibs/#curses and get the build for your platform and Python version.
+The curses library comes bundled with python on Linux and MacOS. Windows users can visit http://www.lfd.uci.edu/~gohlke/pythonlibs/#curses and get a third-party build for your platform and Python version.
 
 Then just run python setup.py install from the project directory. PyPi coming soon.
 
@@ -37,7 +39,3 @@ menu.append_item(submenu_item)
 # finally, we call show to show the menu and allow the user to interact
 menu.show()
 ```
-
-
-### Acknowledgements
-

@@ -5,9 +5,9 @@ from cursesmenu import CursesMenu
 from cursesmenu.items import MenuItem
 
 
-class TestCursesMenu(BaseTestCase):
+class TestSampleMenu(BaseTestCase):
     def setUp(self):
-        super().setUp()
+        super(TestSampleMenu, self).setUp()
 
         self.menu = CursesMenu("Test menu 1", "Subtitle 1")
         self.item1 = MenuItem("Item1", self.menu)
@@ -17,22 +17,10 @@ class TestCursesMenu(BaseTestCase):
         self.menu_thread = Thread(target=self.menu.show, daemon=True)
         self.menu_thread.start()
 
-    def test_init(self):
-        menu_1 = CursesMenu()
-        menu_2 = CursesMenu("title", "subtitle", True, None)
-        menu_3 = CursesMenu(title="title2", subtitle="subtitle2", show_exit_option=False, parent=self.menu)
-        self.assertIsNone(menu_1.title)
-        self.assertEqual(menu_2.title, "title")
-        self.assertEqual(menu_3.title, "title2")
-        self.assertIsNone(menu_1.subtitle)
-        self.assertEqual(menu_2.subtitle, "subtitle")
-        self.assertEqual(menu_3.subtitle, "subtitle2")
-        self.assertTrue(menu_1.show_exit_option)
-        self.assertTrue(menu_2.show_exit_option)
-        self.assertFalse(menu_3.show_exit_option)
-        self.assertIsNone(menu_1.parent)
-        self.assertIsNone(menu_2.parent)
-        self.assertEqual(menu_3.parent, self.menu)
+    def tearDown(self):
+        super(TestSampleMenu, self).tearDown()
+        self.menu.exit()
+        self.menu_thread.join()
 
     def test_go_down(self):
         self.menu.go_down()
@@ -80,3 +68,22 @@ class TestCursesMenu(BaseTestCase):
         self.menu.exit()
         self.menu_thread.join(timeout=5)
         self.assertFalse(self.menu_thread.is_alive())
+
+
+class TestCursesMenu(BaseTestCase):
+    def test_init(self):
+        menu_1 = CursesMenu()
+        menu_2 = CursesMenu("title", "subtitle", True, None)
+        menu_3 = CursesMenu(title="title2", subtitle="subtitle2", show_exit_option=False, parent=menu_1)
+        self.assertIsNone(menu_1.title)
+        self.assertEqual(menu_2.title, "title")
+        self.assertEqual(menu_3.title, "title2")
+        self.assertIsNone(menu_1.subtitle)
+        self.assertEqual(menu_2.subtitle, "subtitle")
+        self.assertEqual(menu_3.subtitle, "subtitle2")
+        self.assertTrue(menu_1.show_exit_option)
+        self.assertTrue(menu_2.show_exit_option)
+        self.assertFalse(menu_3.show_exit_option)
+        self.assertIsNone(menu_1.parent)
+        self.assertIsNone(menu_2.parent)
+        self.assertEqual(menu_3.parent, menu_1)

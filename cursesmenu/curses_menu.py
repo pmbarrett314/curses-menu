@@ -58,6 +58,8 @@ class CursesMenu(object):
 
         self.should_exit = False
 
+        self.previous_active_menu = None
+
     @property
     def current_item(self):
         """
@@ -139,6 +141,10 @@ class CursesMenu(object):
         :type exit_option: bool
         :return: Whatever was returned by the last selected item
         """
+
+        self.previous_active_menu = CursesMenu.currently_active_menu
+        CursesMenu.currently_active_menu = self
+
         if exit_option is None:
             exit_option = self.show_exit_option
 
@@ -147,12 +153,11 @@ class CursesMenu(object):
         else:
             self.remove_exit()
 
-        CursesMenu.currently_active_menu = self
-
         self.draw()
         while not self.should_exit:
             self.process_user_input()
 
+        CursesMenu.currently_active_menu = self.previous_active_menu
         self.remove_exit()
         clean_up_screen()
         return self.returned_value

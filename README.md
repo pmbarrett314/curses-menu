@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/pmbarrett314/curses-menu.svg?token=eWX7zFvhdYRJVxPoXia3&branch=master)](https://travis-ci.com/pmbarrett314/curses-menu)[![Documentation Status](https://readthedocs.org/projects/curses-menu/badge/?version=latest)](http://curses-menu.readthedocs.org/en/latest/?badge=latest)
+[![Build Status](https://travis-ci.org/pmbarrett314/curses-menu.svg)](https://travis-ci.org/pmbarrett314/curses-menu)[![Documentation Status](https://readthedocs.org/projects/curses-menu/badge/?version=latest)](http://curses-menu.readthedocs.org/en/latest/?badge=latest)
 
 # curses-menu
 A simple Python menu-based GUI system on the terminal using curses. Perfect for those times when you need a GUI, but don't want the overhead or learning curve of a full-fledged GUI framework.

@@ -8,3 +8,7 @@ env:
   - TOX_ENV=py27
   - TOX_ENV=py34
   - TOX_ENV=py35
+
+matrix:
+  allow_failures:
+    - env: TOX_ENV=py27

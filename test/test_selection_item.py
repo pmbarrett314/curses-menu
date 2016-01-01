@@ -6,14 +6,14 @@ from cursesmenu.items import SelectionItem
 class TestSelectionItem(BaseTestCase):
     def setUp(self):
         super(TestSelectionItem, self).setUp()
-        self.menu = CursesMenu("Test menu 1", "Subtitle 1")
+        self.menu = CursesMenu("self.menu", "TestSelectionItem")
 
     def test_init(self):
-        menu_item_1 = SelectionItem("test1", self.menu)
-        menu_item_3 = SelectionItem(name="test2", menu=self.menu)
-        self.assertEqual(menu_item_1.name, "test1")
-        self.assertEqual(menu_item_3.name, "test2")
-        self.assertEqual(menu_item_1.menu, self.menu)
-        self.assertEqual(menu_item_3.menu, self.menu)
-        self.assertTrue(menu_item_1.should_exit)
-        self.assertTrue(menu_item_3.should_exit)
+        selection_item_1 = SelectionItem("selection_item_1", self.menu)
+        selection_item_2 = SelectionItem(name="selection_item_2", menu=self.menu)
+        self.assertEqual(selection_item_1.name, "selection_item_1")
+        self.assertEqual(selection_item_2.name, "selection_item_2")
+        self.assertEqual(selection_item_1.menu, self.menu)
+        self.assertEqual(selection_item_2.menu, self.menu)
+        self.assertTrue(selection_item_1.should_exit)
+        self.assertTrue(selection_item_2.should_exit)

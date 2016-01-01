@@ -7,15 +7,15 @@ from cursesmenu.items import SubmenuItem
 
 class TestSubmenuItem(BaseTestCase):
     def test_init(self):
-        root_menu = CursesMenu("root_menu")
-        submenu1 = CursesMenu("submenu_1")
-        submenu2 = CursesMenu("submenu_2")
-        menu_item_1 = SubmenuItem("test1", root_menu, submenu1)
-        menu_item_2 = SubmenuItem("test2", root_menu, submenu2, True)
-        menu_item_3 = SubmenuItem(name="test3", menu=root_menu, submenu=submenu2, should_exit=False)
-        self.assertEqual(menu_item_1.name, "test1")
-        self.assertEqual(menu_item_2.name, "test2")
-        self.assertEqual(menu_item_3.name, "test3")
+        root_menu = CursesMenu("root_menu", "test_init")
+        submenu1 = CursesMenu("submenu1", "test_init")
+        submenu2 = CursesMenu("submenu2", "test_init")
+        menu_item_1 = SubmenuItem("menu_item_1", root_menu, submenu1)
+        menu_item_2 = SubmenuItem("menu_item_2", root_menu, submenu2, True)
+        menu_item_3 = SubmenuItem(name="menu_item_3", menu=root_menu, submenu=submenu2, should_exit=False)
+        self.assertEqual(menu_item_1.name, "menu_item_1")
+        self.assertEqual(menu_item_2.name, "menu_item_2")
+        self.assertEqual(menu_item_3.name, "menu_item_3")
         self.assertEqual(menu_item_1.menu, root_menu)
         self.assertEqual(menu_item_2.menu, root_menu)
         self.assertEqual(menu_item_3.menu, root_menu)
@@ -33,22 +33,22 @@ class TestSubmenuItem(BaseTestCase):
         root_menu = CursesMenu("root_menu", "test_action")
         submenu1 = CursesMenu("submenu1", "test_action")
         submenu2 = CursesMenu("submenu2", "test_action")
-        item1 = SubmenuItem("Item1", root_menu, submenu1)
-        item2 = SubmenuItem("Item2", root_menu, submenu2)
+        submenu_item_1 = SubmenuItem("submenu_item_1", root_menu, submenu1)
+        submenu_item_2 = SubmenuItem("submenu_item_2", root_menu, submenu2)
         try:
-            submenu1_thread = Thread(target=item1.action, daemon=True)
-            submenu2_thread = Thread(target=item2.action, daemon=True)
+            submenu1_thread = Thread(target=submenu_item_1.action, daemon=True)
+            submenu2_thread = Thread(target=submenu_item_2.action, daemon=True)
             menu_thread = Thread(target=root_menu.show, daemon=True)
         except TypeError:
-            submenu1_thread = Thread(target=item1.action)
+            submenu1_thread = Thread(target=submenu_item_1.action)
             submenu1_thread.daemon = True
-            submenu2_thread = Thread(target=item2.action)
+            submenu2_thread = Thread(target=submenu_item_2.action)
             submenu2_thread.daemon = True
             menu_thread = Thread(target=root_menu.show)
             menu_thread.daemon = True
 
-        root_menu.append_item(item1)
-        root_menu.append_item(item2)
+        root_menu.append_item(submenu_item_1)
+        root_menu.append_item(submenu_item_2)
 
         menu_thread.start()
         self.assertIs(CursesMenu.currently_active_menu, root_menu)

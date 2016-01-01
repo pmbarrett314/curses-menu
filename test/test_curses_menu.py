@@ -9,9 +9,9 @@ class TestSampleMenu(BaseTestCase):
     def setUp(self):
         super(TestSampleMenu, self).setUp()
 
-        self.menu = CursesMenu("Test menu 1", "Subtitle 1")
-        self.item1 = MenuItem("Item1", self.menu)
-        self.item2 = MenuItem("Item2", self.menu)
+        self.menu = CursesMenu("self.menu", "TestSampleMenu")
+        self.item1 = MenuItem("self.item1", self.menu)
+        self.item2 = MenuItem("self.item2", self.menu)
         self.menu.append_item(self.item1)
         self.menu.append_item(self.item2)
         try:
@@ -76,35 +76,35 @@ class TestSampleMenu(BaseTestCase):
 
 class TestCursesMenu(BaseTestCase):
     def test_init(self):
-        menu_1 = CursesMenu()
-        menu_2 = CursesMenu("title", "subtitle", True, None)
-        menu_3 = CursesMenu(title="title2", subtitle="subtitle2", show_exit_option=False, parent=menu_1)
-        self.assertIsNone(menu_1.title)
-        self.assertEqual(menu_2.title, "title")
-        self.assertEqual(menu_3.title, "title2")
-        self.assertIsNone(menu_1.subtitle)
-        self.assertEqual(menu_2.subtitle, "subtitle")
-        self.assertEqual(menu_3.subtitle, "subtitle2")
-        self.assertTrue(menu_1.show_exit_option)
-        self.assertTrue(menu_2.show_exit_option)
-        self.assertFalse(menu_3.show_exit_option)
-        self.assertIsNone(menu_1.parent)
-        self.assertIsNone(menu_2.parent)
-        self.assertEqual(menu_3.parent, menu_1)
+        menu1 = CursesMenu()
+        menu2 = CursesMenu("menu2", "test_init", True, None)
+        menu3 = CursesMenu(title="menu3", subtitle="test_init", show_exit_option=False, parent=menu1)
+        self.assertIsNone(menu1.title)
+        self.assertEqual(menu2.title, "menu2")
+        self.assertEqual(menu3.title, "menu3")
+        self.assertIsNone(menu1.subtitle)
+        self.assertEqual(menu2.subtitle, "test_init")
+        self.assertEqual(menu3.subtitle, "test_init")
+        self.assertTrue(menu1.show_exit_option)
+        self.assertTrue(menu2.show_exit_option)
+        self.assertFalse(menu3.show_exit_option)
+        self.assertIsNone(menu1.parent)
+        self.assertIsNone(menu2.parent)
+        self.assertEqual(menu3.parent, menu1)
 
     def test_currently_active_menu(self):
-        menu_1 = CursesMenu("Menu 1")
-        menu_2 = CursesMenu("Menu 2")
+        menu1 = CursesMenu("menu1", "test_currently_active_menu")
+        menu2 = CursesMenu("menu2", "test_currently_active_menu")
         try:
-            thread_1 = Thread(target=menu_1.show, daemon=True)
-            thread_2 = Thread(target=menu_2.show, daemon=True)
+            thread1 = Thread(target=menu1.show, daemon=True)
+            thread2 = Thread(target=menu2.show, daemon=True)
         except TypeError:
-            thread_1 = Thread(target=menu_1.show)
-            thread_1.daemon = True
-            thread_2 = Thread(target=menu_2.show)
-            thread_2.daemon = True
+            thread1 = Thread(target=menu1.show)
+            thread1.daemon = True
+            thread2 = Thread(target=menu2.show)
+            thread2.daemon = True
         self.assertIsNone(CursesMenu.currently_active_menu)
-        thread_1.start()
-        self.assertIs(CursesMenu.currently_active_menu, menu_1)
-        thread_2.start()
-        self.assertIs(CursesMenu.currently_active_menu, menu_2)
+        thread1.start()
+        self.assertIs(CursesMenu.currently_active_menu, menu1)
+        thread2.start()
+        self.assertIs(CursesMenu.currently_active_menu, menu2)

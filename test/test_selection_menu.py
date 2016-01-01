@@ -31,15 +31,15 @@ class TestSelectionMenu(BaseTestCase):
 
     def test_init(self):
         selection_menu_1 = SelectionMenu(["1", "2", "3"])
-        selection_menu_2 = SelectionMenu(["4", "5"], "Title", "subtitle", True, None)
-        selection_menu_3 = SelectionMenu(strings=["6", "7", "8", "9"], title="Title 2", subtitle="subtitle 2",
+        selection_menu_2 = SelectionMenu(["4", "5"], "selection_menu_2", "test_init", True, None)
+        selection_menu_3 = SelectionMenu(strings=["6", "7", "8", "9"], title="selection_menu_3", subtitle="test_init",
                                          show_exit_option=False, parent=None)
         self.assertIsNone(selection_menu_1.title)
-        self.assertEqual(selection_menu_2.title, "Title")
-        self.assertEqual(selection_menu_3.title, "Title 2")
+        self.assertEqual(selection_menu_2.title, "selection_menu_2")
+        self.assertEqual(selection_menu_3.title, "selection_menu_3")
         self.assertIsNone(selection_menu_1.subtitle)
-        self.assertEqual(selection_menu_2.subtitle, "subtitle")
-        self.assertEqual(selection_menu_3.subtitle, "subtitle 2")
+        self.assertEqual(selection_menu_2.subtitle, "test_init")
+        self.assertEqual(selection_menu_3.subtitle, "test_init")
         self.assertTrue(selection_menu_1.show_exit_option)
         self.assertTrue(selection_menu_2.show_exit_option)
         self.assertFalse(selection_menu_3.show_exit_option)

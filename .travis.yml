@@ -1,4 +1,8 @@
 language: python
+os:
+  - osx
+  - linux
+
 python:
   - "3.5"
 script:

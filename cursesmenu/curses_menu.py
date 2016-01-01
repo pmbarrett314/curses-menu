@@ -78,6 +78,9 @@ class CursesMenu(object):
         else:
             return None
 
+    def __repr__(self):
+        return "%s: %s. %d items" % (self.title, self.subtitle, len(self.items))
+
     def append_item(self, item):
         """
         Append an item to the menu

@@ -31,6 +31,11 @@ class CommandItem(ExternalItem):
 
         :return: the exit status of the command process
         """
-        completed_process = subprocess.run(self.command + " " + " ".join(self.arguments), shell=True)
-        self.status = completed_process.returncode
+        commandline=self.command + " " + " ".join(self.arguments)
+        try:
+            completed_process = subprocess.run(commandline, shell=True)
+            self.status = completed_process.returncode
+        except AttributeError:
+            self.status=subprocess.call(commandline,shell=True)
+
         return self.status

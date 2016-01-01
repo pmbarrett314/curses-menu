@@ -8,12 +8,16 @@ from cursesmenu import SelectionMenu
 class TestSelectionMenu(BaseTestCase):
     def test_select(self):
         selection_menu = SelectionMenu(strings=["a", "b", "c"], title="Select a letter")
-
-        menu_thread = Thread(target=selection_menu.show, daemon=True)
+        try:
+            menu_thread = Thread(target=selection_menu.show, daemon=True)
+        except TypeError:
+            menu_thread = Thread(target=selection_menu.show)
+            menu_thread.daemon = True
         menu_thread.start()
         selection_menu.go_down()
         selection_menu.select()
-        menu_thread.join(timeout=5)
+        menu_thread.join(timeout=10)
+        self.assertFalse(menu_thread.is_alive())
         self.assertEqual(selection_menu.selected_option, 1)
 
     def test_get_selection(self):
@@ -21,7 +25,8 @@ class TestSelectionMenu(BaseTestCase):
         self.menu_thread.start()
         CursesMenu.currently_active_menu.go_down()
         CursesMenu.currently_active_menu.select()
-        self.menu_thread.join(timeout=5)
+        self.menu_thread.join(timeout=10)
+        self.assertFalse(self.menu_thread.is_alive())
         self.assertEqual(self.menu_thread.return_value, 1)
 
     def test_init(self):

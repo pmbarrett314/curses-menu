@@ -14,7 +14,11 @@ class TestSampleMenu(BaseTestCase):
         self.item2 = MenuItem("Item2", self.menu)
         self.menu.append_item(self.item1)
         self.menu.append_item(self.item2)
-        self.menu_thread = Thread(target=self.menu.show, daemon=True)
+        try:
+            self.menu_thread = Thread(target=self.menu.show, daemon=True)
+        except TypeError:
+            self.menu_thread = Thread(target=self.menu.show)
+            self.menu_thread.daemon = True
         self.menu_thread.start()
 
     def tearDown(self):
@@ -87,3 +91,20 @@ class TestCursesMenu(BaseTestCase):
         self.assertIsNone(menu_1.parent)
         self.assertIsNone(menu_2.parent)
         self.assertEqual(menu_3.parent, menu_1)
+
+    def test_currently_active_menu(self):
+        menu_1 = CursesMenu("Menu 1")
+        menu_2 = CursesMenu("Menu 2")
+        try:
+            thread_1 = Thread(target=menu_1.show, daemon=True)
+            thread_2 = Thread(target=menu_2.show, daemon=True)
+        except TypeError:
+            thread_1 = Thread(target=menu_1.show)
+            thread_1.daemon = True
+            thread_2 = Thread(target=menu_2.show)
+            thread_2.daemon = True
+        self.assertIsNone(CursesMenu.currently_active_menu)
+        thread_1.start()
+        self.assertIs(CursesMenu.currently_active_menu, menu_1)
+        thread_2.start()
+        self.assertIs(CursesMenu.currently_active_menu, menu_2)

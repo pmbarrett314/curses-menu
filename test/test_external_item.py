@@ -1,5 +1,7 @@
-from unittest.mock import MagicMock
-
+try:
+    from unittest.mock import MagicMock
+except ImportError:
+    from mock import MagicMock
 from base_test_case import BaseTestCase
 from cursesmenu import CursesMenu
 from cursesmenu.items import ExternalItem

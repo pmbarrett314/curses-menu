@@ -20,6 +20,16 @@ class TestSelectionMenu(BaseTestCase):
         self.assertFalse(menu_thread.is_alive())
         self.assertEqual(selection_menu.selected_option, 1)
 
+    def test_mock(self):
+        selection_menu = SelectionMenu(strings=["a", "b", "c"], title="Select a letter")
+        try:
+            menu_thread = Thread(target=selection_menu.show, daemon=True)
+        except TypeError:
+            menu_thread = Thread(target=selection_menu.show)
+            menu_thread.daemon = True
+        menu_thread.start()
+        self.mock_curses.initscr.assert_any_call()
+
     def test_get_selection(self):
         self.menu_thread = ThreadedReturnGetter(SelectionMenu.get_selection, ["One", "Two", "Three"])
         self.menu_thread.start()
@@ -28,6 +38,20 @@ class TestSelectionMenu(BaseTestCase):
         self.menu_thread.join(timeout=10)
         self.assertFalse(self.menu_thread.is_alive())
         self.assertEqual(self.menu_thread.return_value, 1)
+
+    def test_current_menu(self):
+        self.menu_thread = ThreadedReturnGetter(SelectionMenu.get_selection, ["One", "Two", "Three"])
+        self.menu_thread.start()
+        self.assertIsInstance(CursesMenu.currently_active_menu, SelectionMenu)
+
+        selection_menu = SelectionMenu(strings=["a", "b", "c"], title="Select a letter")
+        try:
+            menu_thread = Thread(target=selection_menu.show, daemon=True)
+        except TypeError:
+            menu_thread = Thread(target=selection_menu.show)
+            menu_thread.daemon = True
+        menu_thread.start()
+        self.assertIs(CursesMenu.currently_active_menu, selection_menu)
 
     def test_init(self):
         selection_menu_1 = SelectionMenu(["1", "2", "3"])

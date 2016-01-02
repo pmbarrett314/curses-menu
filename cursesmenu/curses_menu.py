@@ -188,7 +188,7 @@ class CursesMenu(object):
         Called in process_user_input
 
         :return: a single character at a time
-        :rtype: str
+        :rtype: int
         """
         return self.screen.getch()
 

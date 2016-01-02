@@ -145,6 +145,8 @@ class CursesMenu(object):
         self.previous_active_menu = CursesMenu.currently_active_menu
         CursesMenu.currently_active_menu = self
 
+        self.should_exit = False
+
         if exit_option is None:
             exit_option = self.show_exit_option
 

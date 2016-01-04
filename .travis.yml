@@ -1,9 +1,15 @@
 language: python
+
 os:
   - linux
 
+sudo: false
+
+cache: pip
+
 python:
   - "3.5"
+
 script:
   - 'python setup.py test --tox-args="-e$TOX_ENV"'
 

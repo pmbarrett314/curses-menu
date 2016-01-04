@@ -38,4 +38,6 @@ menu.append_item(command_item)
 menu.append_item(submenu_item)
 # finally, we call show to show the menu and allow the user to interact
 menu.show()
+# and ensure that the menu doesn't instantly exit
+menu.join()
 ```

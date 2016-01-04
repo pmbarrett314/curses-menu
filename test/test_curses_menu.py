@@ -14,17 +14,12 @@ class TestSampleMenu(BaseTestCase):
         self.item2 = MenuItem("self.item2", self.menu)
         self.menu.append_item(self.item1)
         self.menu.append_item(self.item2)
-        try:
-            self.menu_thread = Thread(target=self.menu.show, daemon=True)
-        except TypeError:
-            self.menu_thread = Thread(target=self.menu.show)
-            self.menu_thread.daemon = True
-        self.menu_thread.start()
+        self.menu.show()
 
     def tearDown(self):
         super(TestSampleMenu, self).tearDown()
         self.menu.exit()
-        self.menu_thread.join()
+        self.menu.join()
 
     def test_go_down(self):
         self.menu.go_down()
@@ -65,13 +60,13 @@ class TestSampleMenu(BaseTestCase):
         self.menu.select()
         self.assertEqual(self.menu.selected_option, 2)
         self.assertIs(self.menu.selected_item, self.menu.exit_item)
-        self.menu_thread.join(timeout=5)
-        self.assertFalse(self.menu_thread.is_alive())
+        self.menu.join(timeout=5)
+        self.assertFalse(self.menu.is_alive())
 
     def test_exit(self):
         self.menu.exit()
-        self.menu_thread.join(timeout=5)
-        self.assertFalse(self.menu_thread.is_alive())
+        self.menu.join(timeout=5)
+        self.assertFalse(self.menu.is_alive())
 
 
 class TestCursesMenu(BaseTestCase):
@@ -95,16 +90,8 @@ class TestCursesMenu(BaseTestCase):
     def test_currently_active_menu(self):
         menu1 = CursesMenu("menu1", "test_currently_active_menu")
         menu2 = CursesMenu("menu2", "test_currently_active_menu")
-        try:
-            thread1 = Thread(target=menu1.show, daemon=True)
-            thread2 = Thread(target=menu2.show, daemon=True)
-        except TypeError:
-            thread1 = Thread(target=menu1.show)
-            thread1.daemon = True
-            thread2 = Thread(target=menu2.show)
-            thread2.daemon = True
         self.assertIsNone(CursesMenu.currently_active_menu)
-        thread1.start()
+        menu1.show()
         self.assertIs(CursesMenu.currently_active_menu, menu1)
-        thread2.start()
+        menu2.show()
         self.assertIs(CursesMenu.currently_active_menu, menu2)

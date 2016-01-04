@@ -1,4 +1,5 @@
 from threading import Thread
+from unittest import skip
 
 from base_test_case import BaseTestCase
 from cursesmenu import CursesMenu
@@ -35,27 +36,16 @@ class TestSubmenuItem(BaseTestCase):
         submenu2 = CursesMenu("submenu2", "test_action")
         submenu_item_1 = SubmenuItem("submenu_item_1", root_menu, submenu1)
         submenu_item_2 = SubmenuItem("submenu_item_2", root_menu, submenu2)
-        try:
-            submenu1_thread = Thread(target=submenu_item_1.action, daemon=True)
-            submenu2_thread = Thread(target=submenu_item_2.action, daemon=True)
-            menu_thread = Thread(target=root_menu.show, daemon=True)
-        except TypeError:
-            submenu1_thread = Thread(target=submenu_item_1.action)
-            submenu1_thread.daemon = True
-            submenu2_thread = Thread(target=submenu_item_2.action)
-            submenu2_thread.daemon = True
-            menu_thread = Thread(target=root_menu.show)
-            menu_thread.daemon = True
 
         root_menu.append_item(submenu_item_1)
         root_menu.append_item(submenu_item_2)
 
-        menu_thread.start()
+        root_menu.show()
         self.assertIs(CursesMenu.currently_active_menu, root_menu)
-        submenu1_thread.start()
+        submenu_item_1.action()
         self.assertIs(CursesMenu.currently_active_menu, submenu1)
         CursesMenu.currently_active_menu.exit()
-        submenu1_thread.join(timeout=10)
+        submenu1.join(timeout=10)
         self.assertIs(CursesMenu.currently_active_menu, root_menu)
-        submenu2_thread.start()
+        submenu_item_2.action()
         self.assertIs(CursesMenu.currently_active_menu, submenu2)

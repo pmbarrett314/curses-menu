@@ -1,6 +1,7 @@
 import curses
 import os
 import platform
+import threading
 
 
 class CursesMenu(object):
@@ -30,6 +31,9 @@ class CursesMenu(object):
         :ivar int self.selected_option: The option that the user has most recently selected
         :ivar MenuItem self.selected_item: The item in :attr:`self.items` that the user most recently selected
         :ivar self.returned_value: The value returned by the most recently selected item
+        :type self._main_thread: threading.Thread
+        :type self._running: threading.Event
+
         """
 
         self.screen = None
@@ -59,6 +63,10 @@ class CursesMenu(object):
         self.should_exit = False
 
         self.previous_active_menu = None
+
+        self._main_thread = None
+
+        self._running = threading.Event()
 
     @property
     def current_item(self):
@@ -139,7 +147,6 @@ class CursesMenu(object):
 
         :param exit_option: Whether the exit item should be shown, defaults to the value set in the constructor
         :type exit_option: bool
-        :return: Whatever was returned by the last selected item
         """
 
         self.previous_active_menu = CursesMenu.currently_active_menu
@@ -155,14 +162,45 @@ class CursesMenu(object):
         else:
             self.remove_exit()
 
-        self.draw()
-        while not self.should_exit:
-            self.process_user_input()
+        try:
+            self._main_thread = threading.Thread(target=self._main_loop, daemon=True)
+        except TypeError:
+            self._main_thread = threading.Thread(target=self._main_loop)
+            self._main_thread.daemon = True
+        self._running.set()
+        self._main_thread.start()
 
-        CursesMenu.currently_active_menu = self.previous_active_menu
-        self.remove_exit()
-        clean_up_screen()
-        return self.returned_value
+    def join(self, timeout=None):
+        """
+        Wait on the menu to exit then return
+        :param Number timeout: How long to wait before timing out
+        """
+        if threading.current_thread() is not self._main_thread:
+            self._main_thread.join(timeout=timeout)
+
+    def is_alive(self):
+        """
+        :return: True if the thread is still alive, False otherwise
+        """
+        return self._main_thread.is_alive()
+
+    def pause(self):
+        """
+        Temporarily pause this menu until resume is called
+        """
+        self._running.clear()
+
+    def resume(self):
+        """
+        Sets the currently active menu to this one and resumes ut
+        """
+        CursesMenu.currently_active_menu = self
+        self._running.set()
+
+    def _main_loop(self):
+        self.draw()
+        while self._running.wait() and not self.should_exit:
+            self.process_user_input()
 
     def draw(self):
         """
@@ -245,15 +283,25 @@ class CursesMenu(object):
         Select the current item and run its action() method
         """
         self.selected_option = self.current_option
+        self.selected_item.set_up()
         self.returned_value = self.selected_item.action()
+        self.selected_item.clean_up()
         if self.selected_item.should_exit:
             self.exit()
         else:
             self.draw()
 
     def exit(self):
+        """
+        Exit the menu and clean up
+        :return: The return value of the most recently selected item
+        """
         clear_terminal()
         self.should_exit = True
+        self.join()
+        CursesMenu.currently_active_menu = self.previous_active_menu
+        clean_up_screen()
+        return self.returned_value
 
     def clear_screen(self):
         self.screen.clear()
@@ -296,9 +344,21 @@ class MenuItem(object):
         """
         return "%d - %s" % (index + 1, self.name)
 
+    def set_up(self):
+        """
+        Override to add any setup actions necessary for the item
+        """
+        pass
+
     def action(self):
         """
         What should be done when this item is selected. Should be overridden as needed.
+        """
+        pass
+
+    def clean_up(self):
+        """
+        Override to add any cleanup actions necessary for the item
         """
         pass
 

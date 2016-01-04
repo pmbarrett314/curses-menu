@@ -15,12 +15,24 @@ class SubmenuItem(MenuItem):
         self.submenu = submenu
         self.submenu.parent = self.menu
 
+    def set_up(self):
+        """
+        Pause the parent menu and clear the screen
+        :return:
+        """
+        self.menu.pause()
+        self.menu.clear_screen()
+
     def action(self):
         """
         Shows the submenu
         """
-        self.menu.clear_screen()
-        return_value = self.submenu.show()
-        CursesMenu.currently_active_menu = self.menu
-        self.menu.clear_screen()
-        return return_value
+        self.submenu.show()
+
+    def clean_up(self):
+        """
+        Wait on the submenu to return, then clean up and resume the parent menu
+        """
+        self.submenu.join()
+        self.submenu.clear_screen()
+        self.menu.resume()

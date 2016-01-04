@@ -36,4 +36,5 @@ class SelectionMenu(CursesMenu):
         """
         menu = cls(strings, title, subtitle, exit_option, parent)
         menu.show()
+        menu.join()
         return menu.selected_option

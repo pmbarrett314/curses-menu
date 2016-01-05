@@ -1,6 +1,3 @@
-from threading import Thread
-from unittest import skip
-
 from base_test_case import BaseTestCase
 from cursesmenu import CursesMenu
 from cursesmenu.items import SubmenuItem

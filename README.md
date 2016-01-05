@@ -6,7 +6,7 @@ A simple Python menu-based GUI system on the terminal using curses. Perfect for 
 http://curses-menu.readthedocs.org/en/latest/
 
 ### Installation
-Currently only supports Python 3.5.
+Supports Python 2.7, 3.4, and 3.5
 
 The curses library comes bundled with python on Linux and MacOS. Windows users can visit http://www.lfd.uci.edu/~gohlke/pythonlibs/#curses and get a third-party build for your platform and Python version.
 

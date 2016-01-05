@@ -46,6 +46,8 @@ setup(
         description='A simple console menu system using curses',
         classifiers=[
             'Development Status :: 3 - Alpha',
+            'Programming Language :: Python :: 2.7',
+            'Programming Language :: Python :: 3.4',
             'Programming Language :: Python :: 3.5',
             'Intended Audience :: Developers'
         ],

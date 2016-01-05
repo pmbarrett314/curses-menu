@@ -1,5 +1,3 @@
-from threading import Thread
-
 import time
 
 from base_test_case import BaseTestCase, ThreadedReturnGetter

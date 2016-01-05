@@ -39,7 +39,7 @@ class TestFunctionItem(TestExternalItem):
         function_item_1 = FunctionItem("function_item_1", self.menu, fun1)
         function_item_2 = FunctionItem("function_item_2", self.menu, fun1, ["-l", "-a", "~"], {"test": 12}, True)
         function_item_3 = FunctionItem(name="function_item_3", menu=self.menu, function=fun2, args=[1, 2, 3],
-                                   kwargs={1: "thing", 16: "other"}, should_exit=False)
+                                       kwargs={1: "thing", 16: "other"}, should_exit=False)
         self.assertEqual(function_item_1.name, "function_item_1")
         self.assertEqual(function_item_2.name, "function_item_2")
         self.assertEqual(function_item_3.name, "function_item_3")

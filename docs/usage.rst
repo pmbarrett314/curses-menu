@@ -15,13 +15,13 @@ Then create a menu::
 
     menu = CursesMenu(title="This is a menu!", subtitle="It has a subtitle too!")
 
-Create some items::
+Create menu items for each choice you need::
 
     command_item = CommandItem("command", menu, "touch hello.txt")
 
     function_item = FunctionItem("function", menu, input,["Enter some input"])
 
-Maybe even a submenu::
+If you'd like to add submenus, just create a :py:class:`~cursesmenu.items.SubmenuItem`::
 
     submenu = CursesMenu(title="This is the submenu")
 
@@ -35,16 +35,20 @@ Add the items to the menu::
 
     menu.append_item(submenu_item)
 
-Then show the menu::
+Then call show to start the menu::
 
     menu.show()
 
-And let the user take over from there.
+After that, the menu will spawn its own thread and go about its business. If you want to wait on the user to finish
+with the menu before continuing, call::
+
+    menu.join()
 
 Getting a selection
 -------------------
 
-If you'd like to get a selection from a list, that's even easier::
+If you have a list of things (strings for example), and you want to allow the user to select one, you can use a
+:py:class:`~cursesmenu.SelectionMenu`::
 
     from cursesmenu import SelectionMenu
 

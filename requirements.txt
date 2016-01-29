@@ -3,7 +3,7 @@ Babel
 colorama
 docutils
 Jinja2
-MarkupSafe=
+MarkupSafe
 pluggy
 py
 Pygments

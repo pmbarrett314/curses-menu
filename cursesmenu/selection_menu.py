@@ -21,7 +21,7 @@ class SelectionMenu(CursesMenu):
             self.append_item(SelectionItem(item, self))
 
     @classmethod
-    def get_selection(cls, strings, title="Select an option", subtitle=None, exit_option=True, parent=None):
+    def get_selection(cls, strings, title="Select an option", subtitle=None, exit_option=True, parent=None, _menu=[]):
         """
         Simplifies everything even further. Just give this method a list of strings, and it will show the menu and
         return the selected index
@@ -35,6 +35,7 @@ class SelectionMenu(CursesMenu):
         :rtype: int
         """
         menu = cls(strings, title, subtitle, exit_option, parent)
+        _menu.append(menu)
         menu.show()
         menu.join()
         return menu.selected_option

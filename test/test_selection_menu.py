@@ -6,6 +6,7 @@ from cursesmenu import SelectionMenu
 
 
 class TestSelectionMenu(BaseTestCase):
+
     def test_select(self):
         selection_menu = SelectionMenu(strings=["a", "b", "c"], title="Select a letter")
         selection_menu.show()
@@ -21,20 +22,27 @@ class TestSelectionMenu(BaseTestCase):
         self.mock_curses.initscr.assert_any_call()
 
     def test_get_selection(self):
-        self.menu_thread = ThreadedReturnGetter(SelectionMenu.get_selection, ["One", "Two", "Three"])
-        self.menu_thread.start()
+        menu = []
+        menu_thread = ThreadedReturnGetter(SelectionMenu.get_selection, args=[["One", "Two", "Three"]], kwargs={"_menu": menu})
+
+        menu_thread.start()
         time.sleep(1)
-        CursesMenu.currently_active_menu.go_down()
-        CursesMenu.currently_active_menu.select()
-        self.menu_thread.join(timeout=10)
-        self.assertFalse(self.menu_thread.is_alive())
-        self.assertEqual(self.menu_thread.return_value, 1)
+        menu = menu[0]
+        menu.wait_for_start()
+        menu.go_down()
+        menu.select()
+        print(menu.returned_value)
+        menu_thread.join(timeout=10)
+        self.assertFalse(menu_thread.is_alive())
+        self.assertEqual(menu_thread.return_value, 1)
 
     def test_current_menu(self):
-        self.menu_thread = ThreadedReturnGetter(SelectionMenu.get_selection, ["One", "Two", "Three"])
+        menu = []
+        self.menu_thread = ThreadedReturnGetter(SelectionMenu.get_selection, args=[["One", "Two", "Three"]], kwargs={"_menu": menu})
         self.menu_thread.start()
         time.sleep(1)
         self.assertIsInstance(CursesMenu.currently_active_menu, SelectionMenu)
+        self.assertIs(CursesMenu.currently_active_menu, menu[0])
 
         selection_menu = SelectionMenu(strings=["a", "b", "c"], title="Select a letter")
         selection_menu.show()

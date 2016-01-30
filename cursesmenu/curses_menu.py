@@ -178,6 +178,9 @@ class CursesMenu(object):
         if threading.current_thread() is not self._main_thread:
             self._main_thread.join(timeout=timeout)
 
+    def wait_for_start(self):
+        self._running.wait()
+
     def is_alive(self):
         """
         :return: True if the thread is still alive, False otherwise
@@ -199,7 +202,7 @@ class CursesMenu(object):
 
     def _main_loop(self):
         self.draw()
-        while self._running.wait() and not self.should_exit:
+        while self._running.wait() is not False and not self.should_exit:
             self.process_user_input()
 
     def draw(self):

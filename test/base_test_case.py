@@ -1,5 +1,9 @@
-import unittest
-
+import sys
+if sys.version_info<(2,7):
+    import unittest2 as unittest
+else:
+    import unittest
+    
 try:
     from unittest.mock import Mock, patch
 except ImportError:
@@ -8,24 +12,15 @@ import curses
 from threading import Thread
 
 
-class ThreadedReturnGetter():
-    def __init__(self, function, *args, **kwargs):
+class ThreadedReturnGetter(Thread):
+    def __init__(self, function, args=list(), kwargs=dict()):
         self.return_value = None
         self.function = function
         try:
-            self.thread = Thread(target=self.get_return_value, args=args, kwargs=kwargs, daemon=True)
+            super(ThreadedReturnGetter, self).__init__(target=self.get_return_value, args=args, kwargs=kwargs, daemon=True)
         except TypeError:
-            self.thread = Thread(target=self.get_return_value, args=args, kwargs=kwargs)
-            self.thread.daemon = True
-
-    def start(self):
-        self.thread.start()
-
-    def join(self, timeout):
-        self.thread.join(timeout=timeout)
-
-    def is_alive(self):
-        return self.thread.is_alive()
+            super(ThreadedReturnGetter, self).__init__(target=self.get_return_value, args=args, kwargs=kwargs)
+            self.daemon = True
 
     def get_return_value(self, *args, **kwargs):
         self.return_value = self.function(*args, **kwargs)

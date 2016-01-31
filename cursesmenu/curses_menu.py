@@ -76,7 +76,7 @@ class CursesMenu(object):
         if self.items:
             return self.items[self.current_option]
         else:
-            return None
+            return
 
     @property
     def selected_item(self):
@@ -141,7 +141,10 @@ class CursesMenu(object):
         self.highlight = curses.color_pair(1)
         self.normal = curses.A_NORMAL
 
-    def show(self, exit_option=None):
+    def clear_screen(self):
+        self.screen.clear()
+
+    def start(self, exit_option=None):
         """
         Start the menu and allow the user to interact with it
 
@@ -177,6 +180,10 @@ class CursesMenu(object):
         """
         if threading.current_thread() is not self._main_thread:
             self._main_thread.join(timeout=timeout)
+
+    def show(self, exit_option=None):
+        self.start(exit_option)
+        self.join()
 
     def wait_for_start(self):
         self._running.wait()
@@ -305,9 +312,6 @@ class CursesMenu(object):
         CursesMenu.currently_active_menu = self.previous_active_menu
         clean_up_screen()
         return self.returned_value
-
-    def clear_screen(self):
-        self.screen.clear()
 
 
 class MenuItem(object):

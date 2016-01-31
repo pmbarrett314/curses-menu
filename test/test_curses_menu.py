@@ -12,7 +12,7 @@ class TestSampleMenu(BaseTestCase):
         self.item2 = MenuItem("self.item2", self.menu)
         self.menu.append_item(self.item1)
         self.menu.append_item(self.item2)
-        self.menu.show()
+        self.menu.start()
 
     def tearDown(self):
         super(TestSampleMenu, self).tearDown()
@@ -89,7 +89,7 @@ class TestCursesMenu(BaseTestCase):
         menu1 = CursesMenu("menu1", "test_currently_active_menu")
         menu2 = CursesMenu("menu2", "test_currently_active_menu")
         self.assertIsNone(CursesMenu.currently_active_menu)
-        menu1.show()
+        menu1.start()
         self.assertIs(CursesMenu.currently_active_menu, menu1)
-        menu2.show()
+        menu2.start()
         self.assertIs(CursesMenu.currently_active_menu, menu2)

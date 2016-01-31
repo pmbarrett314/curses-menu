@@ -27,7 +27,7 @@ class SubmenuItem(MenuItem):
         """
         Shows the submenu
         """
-        self.submenu.show()
+        self.submenu.start()
 
     def clean_up(self):
         """

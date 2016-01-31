@@ -37,7 +37,7 @@ class TestSubmenuItem(BaseTestCase):
         root_menu.append_item(submenu_item_1)
         root_menu.append_item(submenu_item_2)
 
-        root_menu.show()
+        root_menu.start()
         self.assertIs(CursesMenu.currently_active_menu, root_menu)
         submenu_item_1.action()
         self.assertIs(CursesMenu.currently_active_menu, submenu1)

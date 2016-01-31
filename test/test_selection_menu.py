@@ -9,7 +9,7 @@ class TestSelectionMenu(BaseTestCase):
 
     def test_select(self):
         selection_menu = SelectionMenu(strings=["a", "b", "c"], title="Select a letter")
-        selection_menu.show()
+        selection_menu.start()
         selection_menu.go_down()
         selection_menu.select()
         selection_menu.join(timeout=10)
@@ -18,7 +18,7 @@ class TestSelectionMenu(BaseTestCase):
 
     def test_mock(self):
         selection_menu = SelectionMenu(strings=["a", "b", "c"], title="Select a letter")
-        selection_menu.show()
+        selection_menu.start()
         self.mock_curses.initscr.assert_any_call()
 
     def test_get_selection(self):
@@ -45,7 +45,7 @@ class TestSelectionMenu(BaseTestCase):
         self.assertIs(CursesMenu.currently_active_menu, menu[0])
 
         selection_menu = SelectionMenu(strings=["a", "b", "c"], title="Select a letter")
-        selection_menu.show()
+        selection_menu.start()
         self.assertIs(CursesMenu.currently_active_menu, selection_menu)
 
     def test_init(self):

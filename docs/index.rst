@@ -4,7 +4,7 @@
    contain the root `toctree` directive.
 
 Welcome to curses-menu's documentation!
-======================================
+=======================================
 
 Contents:
 

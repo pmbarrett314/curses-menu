@@ -7,4 +7,4 @@ appropriate to your machine and version of Python.
 
 Everyone should run::
 
-    pip install cursesmenu
+    pip install curses-menu

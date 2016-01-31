@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #
-# cursesmenu documentation build configuration file, created by
+# curses-menu documentation build configuration file, created by
 # sphinx-quickstart on Fri Dec 18 18:18:50 2015.
 #
 # This file is execfile()d with the current directory set to its

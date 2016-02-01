@@ -1,5 +1,3 @@
-import time
-
 try:
     from unittest.mock import Mock, patch
 except ImportError:
@@ -46,7 +44,7 @@ class TestSelectionMenu(BaseTestCase):
         self.menu_thread.start()
         while not menu:
             continue
-        menu=menu[0]
+        menu = menu[0]
         menu.wait_for_start()
         self.assertIsInstance(CursesMenu.currently_active_menu, SelectionMenu)
         self.assertIs(CursesMenu.currently_active_menu, menu)

@@ -13,6 +13,7 @@ class TestSampleMenu(BaseTestCase):
         self.menu.append_item(self.item1)
         self.menu.append_item(self.item2)
         self.menu.start()
+        self.menu.wait_for_start()
 
     def tearDown(self):
         super(TestSampleMenu, self).tearDown()

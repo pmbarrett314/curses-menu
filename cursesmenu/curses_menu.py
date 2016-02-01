@@ -39,8 +39,6 @@ class CursesMenu(object):
         self.screen = None
         self.highlight = None
         self.normal = None
-        self._set_up_screen()
-        self._set_up_colors()
 
         self.title = title
         self.subtitle = subtitle
@@ -129,13 +127,6 @@ class CursesMenu(object):
                 return True
         return False
 
-    def _set_up_screen(self):
-        self.screen = curses.initscr()
-        curses.start_color()
-        curses.noecho()
-        curses.cbreak()
-        self.screen.keypad(1)
-
     def _set_up_colors(self):
         curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
         self.highlight = curses.color_pair(1)
@@ -143,6 +134,12 @@ class CursesMenu(object):
 
     def clear_screen(self):
         self.screen.clear()
+
+    def _wrap_start(self):
+        if self.parent is None:
+            curses.wrapper(self._main_loop)
+        else:
+            self._main_loop(curses.initscr())
 
     def start(self, exit_option=None):
         """
@@ -166,11 +163,11 @@ class CursesMenu(object):
             self.remove_exit()
 
         try:
-            self._main_thread = threading.Thread(target=self._main_loop, daemon=True)
+            self._main_thread = threading.Thread(target=self._wrap_start, daemon=True)
         except TypeError:
-            self._main_thread = threading.Thread(target=self._main_loop)
+            self._main_thread = threading.Thread(target=self._wrap_start)
             self._main_thread.daemon = True
-        self._running.set()
+
         self._main_thread.start()
 
     def join(self, timeout=None):
@@ -207,10 +204,16 @@ class CursesMenu(object):
         CursesMenu.currently_active_menu = self
         self._running.set()
 
-    def _main_loop(self):
+    def _main_loop(self, scr):
+        self.screen = scr
+        self._set_up_colors()
         self.draw()
+        self._running.set()
         while self._running.wait() is not False and not self.should_exit:
             self.process_user_input()
+
+    def is_running(self):
+        return self._running.is_set()
 
     def draw(self):
         """
@@ -296,6 +299,7 @@ class CursesMenu(object):
         self.selected_item.set_up()
         self.returned_value = self.selected_item.action()
         self.selected_item.clean_up()
+
         if self.selected_item.should_exit:
             self.exit()
         else:
@@ -311,6 +315,7 @@ class CursesMenu(object):
         self.join()
         CursesMenu.currently_active_menu = self.previous_active_menu
         clean_up_screen()
+        self.clear_screen()
         return self.returned_value
 
 

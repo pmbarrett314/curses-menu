@@ -127,14 +127,6 @@ class CursesMenu(object):
                 return True
         return False
 
-    def _set_up_colors(self):
-        curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
-        self.highlight = curses.color_pair(1)
-        self.normal = curses.A_NORMAL
-
-    def clear_screen(self):
-        self.screen.clear()
-
     def _wrap_start(self):
         if self.parent is None:
             curses.wrapper(self._main_loop)
@@ -170,17 +162,38 @@ class CursesMenu(object):
 
         self._main_thread.start()
 
-    def join(self, timeout=None):
-        """
-        Wait on the menu to exit then return
-        :param Number timeout: How long to wait before timing out
-        """
-        if threading.current_thread() is not self._main_thread:
-            self._main_thread.join(timeout=timeout)
-
     def show(self, exit_option=None):
         self.start(exit_option)
         self.join()
+
+    def _main_loop(self, scr):
+        self.screen = scr
+        self._set_up_colors()
+        self.draw()
+        self._running.set()
+        while self._running.wait() is not False and not self.should_exit:
+            self.process_user_input()
+
+    def draw(self):
+        """
+        Redraws the menu and refreshes the screen. Should be called whenever something changes.
+        """
+        self.screen.border(0)
+        if self.title is not None:
+            self.screen.addstr(2, 2, self.title, curses.A_STANDOUT)
+        if self.subtitle is not None:
+            self.screen.addstr(4, 2, self.subtitle, curses.A_BOLD)
+
+        for index, item in enumerate(self.items):
+            if self.current_option == index:
+                text_style = self.highlight
+            else:
+                text_style = self.normal
+            self.screen.addstr(5 + index, 4, item.show(index), text_style)
+        self.screen.refresh()
+
+    def is_running(self):
+        return self._running.is_set()
 
     def wait_for_start(self):
         self._running.wait()
@@ -204,34 +217,13 @@ class CursesMenu(object):
         CursesMenu.currently_active_menu = self
         self._running.set()
 
-    def _main_loop(self, scr):
-        self.screen = scr
-        self._set_up_colors()
-        self.draw()
-        self._running.set()
-        while self._running.wait() is not False and not self.should_exit:
-            self.process_user_input()
-
-    def is_running(self):
-        return self._running.is_set()
-
-    def draw(self):
+    def join(self, timeout=None):
         """
-        Redraws the menu and refreshes the screen. Should be called whenever something changes.
+        Wait on the menu to exit then return
+        :param Number timeout: How long to wait before timing out
         """
-        self.screen.border(0)
-        if self.title is not None:
-            self.screen.addstr(2, 2, self.title, curses.A_STANDOUT)
-        if self.subtitle is not None:
-            self.screen.addstr(4, 2, self.subtitle, curses.A_BOLD)
-
-        for index, item in enumerate(self.items):
-            if self.current_option == index:
-                text_style = self.highlight
-            else:
-                text_style = self.normal
-            self.screen.addstr(5 + index, 4, item.show(index), text_style)
-        self.screen.refresh()
+        if threading.current_thread() is not self._main_thread:
+            self._main_thread.join(timeout=timeout)
 
     def get_input(self):
         """
@@ -317,6 +309,14 @@ class CursesMenu(object):
         clean_up_screen()
         self.clear_screen()
         return self.returned_value
+
+    def _set_up_colors(self):
+        curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
+        self.highlight = curses.color_pair(1)
+        self.normal = curses.A_NORMAL
+
+    def clear_screen(self):
+        self.screen.clear()
 
 
 class MenuItem(object):

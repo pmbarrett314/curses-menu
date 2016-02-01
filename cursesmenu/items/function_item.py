@@ -29,7 +29,7 @@ class FunctionItem(ExternalItem):
         self.function = function
         self.returned = None
 
-    def external_action(self):
+    def action(self):
         """
         Call the function with the given args and kwargs
 

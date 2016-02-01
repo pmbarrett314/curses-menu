@@ -25,17 +25,17 @@ class CommandItem(ExternalItem):
             self.arguments = []
         self.status = None
 
-    def external_action(self):
+    def action(self):
         """
         Runs the command
 
         :return: the exit status of the command process
         """
-        commandline=self.command + " " + " ".join(self.arguments)
+        commandline = self.command + " " + " ".join(self.arguments)
         try:
             completed_process = subprocess.run(commandline, shell=True)
             self.status = completed_process.returncode
         except AttributeError:
-            self.status=subprocess.call(commandline,shell=True)
+            self.status = subprocess.call(commandline, shell=True)
 
         return self.status

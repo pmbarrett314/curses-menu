@@ -15,7 +15,7 @@ from test_external_item import TestExternalItem
 class TestCommandItem(TestExternalItem):
     def setUp(self):
         super(TestCommandItem, self).setUp()
-        self.menu = CursesMenu("self.menu", "TestCommnadItem")
+        self.menu = CursesMenu("self.menu", "TestCommandItem")
 
     def test_init(self):
         command_item_1 = CommandItem("command_item_1", self.menu, "exit")

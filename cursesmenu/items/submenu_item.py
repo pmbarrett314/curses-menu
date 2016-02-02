@@ -7,13 +7,19 @@ class SubmenuItem(MenuItem):
     A menu item that opens a submenu.
     """
 
-    def __init__(self, name, menu, submenu, should_exit=False):
+    def __init__(self, text, submenu, menu=None, should_exit=False):
         """
         :param CursesMenu submenu: The submenu to be opened when this item is selected
         """
-        super(SubmenuItem, self).__init__(name, menu, should_exit)
+        super(SubmenuItem, self).__init__(text=text, menu=menu, should_exit=should_exit)
+
         self.submenu = submenu
-        self.submenu.parent = self.menu
+        if menu:
+            self.submenu.set_parent(menu)
+
+    def set_menu(self, menu):
+        self.menu = menu
+        self.submenu.set_parent(self.menu)
 
     def set_up(self):
         """

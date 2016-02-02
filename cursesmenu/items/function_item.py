@@ -6,18 +6,21 @@ class FunctionItem(ExternalItem):
     A menu item to call a Python function
     """
 
-    def __init__(self, name, menu, function, args=None, kwargs=None, should_exit=False):
+    def __init__(self, text, function, args=None, kwargs=None, menu=None, should_exit=False):
         """
-        :type name: str
+        :type text: str
         :type menu: cursesemnu.CursesMenu
 
         :param function: The function to be called
         :param list args: The list of args to be passed to the function
         :param dict kwargs: The dictionary of kwargs to be passed to the function
 
-        :ivar self.returned: the value returned by the function
+        :ivar self.return_value: the value returned by the function
         """
-        super(FunctionItem, self).__init__(name, menu, should_exit)
+        super(FunctionItem, self).__init__(text=text, menu=menu, should_exit=should_exit)
+
+        self.function = function
+
         if args is not None:
             self.args = args
         else:
@@ -26,8 +29,8 @@ class FunctionItem(ExternalItem):
             self.kwargs = kwargs
         else:
             self.kwargs = {}
-        self.function = function
-        self.returned = None
+
+        self.return_value = None
 
     def action(self):
         """
@@ -35,5 +38,5 @@ class FunctionItem(ExternalItem):
 
         :return: the return value of the function
         """
-        self.returned = self.function(*self.args, **self.kwargs)
-        return self.returned
+        self.return_value = self.function(*self.args, **self.kwargs)
+        return self.return_value

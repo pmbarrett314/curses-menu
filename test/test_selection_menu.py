@@ -51,13 +51,14 @@ class TestSelectionMenu(BaseTestCase):
 
         selection_menu = SelectionMenu(strings=["a", "b", "c"], title="Select a letter")
         selection_menu.start()
+        selection_menu.wait_for_start(10)
         self.assertIs(CursesMenu.currently_active_menu, selection_menu)
 
     def test_init(self):
         selection_menu_1 = SelectionMenu(["1", "2", "3"])
-        selection_menu_2 = SelectionMenu(["4", "5"], "selection_menu_2", "test_init", True, None)
+        selection_menu_2 = SelectionMenu(["4", "5"], "selection_menu_2", "test_init", True)
         selection_menu_3 = SelectionMenu(strings=["6", "7", "8", "9"], title="selection_menu_3", subtitle="test_init",
-                                         show_exit_option=False, parent=None)
+                                         show_exit_option=False)
         self.assertIsNone(selection_menu_1.title)
         self.assertEqual(selection_menu_2.title, "selection_menu_2")
         self.assertEqual(selection_menu_3.title, "selection_menu_3")
@@ -67,9 +68,6 @@ class TestSelectionMenu(BaseTestCase):
         self.assertTrue(selection_menu_1.show_exit_option)
         self.assertTrue(selection_menu_2.show_exit_option)
         self.assertFalse(selection_menu_3.show_exit_option)
-        self.assertIsNone(selection_menu_1.parent)
-        self.assertIsNone(selection_menu_2.parent)
-        self.assertIsNone(selection_menu_3.parent)
-        self.assertEqual(selection_menu_1.items[1].name, "2")
-        self.assertEqual(selection_menu_2.items[0].name, "4")
-        self.assertEqual(selection_menu_3.items[3].name, "9")
+        self.assertEqual(selection_menu_1.items[1].text, "2")
+        self.assertEqual(selection_menu_2.items[0].text, "4")
+        self.assertEqual(selection_menu_3.items[3].text, "9")

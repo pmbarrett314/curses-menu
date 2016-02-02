@@ -13,12 +13,11 @@ class CursesMenu(object):
     """
     currently_active_menu = None
 
-    def __init__(self, title=None, subtitle=None, show_exit_option=True, parent=None):
+    def __init__(self, title=None, subtitle=None, show_exit_option=True):
         """
         :type title: str
         :type subtitle: str
         :type show_exit_option: bool
-        :type parent: CursesMenu
 
         :ivar str self.title: The title of the menu
         :ivar str self.subtitle: The subtitle of the menu
@@ -46,12 +45,9 @@ class CursesMenu(object):
 
         self.items = list()
 
-        self.parent = parent
+        self.parent = None
 
-        if parent is None:
-            self.exit_item = ExitItem("Exit", self)
-        else:
-            self.exit_item = ExitItem("Return to %s menu" % parent.title, self)
+        self.exit_item = ExitItem("Exit", self)
 
         self.current_option = 0
         self.selected_option = -1
@@ -65,6 +61,9 @@ class CursesMenu(object):
         self._main_thread = None
 
         self._running = threading.Event()
+
+    def __repr__(self):
+        return "%s: %s. %d items" % (self.title, self.subtitle, len(self.items))
 
     @property
     def current_item(self):
@@ -86,8 +85,9 @@ class CursesMenu(object):
         else:
             return None
 
-    def __repr__(self):
-        return "%s: %s. %d items" % (self.title, self.subtitle, len(self.items))
+    def set_parent(self, menu):
+        self.parent = menu
+        self.exit_item = ExitItem("Return to %s menu" % self.parent.title, self)
 
     def append_item(self, item):
         """
@@ -97,6 +97,7 @@ class CursesMenu(object):
         :type item: MenuItem
         """
         did_remove = self.remove_exit()
+        item.menu = self
         self.items.append(item)
         if did_remove:
             self.add_exit()
@@ -142,7 +143,7 @@ class CursesMenu(object):
         """
 
         self.previous_active_menu = CursesMenu.currently_active_menu
-        CursesMenu.currently_active_menu = self
+        CursesMenu.currently_active_menu = None
 
         self.should_exit = False
 
@@ -170,6 +171,7 @@ class CursesMenu(object):
         self.screen = scr
         self._set_up_colors()
         self.draw()
+        CursesMenu.currently_active_menu = self
         self._running.set()
         while self._running.wait() is not False and not self.should_exit:
             self.process_user_input()
@@ -195,8 +197,8 @@ class CursesMenu(object):
     def is_running(self):
         return self._running.is_set()
 
-    def wait_for_start(self):
-        self._running.wait()
+    def wait_for_start(self, timeout=None):
+        self._running.wait(timeout)
 
     def is_alive(self):
         """
@@ -304,10 +306,11 @@ class CursesMenu(object):
         """
         clear_terminal()
         self.should_exit = True
+        CursesMenu.currently_active_menu = None
         self.join()
-        CursesMenu.currently_active_menu = self.previous_active_menu
         clean_up_screen()
         self.clear_screen()
+        CursesMenu.currently_active_menu = self.previous_active_menu
         return self.returned_value
 
     def _set_up_colors(self):
@@ -324,21 +327,21 @@ class MenuItem(object):
     A generic menu item
     """
 
-    def __init__(self, name, menu, should_exit=False):
+    def __init__(self, text, menu=None, should_exit=False):
         """
-        :type name: str
+        :type text: str
         :type menu: CursesMenu
 
         :ivar str self.name: The name shown for this menu item
         :ivar CursesMenu self.menu: The menu to which this item belongs
         :ivar bool self.should_exit: whether the menu should exit once this item's action is done
         """
-        self.name = name
+        self.text = text
         self.menu = menu
         self.should_exit = should_exit
 
     def __str__(self):
-        return "%s %s" % (self.menu.title, self.name)
+        return "%s %s" % (self.menu.title, self.text)
 
     def show(self, index):
         """
@@ -354,7 +357,7 @@ class MenuItem(object):
         :return: The representation of the item to be shown in a menu
         :rtype: str
         """
-        return "%d - %s" % (index + 1, self.name)
+        return "%d - %s" % (index + 1, self.text)
 
     def set_up(self):
         """
@@ -380,8 +383,8 @@ class ExitItem(MenuItem):
     The last item in the menu, used to exit the current menu.
     """
 
-    def __init__(self, name, menu):
-        super(ExitItem, self).__init__(name, menu, should_exit=True)
+    def __init__(self, text, menu=None):
+        super(ExitItem, self).__init__(text=text, menu=menu, should_exit=True)
 
 
 def clear_terminal():

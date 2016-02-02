@@ -41,4 +41,5 @@ class CommandItem(ExternalItem):
         except AttributeError:
             self.exit_status = subprocess.call(commandline, shell=True)
 
+    def get_return(self):
         return self.exit_status

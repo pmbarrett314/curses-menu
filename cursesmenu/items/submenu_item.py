@@ -42,3 +42,6 @@ class SubmenuItem(MenuItem):
         self.submenu.join()
         self.submenu.clear_screen()
         self.menu.resume()
+
+    def get_return(self):
+        return self.submenu.returned_value

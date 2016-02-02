@@ -45,7 +45,9 @@ class TestCommandItem(TestExternalItem):
         else:
             return_command_item = CommandItem("return_command_item", "return 1")
 
-        self.assertEqual(return_command_item.action(), 1)
+        return_command_item.action()
+
+        self.assertEqual(return_command_item.get_return(), 1)
 
     def test_run(self):
         create_item = CommandItem("create_item", 'echo hello>test.txt')
@@ -55,14 +57,15 @@ class TestCommandItem(TestExternalItem):
         else:
             delete_item = CommandItem("delete_item", "rm test.txt")
             expected_contents = "hello\n"
-
-        self.assertEqual(create_item.action(), 0)
+        create_item.action()
+        self.assertEqual(create_item.get_return(), 0)
         self.assertTrue(os.path.isfile("test.txt"))
 
         with open("test.txt", 'r') as text:
             self.assertEqual(text.read(), expected_contents)
 
-        self.assertEqual(delete_item.action(), 0)
+        delete_item.action()
+        self.assertEqual(delete_item.get_return(), 0)
         self.assertFalse(os.path.isfile("test.txt"))
 
     @patch('cursesmenu.items.command_item.subprocess')

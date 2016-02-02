@@ -291,8 +291,9 @@ class CursesMenu(object):
         """
         self.selected_option = self.current_option
         self.selected_item.set_up()
-        self.returned_value = self.selected_item.action()
+        self.selected_item.action()
         self.selected_item.clean_up()
+        self.returned_value = self.selected_item.get_return()
 
         if self.selected_item.should_exit:
             self.exit()
@@ -377,6 +378,9 @@ class MenuItem(object):
         """
         pass
 
+    def get_return(self):
+        return self.menu.returned_value
+
 
 class ExitItem(MenuItem):
     """
@@ -385,6 +389,9 @@ class ExitItem(MenuItem):
 
     def __init__(self, text, menu=None):
         super(ExitItem, self).__init__(text=text, menu=menu, should_exit=True)
+
+    def get_return(self):
+        return self.menu.returned_value
 
 
 def clear_terminal():

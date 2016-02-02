@@ -30,8 +30,11 @@ class TestFunctionItem(TestExternalItem):
         kwargs = {"end": "\n", "sep": " "}
         function_item_1 = FunctionItem("function_item_1", mock_function_1)
         function_item_2 = FunctionItem("function_item_2", mock_function_2, args, kwargs)
-        self.assertEqual(function_item_1.action(), 5)
-        self.assertEqual(function_item_2.action(), 10)
+        function_item_1.action()
+        function_item_2.action()
+
+        self.assertEqual(function_item_1.get_return(), 5)
+        self.assertEqual(function_item_2.get_return(), 10)
         mock_function_1.assert_any_call()
         mock_function_2.assert_called_once_with(*args, **kwargs)
 

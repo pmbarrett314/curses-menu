@@ -9,8 +9,8 @@ class TestSelectionItem(BaseTestCase):
         self.menu = CursesMenu("self.menu", "TestSelectionItem")
 
     def test_init(self):
-        selection_item_1 = SelectionItem("selection_item_1", self.menu)
-        selection_item_2 = SelectionItem(text="selection_item_2", menu=self.menu)
+        selection_item_1 = SelectionItem("selection_item_1", 1, self.menu)
+        selection_item_2 = SelectionItem(text="selection_item_2", index=2, menu=self.menu)
         self.assertEqual(selection_item_1.text, "selection_item_1")
         self.assertEqual(selection_item_2.text, "selection_item_2")
         self.assertEqual(selection_item_1.menu, self.menu)

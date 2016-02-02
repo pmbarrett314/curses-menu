@@ -17,8 +17,8 @@ class SelectionMenu(CursesMenu):
         :type parent: CursesMenu
         """
         super(SelectionMenu, self).__init__(title, subtitle, show_exit_option)
-        for item in strings:
-            self.append_item(SelectionItem(item, self))
+        for index, item in enumerate(strings):
+            self.append_item(SelectionItem(item, index, self))
 
     @classmethod
     def get_selection(cls, strings, title="Select an option", subtitle=None, exit_option=True, _menu=[]):

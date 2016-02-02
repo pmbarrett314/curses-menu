@@ -39,4 +39,6 @@ class FunctionItem(ExternalItem):
         :return: the return value of the function
         """
         self.return_value = self.function(*self.args, **self.kwargs)
+
+    def get_return(self):
         return self.return_value

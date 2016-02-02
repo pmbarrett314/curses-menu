@@ -34,7 +34,7 @@ class CommandItem(ExternalItem):
         :return: the exit status of the command process
         :rtype: int
         """
-        commandline = "{} {}".format(self.command, " ".join(self.arguments))
+        commandline = "{1} {2}".format(self.command, " ".join(self.arguments))
         try:
             completed_process = subprocess.run(commandline, shell=True)
             self.exit_status = completed_process.returncode

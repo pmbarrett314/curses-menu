@@ -133,6 +133,10 @@ class CursesMenu(object):
             curses.wrapper(self._main_loop)
         else:
             self._main_loop(curses.initscr())
+        CursesMenu.currently_active_menu = None
+        self.clear_screen()
+        clear_terminal()
+        CursesMenu.currently_active_menu = self.previous_active_menu
 
     def start(self, exit_option=None):
         """
@@ -225,8 +229,7 @@ class CursesMenu(object):
         Wait on the menu to exit then return
         :param Number timeout: How long to wait before timing out
         """
-        if threading.current_thread() is not self._main_thread:
-            self._main_thread.join(timeout=timeout)
+        self._main_thread.join(timeout=timeout)
 
     def get_input(self):
         """
@@ -295,25 +298,17 @@ class CursesMenu(object):
         self.selected_item.action()
         self.selected_item.clean_up()
         self.returned_value = self.selected_item.get_return()
+        self.should_exit = self.selected_item.should_exit
 
-        if self.selected_item.should_exit:
-            self.exit()
-        else:
+        if not self.should_exit:
             self.draw()
 
     def exit(self):
         """
         Exit the menu and clean up
-        :return: The return value of the most recently selected item
         """
-        clear_terminal()
         self.should_exit = True
-        CursesMenu.currently_active_menu = None
         self.join()
-        clean_up_screen()
-        self.clear_screen()
-        CursesMenu.currently_active_menu = self.previous_active_menu
-        return self.returned_value
 
     def _set_up_colors(self):
         curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
@@ -403,12 +398,3 @@ def clear_terminal():
         os.system('cls')
     else:
         os.system('reset')
-
-
-def clean_up_screen():
-    """
-    Final cleanup after the menu is finished
-    """
-    curses.endwin()
-    clear_terminal()
-

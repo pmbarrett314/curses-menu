@@ -17,5 +17,5 @@ class ExternalItem(MenuItem):
 
     def clean_up(self):
         self.menu.clear_screen()
-        curses.reset_prog_mode()  # reset to 'current' curses environment
+        curses.reset_prog_mode()
 

@@ -40,7 +40,6 @@ class SubmenuItem(MenuItem):
         Wait on the submenu to return, then clean up and resume the parent menu
         """
         self.submenu.join()
-        self.submenu.clear_screen()
         self.menu.resume()
 
     def get_return(self):

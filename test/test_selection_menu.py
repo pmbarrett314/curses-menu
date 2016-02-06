@@ -45,7 +45,7 @@ class TestSelectionMenu(BaseTestCase):
         while not menu:
             continue
         menu = menu[0]
-        menu.wait_for_start()
+        menu.wait_for_start(10)
         self.assertIsInstance(CursesMenu.currently_active_menu, SelectionMenu)
         self.assertIs(CursesMenu.currently_active_menu, menu)
 

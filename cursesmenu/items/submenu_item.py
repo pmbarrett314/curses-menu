@@ -1,8 +1,10 @@
+import curses
+
 from cursesmenu import CursesMenu
-from cursesmenu.items import ExternalItem
+from cursesmenu.items import MenuItem
 
 
-class SubmenuItem(ExternalItem):
+class SubmenuItem(MenuItem):
     """
     A menu item that opens a submenu.
     """
@@ -21,6 +23,11 @@ class SubmenuItem(ExternalItem):
         self.menu = menu
         self.submenu.set_parent(self.menu)
 
+    def set_up(self):
+        self.menu.pause()
+        curses.def_prog_mode()
+        self.menu.clear_screen()
+
     def action(self):
         """
         Shows the submenu
@@ -32,7 +39,11 @@ class SubmenuItem(ExternalItem):
         Wait on the submenu to return, then clean up and resume the parent menu
         """
         self.submenu.join()
-        super().clean_up()
+        self.menu.clear_screen()
+        curses.reset_prog_mode()
+        curses.curs_set(1) # reset doesn't do this right
+        curses.curs_set(0)
+        self.menu.resume()
 
     def get_return(self):
         return self.submenu.returned_value

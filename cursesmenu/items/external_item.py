@@ -19,4 +19,6 @@ class ExternalItem(MenuItem):
     def clean_up(self):
         self.menu.clear_screen()
         curses.reset_prog_mode()
+        curses.curs_set(1) # reset doesn't do this right
+        curses.curs_set(0)
         self.menu.resume()

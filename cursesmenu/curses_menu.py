@@ -170,6 +170,7 @@ class CursesMenu(object):
     def _main_loop(self, scr):
         self.screen = scr
         self._set_up_colors()
+        curses.curs_set(0)
         self.draw()
         CursesMenu.currently_active_menu = self
         self._running.set()
@@ -411,11 +412,3 @@ def clean_up_screen():
     curses.endwin()
     clear_terminal()
 
-
-def reset_prog_mode():
-    """
-    Restore the terminal mode
-    """
-    curses.reset_prog_mode()  # reset to 'current' curses environment
-    curses.curs_set(1)  # reset doesn't do this right
-    curses.curs_set(0)

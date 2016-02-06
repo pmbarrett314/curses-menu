@@ -1,6 +1,6 @@
 import curses
 
-from cursesmenu import clear_terminal, reset_prog_mode
+from cursesmenu import clear_terminal
 from cursesmenu.items import MenuItem
 
 
@@ -17,5 +17,5 @@ class ExternalItem(MenuItem):
 
     def clean_up(self):
         self.menu.clear_screen()
-        reset_prog_mode()
+        curses.reset_prog_mode()  # reset to 'current' curses environment
 

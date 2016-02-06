@@ -6,7 +6,7 @@ def main():
     menu = CursesMenu("Root Menu", "Root Menu Subtitle")
     item1 = MenuItem("Item 1", menu)
     function_item = FunctionItem("Fun item", input, ["Enter an input: "])
-    command_item = CommandItem("Command", "echo hello")
+    command_item = CommandItem("Command", "python examples/example.py")
     submenu = SelectionMenu(["item1", "item2", "item3"])
     submenu_item = SubmenuItem("Submenu item", submenu=submenu)
     submenu_item.set_menu(menu)

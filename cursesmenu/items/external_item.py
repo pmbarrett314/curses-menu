@@ -11,6 +11,7 @@ class ExternalItem(MenuItem):
     """
 
     def set_up(self):
+        self.menu.pause()
         curses.def_prog_mode()
         clear_terminal()
         self.menu.clear_screen()
@@ -18,4 +19,4 @@ class ExternalItem(MenuItem):
     def clean_up(self):
         self.menu.clear_screen()
         curses.reset_prog_mode()
-
+        self.menu.resume()

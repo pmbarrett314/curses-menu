@@ -17,11 +17,11 @@ class SubmenuItem(MenuItem):
 
         self.submenu = submenu
         if menu:
-            self.submenu.set_parent(menu)
+            self.submenu.parent = menu
 
     def set_menu(self, menu):
         self.menu = menu
-        self.submenu.set_parent(self.menu)
+        self.submenu.parent = menu
 
     def set_up(self):
         self.menu.pause()

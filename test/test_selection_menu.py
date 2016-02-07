@@ -12,7 +12,7 @@ class TestSelectionMenu(BaseTestCase):
     def test_select(self):
         selection_menu = SelectionMenu(strings=["a", "b", "c"], title="Select a letter")
         selection_menu.start()
-        selection_menu.wait_for_start()
+        selection_menu.wait_for_start(timeout=10)
         selection_menu.go_down()
         selection_menu.select()
         selection_menu.join(timeout=10)

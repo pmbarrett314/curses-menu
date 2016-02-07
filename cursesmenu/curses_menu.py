@@ -387,7 +387,7 @@ class ExitItem(MenuItem):
             self.text = "Return to %s menu" % self.menu.parent.title
         else:
             self.text = "Exit"
-        super().show(index)
+        super(ExitItem, self).show(index)
 
     def get_return(self):
         return self.menu.returned_value

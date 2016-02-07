@@ -47,7 +47,7 @@ class CursesMenu(object):
 
         self.parent = None
 
-        self.exit_item = ExitItem("Exit", self)
+        self.exit_item = ExitItem(menu=self)
 
         self.current_option = 0
         self.selected_option = -1
@@ -84,10 +84,6 @@ class CursesMenu(object):
             return self.items[self.current_option]
         else:
             return None
-
-    def set_parent(self, menu):
-        self.parent = menu
-        self.exit_item = ExitItem("Return to %s menu" % self.parent.title, self)
 
     def append_item(self, item):
         """
@@ -383,8 +379,15 @@ class ExitItem(MenuItem):
     The last item in the menu, used to exit the current menu.
     """
 
-    def __init__(self, text, menu=None):
+    def __init__(self, text="Exit", menu=None):
         super(ExitItem, self).__init__(text=text, menu=menu, should_exit=True)
+
+    def show(self, index):
+        if self.menu and self.menu.parent:
+            self.text = "Return to %s menu" % self.menu.parent.title
+        else:
+            self.text = "Exit"
+        super().show(index)
 
     def get_return(self):
         return self.menu.returned_value

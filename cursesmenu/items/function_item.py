@@ -8,14 +8,10 @@ class FunctionItem(ExternalItem):
 
     def __init__(self, text, function, args=None, kwargs=None, menu=None, should_exit=False):
         """
-        :type text: str
-        :type menu: cursesemnu.CursesMenu
-
-        :param function: The function to be called
-        :param list args: The list of args to be passed to the function
-        :param dict kwargs: The dictionary of kwargs to be passed to the function
-
-        :ivar self.return_value: the value returned by the function
+        :ivar function: The function to be called
+        :ivar list args: An optional list of arguments to be passed to the function
+        :ivar dict kwargs: An optional dictionary of keyword arguments to be passed to the function
+        :ivar return_value: the value returned by the function, None if it hasn't been called yet.
         """
         super(FunctionItem, self).__init__(text=text, menu=menu, should_exit=should_exit)
 
@@ -34,11 +30,12 @@ class FunctionItem(ExternalItem):
 
     def action(self):
         """
-        Call the function with the given args and kwargs
-
-        :return: the return value of the function
+        This class overrides this method
         """
         self.return_value = self.function(*self.args, **self.kwargs)
 
     def get_return(self):
+        """
+        :return: The return value from the function call
+        """
         return self.return_value

@@ -10,12 +10,9 @@ class CommandItem(ExternalItem):
 
     def __init__(self, text, command, arguments=None, menu=None, should_exit=False):
         """
-        :type text: str
-        :type menu: cursesmenu.CursesMenu
-
-        :param str command: The console command to be executed
-        :param list[str] arguments: A list of string arguments to be passed to the command
-        :ivar int self.exit_status: the exit status of the command, None if it hasn't been run yet
+        :ivar str command: The console command to be executed
+        :ivar list[str] arguments: An optional list of string arguments to be passed to the command
+        :ivar int exit_status: the exit status of the command, None if it hasn't been run yet
         """
         super(CommandItem, self).__init__(text=text, menu=menu, should_exit=should_exit)
         self.command = command
@@ -29,10 +26,7 @@ class CommandItem(ExternalItem):
 
     def action(self):
         """
-        Runs the command
-
-        :return: the exit status of the command process
-        :rtype: int
+        This class overrides this method
         """
         commandline = "{0} {1}".format(self.command, " ".join(self.arguments))
         try:
@@ -42,4 +36,8 @@ class CommandItem(ExternalItem):
             self.exit_status = subprocess.call(commandline, shell=True)
 
     def get_return(self):
+        """
+        :return: the exit status of the command
+        :rtype: int
+        """
         return self.exit_status

@@ -322,12 +322,9 @@ class MenuItem(object):
 
     def __init__(self, text, menu=None, should_exit=False):
         """
-        :type text: str
-        :type menu: CursesMenu
-
-        :ivar str self.name: The name shown for this menu item
-        :ivar CursesMenu self.menu: The menu to which this item belongs
-        :ivar bool self.should_exit: whether the menu should exit once this item's action is done
+        :ivar str text: The text shown for this menu item
+        :ivar CursesMenu menu: The menu to which this item belongs
+        :ivar bool should_exit: Whether the menu should exit once this item's action is done
         """
         self.text = text
         self.menu = menu
@@ -338,12 +335,12 @@ class MenuItem(object):
 
     def show(self, index):
         """
-        How this item should be displayed in the menu. Can be overridden as desired as long as it returns a string
-        and takes an int as its first parameter.
+        How this item should be displayed in the menu. Can be overridden, but should keep the same signature.
 
         Default is:
 
             1 - Item 1
+
             2 - Another Item
 
         :param int index: The index of the item in the items list of the menu
@@ -360,7 +357,7 @@ class MenuItem(object):
 
     def action(self):
         """
-        What should be done when this item is selected. Should be overridden as needed.
+        Override to carry out the main action for this item.
         """
         pass
 
@@ -371,26 +368,30 @@ class MenuItem(object):
         pass
 
     def get_return(self):
+        """
+        Override to change what the item returns.
+        Otherwise just returns the same value the last selected item did.
+        """
         return self.menu.returned_value
 
 
 class ExitItem(MenuItem):
     """
-    The last item in the menu, used to exit the current menu.
+    Used to exit the current menu. Handled by :class:`cursesmenu.CursesMenu`
     """
 
     def __init__(self, text="Exit", menu=None):
         super(ExitItem, self).__init__(text=text, menu=menu, should_exit=True)
 
     def show(self, index):
+        """
+        This class overrides this method
+        """
         if self.menu and self.menu.parent:
             self.text = "Return to %s menu" % self.menu.parent.title
         else:
             self.text = "Exit"
         super(ExitItem, self).show(index)
-
-    def get_return(self):
-        return self.menu.returned_value
 
 
 def clear_terminal():

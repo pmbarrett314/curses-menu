@@ -391,8 +391,8 @@ class ExitItem(MenuItem):
             self.text = "Return to %s menu" % self.menu.parent.title
         else:
             self.text = "Exit"
-        super(ExitItem, self).show(index)
-
+        return super(ExitItem, self).show(index)
+    
 
 def clear_terminal():
     """

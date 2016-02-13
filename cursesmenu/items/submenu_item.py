@@ -21,7 +21,7 @@ class SubmenuItem(MenuItem):
     def set_menu(self, menu):
         """
         Sets the menu of this item.
-        Should be used instead of setting the menu directly for this class.
+        Should be used instead of directly accessing the menu attribute for this class.
 
         :param CursesMenu menu: the menu
         """

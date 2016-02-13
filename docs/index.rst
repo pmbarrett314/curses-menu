@@ -13,7 +13,6 @@ Contents:
 
    installation
    usage
-   oldmenu
    cursesmenu
 
 

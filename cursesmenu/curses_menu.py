@@ -134,12 +134,12 @@ class CursesMenu(object):
         clear_terminal()
         CursesMenu.currently_active_menu = self.previous_active_menu
 
-    def start(self, exit_option=None):
+    def start(self, show_exit_option=None):
         """
         Start the menu and allow the user to interact with it
 
-        :param exit_option: Whether the exit item should be shown, defaults to the value set in the constructor
-        :type exit_option: bool
+        :param show_exit_option: Whether the exit item should be shown, defaults to the value set in the constructor
+        :type show_exit_option: bool
         """
 
         self.previous_active_menu = CursesMenu.currently_active_menu
@@ -147,10 +147,10 @@ class CursesMenu(object):
 
         self.should_exit = False
 
-        if exit_option is None:
-            exit_option = self.show_exit_option
+        if show_exit_option is None:
+            show_exit_option = self.show_exit_option
 
-        if exit_option:
+        if show_exit_option:
             self.add_exit()
         else:
             self.remove_exit()
@@ -163,8 +163,8 @@ class CursesMenu(object):
 
         self._main_thread.start()
 
-    def show(self, exit_option=None):
-        self.start(exit_option)
+    def show(self, show_exit_option=None):
+        self.start(show_exit_option)
         self.join()
 
     def _main_loop(self, scr):

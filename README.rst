@@ -9,6 +9,9 @@ or learning curve of a full-fledged GUI framework.
 
 http://curses-menu.readthedocs.org/en/latest/
 
+.. image:: ./images/curses-menu_screenshot1.png
+
+
 Installation
 ~~~~~~~~~~~~
 

@@ -12,17 +12,8 @@ class TestExternalItem(BaseTestCase):
         super(TestExternalItem, self).setUp()
 
         self.mock_set_up = MagicMock()
-        self.mock_external = MagicMock(return_value=0)
+        self.mock_action = MagicMock(return_value=0)
         self.mock_clean_up = MagicMock()
-        ExternalItem._set_up_terminal = self.mock_set_up
-        ExternalItem._clean_up_terminal = self.mock_clean_up
-        ExternalItem.external_action = self.mock_external
-
-    def test_action(self):
-        menu = CursesMenu("menu", "test_action")
-        external_item = ExternalItem("external_item", menu)
-        self.assertEqual(external_item.action(), 0)
-
-        self.mock_set_up.assert_any_call()
-        self.mock_external.assert_any_call()
-        self.mock_clean_up.assert_any_call()
+        ExternalItem.set_up = self.mock_set_up
+        ExternalItem.clean_up = self.mock_clean_up
+        ExternalItem.action = self.mock_action

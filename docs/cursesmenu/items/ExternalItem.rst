@@ -1,7 +1,7 @@
 ExternalItem
 ============
 
+Bases: :class:`cursesmenu.items.MenuItem`
+
 .. autoclass:: cursesmenu.items.ExternalItem
     :members:
-    :undoc-members:
-    :show-inheritance:

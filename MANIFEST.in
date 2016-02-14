@@ -1,0 +1,5 @@
+include *.rst *.md *.txt tox.ini .travis.yml docs/Makefile .ackrc
+recursive-include test *.py
+recursive-include docs *.rst
+recursive-include docs *.py
+prune docs/_build

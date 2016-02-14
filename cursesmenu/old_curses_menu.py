@@ -32,10 +32,10 @@ def parse_old_menu(menu_data):
         item_title = item["title"]
         if item_type == menuItem.COMMAND:
             item_command = item["command"]
-            menu.append_item(CommandItem(item_title, menu, item_command))
+            menu.append_item(CommandItem(item_title, item_command, menu))
         elif item_type == menuItem.FUNCTION:
             item_function = item["function"]
-            menu.append_item(FunctionItem(item_title, menu, item_function))
+            menu.append_item(FunctionItem(item_title, item_function, menu))
         elif item_type == menuItem.EXITMENU:
             menu.append_item(ExitItem(item_title, menu))
         elif item_type == menuItem.NUMBER:

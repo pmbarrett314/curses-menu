@@ -7,35 +7,26 @@ class SelectionMenu(CursesMenu):
     A menu that simplifies item creation, just give it a list of strings and it builds the menu for you
     """
 
-    def __init__(self, strings, title=None, subtitle=None, show_exit_option=True, parent=None):
+    def __init__(self, strings, title=None, subtitle=None, show_exit_option=True):
         """
-        :param strings: The list of strings this menu should be built from
-        :type title: str
-        :type subtitle: str
-        :type strings: list[str]
-        :type show_exit_option: bool
-        :type parent: CursesMenu
+        :ivar list[str] strings: The list of strings this menu should be built from
         """
-        super(SelectionMenu, self).__init__(title, subtitle, show_exit_option, parent)
-        for item in strings:
-            self.append_item(SelectionItem(item, self))
+        super(SelectionMenu, self).__init__(title, subtitle, show_exit_option)
+        for index, item in enumerate(strings):
+            self.append_item(SelectionItem(item, index, self))
 
     @classmethod
-    def get_selection(cls, strings, title="Select an option", subtitle=None, exit_option=True, parent=None, _menu=[]):
+    def get_selection(cls, strings, title="Select an option", subtitle=None, exit_option=True, _menu=None):
         """
-        Simplifies everything even further. Just give this method a list of strings, and it will show the menu and
-        return the selected index
+        Single-method way of getting a selection out of a list of strings
 
-        :type title: str
-        :type subtitle: str
-        :type strings: list[str]
-        :type exit_option: bool
-        :type parent: CursesMenu
-        :return: the selected index
-        :rtype: int
+        :param list[str] strings: the list of string used to build the menu
+        :param list _menu: should probably only be used for testing, pass in a list and the created menu used \
+        internally by the method will be appended to it
         """
-        menu = cls(strings, title, subtitle, exit_option, parent)
-        _menu.append(menu)
+        menu = cls(strings, title, subtitle, exit_option)
+        if _menu is not None:
+            _menu.append(menu)
         menu.show()
         menu.join()
         return menu.selected_option

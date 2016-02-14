@@ -12,7 +12,8 @@ class TestSampleMenu(BaseTestCase):
         self.item2 = MenuItem("self.item2", self.menu)
         self.menu.append_item(self.item1)
         self.menu.append_item(self.item2)
-        self.menu.show()
+        self.menu.start()
+        self.menu.wait_for_start(10)
 
     def tearDown(self):
         super(TestSampleMenu, self).tearDown()
@@ -70,8 +71,8 @@ class TestSampleMenu(BaseTestCase):
 class TestCursesMenu(BaseTestCase):
     def test_init(self):
         menu1 = CursesMenu()
-        menu2 = CursesMenu("menu2", "test_init", True, None)
-        menu3 = CursesMenu(title="menu3", subtitle="test_init", show_exit_option=False, parent=menu1)
+        menu2 = CursesMenu("menu2", "test_init", True)
+        menu3 = CursesMenu(title="menu3", subtitle="test_init", show_exit_option=False)
         self.assertIsNone(menu1.title)
         self.assertEqual(menu2.title, "menu2")
         self.assertEqual(menu3.title, "menu3")
@@ -81,15 +82,14 @@ class TestCursesMenu(BaseTestCase):
         self.assertTrue(menu1.show_exit_option)
         self.assertTrue(menu2.show_exit_option)
         self.assertFalse(menu3.show_exit_option)
-        self.assertIsNone(menu1.parent)
-        self.assertIsNone(menu2.parent)
-        self.assertEqual(menu3.parent, menu1)
 
     def test_currently_active_menu(self):
         menu1 = CursesMenu("menu1", "test_currently_active_menu")
         menu2 = CursesMenu("menu2", "test_currently_active_menu")
         self.assertIsNone(CursesMenu.currently_active_menu)
-        menu1.show()
+        menu1.start()
+        menu1.wait_for_start(10)
         self.assertIs(CursesMenu.currently_active_menu, menu1)
-        menu2.show()
+        menu2.start()
+        menu2.wait_for_start(10)
         self.assertIs(CursesMenu.currently_active_menu, menu2)

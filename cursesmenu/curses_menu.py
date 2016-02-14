@@ -8,39 +8,35 @@ class CursesMenu(object):
     """
     A class that displays a menu and allows the user to select an option
 
-    :cvar cls.currently_active_menu: The currently active menu
-    :type currently_active_menu: CursesMenu
+    :cvar CursesMenu cls.currently_active_menu: Class variable that holds the currently active menu or None if no menu\
+    is currently active (E.G. when switching between menus)
     """
     currently_active_menu = None
 
-    def __init__(self, title=None, subtitle=None, show_exit_option=True, parent=None):
+    def __init__(self, title=None, subtitle=None, show_exit_option=True):
         """
-        :type title: str
-        :type subtitle: str
-        :type show_exit_option: bool
-        :type parent: CursesMenu
-
-        :ivar str self.title: The title of the menu
-        :ivar str self.subtitle: The subtitle of the menu
-        :ivar self.items: The list of MenuItems that the menu will display
-        :vartype self.items: list[MenuItem]
-        :ivar bool self.show_exit_option: Whether this menu should show an exit item by default. can be overridden in :meth:`CursesMenu.show`
-        :ivar CursesMenu self.parent: The parent of this menu
-        :ivar int self.current_option: The currently highlighted menu option
-        :ivar MenuItem self.current_item: The item corresponding to the menu option that is currently highlighted
-        :ivar int self.selected_option: The option that the user has most recently selected
-        :ivar MenuItem self.selected_item: The item in :attr:`self.items` that the user most recently selected
-        :ivar self.returned_value: The value returned by the most recently selected item
-        :type self._main_thread: threading.Thread
-        :type self._running: threading.Event
-
+        :ivar str title: The title of the menu
+        :ivar str subtitle: The subtitle of the menu
+        :ivar bool show_exit_option: Whether this menu should show an exit item by default. Can be overridden \
+        when the menu is started
+        :ivar items: The list of MenuItems that the menu will display
+        :vartype items: list[:class:`MenuItem<cursesmenu.items.MenuItem>`]
+        :ivar CursesMenu parent: The parent of this menu
+        :ivar CursesMenu previous_active_menu: the previously active menu to be restored into the class's \
+        currently active menu
+        :ivar int current_option: The currently highlighted menu option
+        :ivar MenuItem current_item: The item corresponding to the menu option that is currently highlighted
+        :ivar int selected_option: The option that the user has most recently selected
+        :ivar MenuItem selected_item: The item in :attr:`items` that the user most recently selected
+        :ivar returned_value: The value returned by the most recently selected item
+        :ivar screen: the curses window associated with this menu
+        :ivar normal: the normal text color pair for this menu
+        :ivar highlight: the highlight color pair associated with this window
         """
 
         self.screen = None
         self.highlight = None
         self.normal = None
-        self._set_up_screen()
-        self._set_up_colors()
 
         self.title = title
         self.subtitle = subtitle
@@ -48,12 +44,9 @@ class CursesMenu(object):
 
         self.items = list()
 
-        self.parent = parent
+        self.parent = None
 
-        if parent is None:
-            self.exit_item = ExitItem("Exit", self)
-        else:
-            self.exit_item = ExitItem("Return to %s menu" % parent.title, self)
+        self.exit_item = ExitItem(menu=self)
 
         self.current_option = 0
         self.selected_option = -1
@@ -68,10 +61,13 @@ class CursesMenu(object):
 
         self._running = threading.Event()
 
+    def __repr__(self):
+        return "%s: %s. %d items" % (self.title, self.subtitle, len(self.items))
+
     @property
     def current_item(self):
         """
-        :rtype: MenuItem or None
+        :rtype: MenuItem|None
         """
         if self.items:
             return self.items[self.current_option]
@@ -81,31 +77,28 @@ class CursesMenu(object):
     @property
     def selected_item(self):
         """
-        :rtype: MenuItem or None
+        :rtype: MenuItem|None
         """
         if self.items and self.selected_option != -1:
             return self.items[self.current_option]
         else:
             return None
 
-    def __repr__(self):
-        return "%s: %s. %d items" % (self.title, self.subtitle, len(self.items))
-
     def append_item(self, item):
         """
-        Append an item to the menu
+        Add an item to the end of the menu before the exit item
 
-        :param item: The item to be added
-        :type item: MenuItem
+        :param MenuItem item: The item to be added
         """
         did_remove = self.remove_exit()
+        item.menu = self
         self.items.append(item)
         if did_remove:
             self.add_exit()
 
     def add_exit(self):
         """
-        Add the exit item if necessary
+        Add the exit item if necessary. Used to make sure there aren't multiple exit items
 
         :return: True if item needed to be added, False otherwise
         :rtype: bool
@@ -118,7 +111,7 @@ class CursesMenu(object):
 
     def remove_exit(self):
         """
-        Remove the exit item if necessary
+        Remove the exit item if necessary. Used to make sure we only remove the exit item, not something else
 
         :return: True if item needed to be removed, False otherwise
         :rtype: bool
@@ -129,85 +122,70 @@ class CursesMenu(object):
                 return True
         return False
 
-    def _set_up_screen(self):
-        self.screen = curses.initscr()
-        curses.start_color()
-        curses.noecho()
-        curses.cbreak()
-        self.screen.keypad(1)
+    def _wrap_start(self):
+        if self.parent is None:
+            curses.wrapper(self._main_loop)
+        else:
+            self._main_loop(curses.initscr())
+        CursesMenu.currently_active_menu = None
+        self.clear_screen()
+        clear_terminal()
+        CursesMenu.currently_active_menu = self.previous_active_menu
 
-    def _set_up_colors(self):
-        curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
-        self.highlight = curses.color_pair(1)
-        self.normal = curses.A_NORMAL
-
-    def show(self, exit_option=None):
+    def start(self, show_exit_option=None):
         """
-        Start the menu and allow the user to interact with it
+        Start the menu in a new thread and allow the user to interact with it.
+        The thread is a daemon, so :meth:`join()<cursesmenu.CursesMenu.join>` should be called if there's a possibility\
+        that the main thread will exit before the menu is done
 
-        :param exit_option: Whether the exit item should be shown, defaults to the value set in the constructor
-        :type exit_option: bool
+        :param bool show_exit_option: Whether the exit item should be shown, defaults to\
+        the value set in the constructor
         """
 
         self.previous_active_menu = CursesMenu.currently_active_menu
-        CursesMenu.currently_active_menu = self
+        CursesMenu.currently_active_menu = None
 
         self.should_exit = False
 
-        if exit_option is None:
-            exit_option = self.show_exit_option
+        if show_exit_option is None:
+            show_exit_option = self.show_exit_option
 
-        if exit_option:
+        if show_exit_option:
             self.add_exit()
         else:
             self.remove_exit()
 
         try:
-            self._main_thread = threading.Thread(target=self._main_loop, daemon=True)
+            self._main_thread = threading.Thread(target=self._wrap_start, daemon=True)
         except TypeError:
-            self._main_thread = threading.Thread(target=self._main_loop)
+            self._main_thread = threading.Thread(target=self._wrap_start)
             self._main_thread.daemon = True
-        self._running.set()
+
         self._main_thread.start()
 
-    def join(self, timeout=None):
+    def show(self, show_exit_option=None):
         """
-        Wait on the menu to exit then return
-        :param Number timeout: How long to wait before timing out
-        """
-        if threading.current_thread() is not self._main_thread:
-            self._main_thread.join(timeout=timeout)
+        Calls start and then immediately joins.
 
-    def wait_for_start(self):
-        self._running.wait()
+        :param bool show_exit_option: Whether the exit item should be shown, defaults to the value set \
+        in the constructor
+        """
+        self.start(show_exit_option)
+        self.join()
 
-    def is_alive(self):
-        """
-        :return: True if the thread is still alive, False otherwise
-        """
-        return self._main_thread.is_alive()
-
-    def pause(self):
-        """
-        Temporarily pause this menu until resume is called
-        """
-        self._running.clear()
-
-    def resume(self):
-        """
-        Sets the currently active menu to this one and resumes ut
-        """
+    def _main_loop(self, scr):
+        self.screen = scr
+        self._set_up_colors()
+        curses.curs_set(0)
+        self.draw()
         CursesMenu.currently_active_menu = self
         self._running.set()
-
-    def _main_loop(self):
-        self.draw()
         while self._running.wait() is not False and not self.should_exit:
             self.process_user_input()
 
     def draw(self):
         """
-        Redraws the menu and refreshes the screen. Should be called whenever something changes.
+        Redraws the menu and refreshes the screen. Should be called whenever something changes that needs to be redrawn.
         """
         self.screen.border(0)
         if self.title is not None:
@@ -223,20 +201,60 @@ class CursesMenu(object):
             self.screen.addstr(5 + index, 4, item.show(index), text_style)
         self.screen.refresh()
 
+    def is_running(self):
+        """
+        :return: True if the menu is started and hasn't been paused
+        """
+        return self._running.is_set()
+
+    def wait_for_start(self, timeout=None):
+        """
+        Block until the menu is started
+
+        :param timeout: How long to wait before timing out
+        :return: False if timeout is given and operation times out, True otherwise. None before Python 2.7
+        """
+        return self._running.wait(timeout)
+
+    def is_alive(self):
+        """
+        :return: True if the thread is still alive, False otherwise
+        """
+        return self._main_thread.is_alive()
+
+    def pause(self):
+        """
+        Temporarily pause the menu until resume is called
+        """
+        self._running.clear()
+
+    def resume(self):
+        """
+        Sets the currently active menu to this one and resumes it
+        """
+        CursesMenu.currently_active_menu = self
+        self._running.set()
+
+    def join(self, timeout=None):
+        """
+        Should be called at some point after :meth:`start()<cursesmenu.CursesMenu.start>` to block until the menu exits.
+        :param Number timeout: How long to wait before timing out
+        """
+        self._main_thread.join(timeout=timeout)
+
     def get_input(self):
         """
-        Can be overridden to change the input method
-        Called in process_user_input
+        Can be overridden to change the input method.
+        Called in :meth:`process_user_input()<cursesmenu.CursesMenu.process_user_input>`
 
-        :return: a single character at a time
+        :return: the ordinal value of a single character
         :rtype: int
         """
         return self.screen.getch()
 
     def process_user_input(self):
         """
-        Gets user input and decides what to do with it
-        Called in show.
+        Gets the next single character and decides what to do with it
         """
         user_input = self.get_input()
 
@@ -283,30 +301,34 @@ class CursesMenu(object):
 
     def select(self):
         """
-        Select the current item and run its action() method
+        Select the current item and run it
         """
         self.selected_option = self.current_option
         self.selected_item.set_up()
-        self.returned_value = self.selected_item.action()
+        self.selected_item.action()
         self.selected_item.clean_up()
-        if self.selected_item.should_exit:
-            self.exit()
-        else:
+        self.returned_value = self.selected_item.get_return()
+        self.should_exit = self.selected_item.should_exit
+
+        if not self.should_exit:
             self.draw()
 
     def exit(self):
         """
-        Exit the menu and clean up
-        :return: The return value of the most recently selected item
+        Signal the menu to exit, then block until it's done cleaning up
         """
-        clear_terminal()
         self.should_exit = True
         self.join()
-        CursesMenu.currently_active_menu = self.previous_active_menu
-        clean_up_screen()
-        return self.returned_value
+
+    def _set_up_colors(self):
+        curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
+        self.highlight = curses.color_pair(1)
+        self.normal = curses.A_NORMAL
 
     def clear_screen(self):
+        """
+        Clear the screen belonging to this menu
+        """
         self.screen.clear()
 
 
@@ -315,37 +337,34 @@ class MenuItem(object):
     A generic menu item
     """
 
-    def __init__(self, name, menu, should_exit=False):
+    def __init__(self, text, menu=None, should_exit=False):
         """
-        :type name: str
-        :type menu: CursesMenu
-
-        :ivar str self.name: The name shown for this menu item
-        :ivar CursesMenu self.menu: The menu to which this item belongs
-        :ivar bool self.should_exit: whether the menu should exit once this item's action is done
+        :ivar str text: The text shown for this menu item
+        :ivar CursesMenu menu: The menu to which this item belongs
+        :ivar bool should_exit: Whether the menu should exit once this item's action is done
         """
-        self.name = name
+        self.text = text
         self.menu = menu
         self.should_exit = should_exit
 
     def __str__(self):
-        return "%s %s" % (self.menu.title, self.name)
+        return "%s %s" % (self.menu.title, self.text)
 
     def show(self, index):
         """
-        How this item should be displayed in the menu. Can be overridden as desired as long as it returns a string
-        and takes an int as its first parameter.
+        How this item should be displayed in the menu. Can be overridden, but should keep the same signature.
 
         Default is:
 
             1 - Item 1
+
             2 - Another Item
 
         :param int index: The index of the item in the items list of the menu
         :return: The representation of the item to be shown in a menu
         :rtype: str
         """
-        return "%d - %s" % (index + 1, self.name)
+        return "%d - %s" % (index + 1, self.text)
 
     def set_up(self):
         """
@@ -355,7 +374,7 @@ class MenuItem(object):
 
     def action(self):
         """
-        What should be done when this item is selected. Should be overridden as needed.
+        Override to carry out the main action for this item.
         """
         pass
 
@@ -365,14 +384,31 @@ class MenuItem(object):
         """
         pass
 
+    def get_return(self):
+        """
+        Override to change what the item returns.
+        Otherwise just returns the same value the last selected item did.
+        """
+        return self.menu.returned_value
+
 
 class ExitItem(MenuItem):
     """
-    The last item in the menu, used to exit the current menu.
+    Used to exit the current menu. Handled by :class:`cursesmenu.CursesMenu`
     """
 
-    def __init__(self, name, menu):
-        super(ExitItem, self).__init__(name, menu, should_exit=True)
+    def __init__(self, text="Exit", menu=None):
+        super(ExitItem, self).__init__(text=text, menu=menu, should_exit=True)
+
+    def show(self, index):
+        """
+        This class overrides this method
+        """
+        if self.menu and self.menu.parent:
+            self.text = "Return to %s menu" % self.menu.parent.title
+        else:
+            self.text = "Exit"
+        return super(ExitItem, self).show(index)
 
 
 def clear_terminal():
@@ -383,20 +419,3 @@ def clear_terminal():
         os.system('cls')
     else:
         os.system('reset')
-
-
-def clean_up_screen():
-    """
-    Final cleanup after the menu is finished
-    """
-    curses.endwin()
-    clear_terminal()
-
-
-def reset_prog_mode():
-    """
-    Restore the terminal mode
-    """
-    curses.reset_prog_mode()  # reset to 'current' curses environment
-    curses.curs_set(1)  # reset doesn't do this right
-    curses.curs_set(0)

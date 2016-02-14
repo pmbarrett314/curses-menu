@@ -21,6 +21,7 @@ get a third-party build for your platform and Python version.
 Then just run
 
 .. code:: shell
+
    pip install curses-menu
 
 Usage

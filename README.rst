@@ -55,8 +55,9 @@ It’s designed to be pretty simple to use. Here’s an example
     # A SelectionMenu constructs a menu from a list of strings
     selection_menu = SelectionMenu(["item1", "item2", "item3"])
 
-    # A SubmenuItem lets you add a menu as a submenu of another menu
-    submenu_item = SubmenuItem("Submenu item", submenu, menu)
+    # A SubmenuItem lets you add a menu (the selection_menu above, for example)
+    # as a submenu of another menu
+    submenu_item = SubmenuItem("Submenu item", selection_menu, menu)
 
     # Once we're done creating them, we just add the items to the menu
     menu.append_item(menu_item)

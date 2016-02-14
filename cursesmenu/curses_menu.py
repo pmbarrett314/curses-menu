@@ -17,9 +17,9 @@ class CursesMenu(object):
         """
         :ivar str title: The title of the menu
         :ivar str subtitle: The subtitle of the menu
-        :ivar items: The list of MenuItems that the menu will display
         :ivar bool show_exit_option: Whether this menu should show an exit item by default. Can be overridden \
         when the menu is started
+        :ivar items: The list of MenuItems that the menu will display
         :vartype items: list[:class:`MenuItem<cursesmenu.items.MenuItem>`]
         :ivar CursesMenu parent: The parent of this menu
         :ivar CursesMenu previous_active_menu: the previously active menu to be restored into the class's \

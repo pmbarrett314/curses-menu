@@ -258,7 +258,9 @@ class CursesMenu(object):
         """
         user_input = self.get_input()
 
-        if ord('1') <= user_input <= ord(str(len(self.items) + 1)):
+        go_to_max = ord("9") if len(self.items) >= 9 else ord(str(len(self.items)))
+
+        if ord('1') <= user_input <= go_to_max:
             self.go_to(user_input - ord('0') - 1)
         elif user_input == curses.KEY_DOWN:
             self.go_down()

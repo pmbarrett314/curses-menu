@@ -187,6 +187,9 @@ class CursesMenu(object):
         """
         Redraws the menu and refreshes the screen. Should be called whenever something changes that needs to be redrawn.
         """
+        if self.screen.getmaxyx()[0] < 5 + len(self.items):
+            raise Exception("There are too many items to fit in your terminal")
+
         self.screen.border(0)
         if self.title is not None:
             self.screen.addstr(2, 2, self.title, curses.A_STANDOUT)
@@ -258,7 +261,9 @@ class CursesMenu(object):
         """
         user_input = self.get_input()
 
-        if ord('1') <= user_input <= ord(str(len(self.items) + 1)):
+        go_to_max = ord("9") if len(self.items) >= 9 else ord(str(len(self.items)))
+
+        if ord('1') <= user_input <= go_to_max:
             self.go_to(user_input - ord('0') - 1)
         elif user_input == curses.KEY_DOWN:
             self.go_down()

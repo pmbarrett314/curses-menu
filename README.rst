@@ -68,9 +68,6 @@ It’s designed to be pretty simple to use. Here’s an example
     # Finally, we call show to show the menu and allow the user to interact
     menu.show()
 
-    # We have to call join ensure that the menu doesn't instantly quit when the main thread exits
-    menu.join()
-
 .. |Build Status| image:: https://travis-ci.org/pmbarrett314/curses-menu.svg
    :target: https://travis-ci.org/pmbarrett314/curses-menu
 .. |Documentation Status| image:: https://readthedocs.org/projects/curses-menu/badge/?version=latest

@@ -28,7 +28,7 @@ class TestSelectionMenu(BaseTestCase):
         while not menu:
             continue
         menu = menu[0]
-        menu.wait_for_start()
+        menu.wait_for_start(timeout=10)
         menu.go_down()
         menu.select()
         print(menu.returned_value)
@@ -45,13 +45,13 @@ class TestSelectionMenu(BaseTestCase):
         while not menu:
             continue
         menu = menu[0]
-        menu.wait_for_start(10)
+        menu.wait_for_start(timeout=10)
         self.assertIsInstance(CursesMenu.currently_active_menu, SelectionMenu)
         self.assertIs(CursesMenu.currently_active_menu, menu)
 
         selection_menu = SelectionMenu(strings=["a", "b", "c"], title="Select a letter")
         selection_menu.start()
-        selection_menu.wait_for_start(10)
+        selection_menu.wait_for_start(timeout=10)
         self.assertIs(CursesMenu.currently_active_menu, selection_menu)
 
     def test_init(self):

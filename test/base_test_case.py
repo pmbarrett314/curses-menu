@@ -31,8 +31,9 @@ class ThreadedReturnGetter(Thread):
 class BaseTestCase(unittest.TestCase):
     def setUp(self):
         self.mock_curses = Mock(spec=curses)
-        self.mock_window = Mock(spec=['keypad', 'addstr', 'border', 'getch', 'refresh', 'clear'])
+        self.mock_window = Mock(spec=['keypad', 'addstr', 'border', 'getch', 'refresh', 'clear', 'getmaxyx'])
         self.mock_window.getch.return_value = ord('a')
+        self.mock_window.getmaxyx.return_value = (999999999, 999999999)
         self.mock_curses.initscr.return_value = self.mock_window
         self.mock_curses.wrapper.side_effect = lambda x: x(self.mock_window)
 

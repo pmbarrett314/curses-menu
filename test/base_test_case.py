@@ -1,4 +1,6 @@
 import sys
+import curses
+from threading import Thread
 
 if sys.version_info < (2, 7):
     import unittest2 as unittest
@@ -9,8 +11,6 @@ try:
     from unittest.mock import Mock, patch
 except ImportError:
     from mock import Mock, patch
-import curses
-from threading import Thread
 
 
 class ThreadedReturnGetter(Thread):

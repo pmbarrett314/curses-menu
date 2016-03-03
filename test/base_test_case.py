@@ -14,7 +14,11 @@ except ImportError:
 
 
 class ThreadedReturnGetter(Thread):
-    def __init__(self, function, args=list(), kwargs=dict()):
+    def __init__(self, function, args=None, kwargs=None):
+        if args is None:
+            args = []
+        if kwargs is None:
+            kwargs = {}
         self.return_value = None
         self.function = function
         try:

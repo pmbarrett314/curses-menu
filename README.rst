@@ -5,7 +5,9 @@ curses-menu
 
 A simple Python menu-based GUI system on the terminal using curses.
 Perfect for those times when you need a GUI, but don’t want the overhead
-or learning curve of a full-fledged GUI framework.
+or learning curve of a full-fledged GUI framework. However, it's also
+flexible enough to do cool stuff like on-the-fly changing of menus and is extensible to
+a large variety of uses.
 
 http://curses-menu.readthedocs.org/en/latest/
 

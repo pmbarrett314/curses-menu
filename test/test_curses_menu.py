@@ -13,12 +13,12 @@ class TestSampleMenu(BaseTestCase):
         self.menu.append_item(self.item1)
         self.menu.append_item(self.item2)
         self.menu.start()
-        self.menu.wait_for_start(10)
+        self.menu.wait_for_start(timeout=10)
 
     def tearDown(self):
         super(TestSampleMenu, self).tearDown()
         self.menu.exit()
-        self.menu.join()
+        self.menu.join(timeout=10)
 
     def test_go_down(self):
         self.menu.go_down()
@@ -59,12 +59,12 @@ class TestSampleMenu(BaseTestCase):
         self.menu.select()
         self.assertEqual(self.menu.selected_option, 2)
         self.assertIs(self.menu.selected_item, self.menu.exit_item)
-        self.menu.join(timeout=5)
+        self.menu.join(timeout=10)
         self.assertFalse(self.menu.is_alive())
 
     def test_exit(self):
         self.menu.exit()
-        self.menu.join(timeout=5)
+        self.menu.join(timeout=10)
         self.assertFalse(self.menu.is_alive())
 
 

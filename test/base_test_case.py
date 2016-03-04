@@ -1,4 +1,6 @@
 import sys
+import curses
+from threading import Thread
 
 if sys.version_info < (2, 7):
     import unittest2 as unittest
@@ -9,12 +11,14 @@ try:
     from unittest.mock import Mock, patch
 except ImportError:
     from mock import Mock, patch
-import curses
-from threading import Thread
 
 
 class ThreadedReturnGetter(Thread):
-    def __init__(self, function, args=list(), kwargs=dict()):
+    def __init__(self, function, args=None, kwargs=None):
+        if args is None:
+            args = []
+        if kwargs is None:
+            kwargs = {}
         self.return_value = None
         self.function = function
         try:
@@ -31,8 +35,9 @@ class ThreadedReturnGetter(Thread):
 class BaseTestCase(unittest.TestCase):
     def setUp(self):
         self.mock_curses = Mock(spec=curses)
-        self.mock_window = Mock(spec=['keypad', 'addstr', 'border', 'getch', 'refresh', 'clear'])
+        self.mock_window = Mock(spec=['keypad', 'addstr', 'border', 'getch', 'refresh', 'clear', 'getmaxyx'])
         self.mock_window.getch.return_value = ord('a')
+        self.mock_window.getmaxyx.return_value = (999999999, 999999999)
         self.mock_curses.initscr.return_value = self.mock_window
         self.mock_curses.wrapper.side_effect = lambda x: x(self.mock_window)
 

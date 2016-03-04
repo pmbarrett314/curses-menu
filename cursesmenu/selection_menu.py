@@ -30,3 +30,6 @@ class SelectionMenu(CursesMenu):
         menu.show()
         menu.join()
         return menu.selected_option
+
+    def append_string(self, string):
+        self.append_item(SelectionItem(string))

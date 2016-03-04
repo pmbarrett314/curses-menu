@@ -12,6 +12,7 @@ class CursesMenu(object):
     is currently active (E.G. when switching between menus)
     """
     currently_active_menu = None
+    stdscr = None
 
     def __init__(self, title=None, subtitle=None, show_exit_option=True):
         """
@@ -95,6 +96,11 @@ class CursesMenu(object):
         self.items.append(item)
         if did_remove:
             self.add_exit()
+        if self.screen:
+            max_row, max_cols = self.screen.getmaxyx()
+            if max_row < 6 + len(self.items):
+                self.screen.resize(6 + len(self.items), max_cols)
+            self.draw()
 
     def add_exit(self):
         """
@@ -126,7 +132,7 @@ class CursesMenu(object):
         if self.parent is None:
             curses.wrapper(self._main_loop)
         else:
-            self._main_loop(curses.initscr())
+            self._main_loop(None)
         CursesMenu.currently_active_menu = None
         self.clear_screen()
         clear_terminal()
@@ -174,9 +180,12 @@ class CursesMenu(object):
         self.join()
 
     def _main_loop(self, scr):
-        self.screen = scr
+        if scr is not None:
+            CursesMenu.stdscr = scr
+        self.screen = curses.newpad(len(self.items) + 6, CursesMenu.stdscr.getmaxyx()[1])
         self._set_up_colors()
         curses.curs_set(0)
+        CursesMenu.stdscr.refresh()
         self.draw()
         CursesMenu.currently_active_menu = self
         self._running.set()
@@ -187,8 +196,6 @@ class CursesMenu(object):
         """
         Redraws the menu and refreshes the screen. Should be called whenever something changes that needs to be redrawn.
         """
-        if self.screen.getmaxyx()[0] < 5 + len(self.items):
-            raise Exception("There are too many items to fit in your terminal")
 
         self.screen.border(0)
         if self.title is not None:
@@ -202,7 +209,16 @@ class CursesMenu(object):
             else:
                 text_style = self.normal
             self.screen.addstr(5 + index, 4, item.show(index), text_style)
-        self.screen.refresh()
+
+        screen_rows, screen_cols = CursesMenu.stdscr.getmaxyx()
+        top_row = 0
+        if 6 + len(self.items) > screen_rows:
+            if screen_rows + self.current_option < 6 + len(self.items):
+                top_row = self.current_option
+            else:
+                top_row = 6 + len(self.items) - screen_rows
+
+        self.screen.refresh(top_row, 0, 0, 0, screen_rows - 1, screen_cols - 1)
 
     def is_running(self):
         """
@@ -253,7 +269,7 @@ class CursesMenu(object):
         :return: the ordinal value of a single character
         :rtype: int
         """
-        return self.screen.getch()
+        return CursesMenu.stdscr.getch()
 
     def process_user_input(self):
         """

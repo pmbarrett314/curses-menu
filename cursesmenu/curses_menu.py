@@ -351,7 +351,9 @@ class CursesMenu(object):
         Clear the screen belonging to this menu
         """
         self.screen.clear()
-
+        screen_rows, screen_cols = CursesMenu.stdscr.getmaxyx()
+        top_row = 0
+        self.screen.refresh(top_row, 0, 0, 0, screen_rows - 1, screen_cols - 1)
 
 class MenuItem(object):
     """

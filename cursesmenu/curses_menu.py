@@ -14,12 +14,13 @@ class CursesMenu(object):
     currently_active_menu = None
     stdscr = None
 
-    def __init__(self, title=None, subtitle=None, show_exit_option=True):
+    def __init__(self, title=None, subtitle=None, show_exit_option=True, with_border=True):
         """
         :ivar str title: The title of the menu
         :ivar str subtitle: The subtitle of the menu
         :ivar bool show_exit_option: Whether this menu should show an exit item by default. Can be overridden \
         when the menu is started
+        :ivar bool with_border: Whether a border should be drawn around the menu.
         :ivar items: The list of MenuItems that the menu will display
         :vartype items: list[:class:`MenuItem<cursesmenu.items.MenuItem>`]
         :ivar CursesMenu parent: The parent of this menu
@@ -42,6 +43,7 @@ class CursesMenu(object):
         self.title = title
         self.subtitle = subtitle
         self.show_exit_option = show_exit_option
+        self.with_border = with_border
 
         self.items = list()
 
@@ -196,8 +198,9 @@ class CursesMenu(object):
         """
         Redraws the menu and refreshes the screen. Should be called whenever something changes that needs to be redrawn.
         """
+        if(self.with_border):
+            self.screen.border(0)
 
-        self.screen.border(0)
         if self.title is not None:
             self.screen.addstr(2, 2, self.title, curses.A_STANDOUT)
         if self.subtitle is not None:

@@ -73,3 +73,10 @@ Which is equivalent to::
     menu.join()
 
     selection = menu.selected_option
+
+If you want to avoid wasting space, maybe because your screen is really small, you can disable the border
+drawn around the menu using the argument `with_border=False`.
+
+    menu = CursesMenu("This is a menu!", "It has a subtitle too!", with_border=False)
+
+This option is also available for :py:class:`~cursesmenu.SelectionMenu`.

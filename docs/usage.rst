@@ -79,4 +79,9 @@ drawn around the menu using the argument `with_border=False`.
 
     menu = CursesMenu("This is a menu!", "It has a subtitle too!", with_border=False)
 
-This option is also available for :py:class:`~cursesmenu.SelectionMenu`.
+Furthermore some spacings, like between title and subtitle and in front of menu items, will not appear
+when the `tight=True` is passed to the menu constructors.
+
+    menu = CursesMenu("This is a menu!", "It has a subtitle too!", tight=True)
+
+These two options are also available for :py:class:`~cursesmenu.SelectionMenu`.

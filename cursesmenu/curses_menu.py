@@ -14,13 +14,14 @@ class CursesMenu(object):
     currently_active_menu = None
     stdscr = None
 
-    def __init__(self, title=None, subtitle=None, show_exit_option=True, with_border=True):
+    def __init__(self, title=None, subtitle=None, show_exit_option=True, with_border=True, tight=False):
         """
         :ivar str title: The title of the menu
         :ivar str subtitle: The subtitle of the menu
         :ivar bool show_exit_option: Whether this menu should show an exit item by default. Can be overridden \
         when the menu is started
         :ivar bool with_border: Whether a border should be drawn around the menu.
+        :ivar bool tight: Whether to save screen space by not inserting some blanks and newlines as spacing.
         :ivar items: The list of MenuItems that the menu will display
         :vartype items: list[:class:`MenuItem<cursesmenu.items.MenuItem>`]
         :ivar CursesMenu parent: The parent of this menu
@@ -44,6 +45,7 @@ class CursesMenu(object):
         self.subtitle = subtitle
         self.show_exit_option = show_exit_option
         self.with_border = with_border
+        self.tight = tight
 
         self.items = list()
 
@@ -198,28 +200,51 @@ class CursesMenu(object):
         """
         Redraws the menu and refreshes the screen. Should be called whenever something changes that needs to be redrawn.
         """
+        origin_line = 0
+        origin_col = 0
         if(self.with_border):
             self.screen.border(0)
+            origin_line += 1
+            origin_col += 1
+        if(not self.tight):
+            origin_col += 1
 
+        title_line = origin_line
+        title_col = origin_col
         if self.title is not None:
-            self.screen.addstr(2, 2, self.title, curses.A_STANDOUT)
+            if(not self.tight):
+                title_line += 1
+            self.screen.addstr(title_line, title_col, self.title, curses.A_STANDOUT)
+        subtitle_line = title_line
+        subtitle_col = origin_col
         if self.subtitle is not None:
-            self.screen.addstr(4, 2, self.subtitle, curses.A_BOLD)
+            # if there is no subtitle, the value is the same as for the title
+            subtitle_line += 1
+            if(not self.tight):
+                subtitle_line += 1
+            self.screen.addstr(subtitle_line, subtitle_col, self.subtitle, curses.A_BOLD)
 
+        items_start_line = subtitle_line + 1
+        items_start_col = origin_col
+        if(not self.tight):
+            items_start_col += 2
         for index, item in enumerate(self.items):
             if self.current_option == index:
                 text_style = self.highlight
             else:
                 text_style = self.normal
-            self.screen.addstr(5 + index, 4, item.show(index), text_style)
+            self.screen.addstr(items_start_line + index, items_start_col, item.show(index), text_style)
 
         screen_rows, screen_cols = CursesMenu.stdscr.getmaxyx()
+        # in case the menu does not fit on the screen, scroll the 'viewport'
         top_row = 0
-        if 6 + len(self.items) > screen_rows:
-            if screen_rows + self.current_option < 6 + len(self.items):
+        # if the last item is outside the screen...
+        if items_start_line + 1 + len(self.items) > screen_rows:
+            # and if
+            if items_start_line + 1 + len(self.items) - self.current_option > screen_rows:
                 top_row = self.current_option
             else:
-                top_row = 6 + len(self.items) - screen_rows
+                top_row = items_start_line + 1 + len(self.items) - screen_rows
 
         self.screen.refresh(top_row, 0, 0, 0, screen_rows - 1, screen_cols - 1)
 

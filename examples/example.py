@@ -3,14 +3,18 @@ from cursesmenu.items import *
 
 
 def main():
-    menu = CursesMenu("Root Menu", "Root Menu Subtitle")
+    with_border = True
+    tight = False
+    menu = CursesMenu("Root Menu", "Root Menu Subtitle", with_border=with_border, tight=tight)
     item1 = MenuItem("Item 1", menu)
     function_item = FunctionItem("Fun item", input, ["Enter an input: "])
     command_item = CommandItem("Command", "python examples/example.py")
-    submenu = SelectionMenu(["item1", "item2", "item3"])
+
+    submenu = SelectionMenu(["item1", "item2", "item3"], with_border=with_border, tight=tight)
     submenu_item = SubmenuItem("Submenu item", submenu=submenu)
     submenu_item.set_menu(menu)
-    submenu_2 = CursesMenu("Submenu Title", "Submenu subtitle")
+
+    submenu_2 = CursesMenu("Submenu Title", "Submenu subtitle", with_border=with_border, tight=tight)
     function_item_2 = FunctionItem("Fun item", input, ["Enter an input"])
     item2 = MenuItem("Another Item")
     submenu_2.append_item(function_item_2)

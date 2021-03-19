@@ -3,7 +3,7 @@ alabaster==0.7.7
 Babel==2.2.0
 colorama==0.3.6
 docutils==0.12
-Jinja2==2.8
+Jinja2==2.11.3
 MarkupSafe==0.23
 pluggy==0.3.1
 py==1.4.31

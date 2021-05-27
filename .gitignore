@@ -240,7 +240,5 @@ crashlytics-build.properties
 fabric.properties
 
 
-/unittests.txt
-/run.cmd
 /tmp/
 .ackrc

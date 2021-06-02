@@ -35,32 +35,33 @@ class CursesMenu(object):
         :ivar highlight: the highlight color pair associated with this window
         """
 
+        self.title = title
+        self.subtitle = subtitle
+
         self.screen = None
+
         self.highlight = None
         self.normal = None
 
-        self.title = title
-        self.subtitle = subtitle
-        self.show_exit_option = show_exit_option
-
         self.items = list()
 
-        self.parent = None
-
         self.exit_item = ExitItem(menu=self)
+        self.show_exit_option = show_exit_option
 
         self.current_option = 0
         self.selected_option = -1
 
-        self.returned_value = None
-
-        self.should_exit = False
-
-        self.previous_active_menu = None
-
         self._main_thread = None
 
         self._running = threading.Event()
+
+        self.should_exit = False
+
+        self.returned_value = None
+
+        self.parent = None
+
+        self.previous_active_menu = None
 
     def __repr__(self):
         return "%s: %s. %d items" % (self.title, self.subtitle, len(self.items))
@@ -84,6 +85,231 @@ class CursesMenu(object):
             return self.items[self.current_option]
         else:
             return None
+
+    def show(self, show_exit_option=None):
+        """
+        Calls start and then immediately joins.
+
+        :param bool show_exit_option: Whether the exit item should be shown, defaults to the value set \
+        in the constructor
+        """
+        self.start(show_exit_option)
+        self.join()
+
+    def start(self, show_exit_option=None):
+        """
+        Start the menu in a new thread and allow the user to interact with it.
+        The thread is a daemon, so :meth:`join()<cursesmenu.CursesMenu.join>` should be called if there's a possibility\
+        that the main thread will exit before the menu is done
+
+        :param bool show_exit_option: Whether the exit item should be shown, defaults to\
+        the value set in the constructor
+        """
+
+        self.previous_active_menu = CursesMenu.currently_active_menu
+        CursesMenu.currently_active_menu = None
+
+        self.should_exit = False
+
+        if show_exit_option is None:
+            show_exit_option = self.show_exit_option
+
+        if show_exit_option:
+            self.add_exit()
+        else:
+            self.remove_exit()
+
+        try:
+            self._main_thread = threading.Thread(target=self._wrap_start, daemon=True)
+        except TypeError:
+            self._main_thread = threading.Thread(target=self._wrap_start)
+            self._main_thread.daemon = True
+
+        self._main_thread.start()
+
+    def _wrap_start(self):
+        if self.parent is None:
+            curses.wrapper(self._main_loop)
+        else:
+            self._main_loop(None)
+        CursesMenu.currently_active_menu = None
+        self.clear_screen()
+        clear_terminal()
+        CursesMenu.currently_active_menu = self.previous_active_menu
+
+    def _main_loop(self, scr):
+        if scr is not None:
+            CursesMenu.stdscr = scr
+        self.screen = curses.newpad(len(self.items) + 6,
+                                    CursesMenu.stdscr.getmaxyx()[1])
+        self._set_up_colors()
+        curses.curs_set(0)
+        CursesMenu.stdscr.refresh()
+        self.draw()
+        CursesMenu.currently_active_menu = self
+        self._running.set()
+        while self._running.wait() is not False and not self.should_exit:
+            self.process_user_input()
+
+    def _set_up_colors(self):
+        curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
+        self.highlight = curses.color_pair(1)
+        self.normal = curses.A_NORMAL
+
+    def draw(self):
+        """
+        Redraws the menu and refreshes the screen. Should be called whenever something changes that needs to be redrawn.
+        """
+
+        self.screen.border(0)
+        if self.title is not None:
+            self.screen.addstr(2, 2, self.title, curses.A_STANDOUT)
+        if self.subtitle is not None:
+            self.screen.addstr(4, 2, self.subtitle, curses.A_BOLD)
+
+        for index, item in enumerate(self.items):
+            if self.current_option == index:
+                text_style = self.highlight
+            else:
+                text_style = self.normal
+            self.screen.addstr(5 + index, 4, item.show(index), text_style)
+
+        screen_rows, screen_cols = CursesMenu.stdscr.getmaxyx()
+        top_row = 0
+        if 6 + len(self.items) > screen_rows:
+            if screen_rows + self.current_option < 6 + len(self.items):
+                top_row = self.current_option
+            else:
+                top_row = 6 + len(self.items) - screen_rows
+
+        self.screen.refresh(top_row, 0, 0, 0, screen_rows - 1, screen_cols - 1)
+
+    def process_user_input(self):
+        """
+        Gets the next single character and decides what to do with it
+        """
+        user_input = self.get_input()
+
+        go_to_max = ord("9") if len(self.items) >= 9 else ord(str(len(self.items)))
+
+        if ord('1') <= user_input <= go_to_max:
+            self.go_to(user_input - ord('0') - 1)
+        elif user_input == curses.KEY_DOWN:
+            self.go_down()
+        elif user_input == curses.KEY_UP:
+            self.go_up()
+        elif user_input == ord("\n"):
+            self.select()
+
+        return user_input
+
+    def get_input(self):
+        """
+        Can be overridden to change the input method.
+        Called in :meth:`process_user_input()<cursesmenu.CursesMenu.process_user_input>`
+
+        :return: the ordinal value of a single character
+        :rtype: int
+        """
+        return CursesMenu.stdscr.getch()
+
+    def select(self):
+        """
+        Select the current item and run it
+        """
+        self.selected_option = self.current_option
+        self.selected_item.set_up()
+        self.selected_item.action()
+        self.selected_item.clean_up()
+        self.returned_value = self.selected_item.get_return()
+        self.should_exit = self.selected_item.should_exit
+
+        if not self.should_exit:
+            self.draw()
+
+    def go_to(self, option):
+        """
+        Go to the option entered by the user as a number
+
+        :param option: the option to go to
+        :type option: int
+        """
+        self.current_option = option
+        self.draw()
+
+    def go_down(self):
+        """
+        Go down one, wrap to beginning if necessary
+        """
+        if self.current_option < len(self.items) - 1:
+            self.current_option += 1
+        else:
+            self.current_option = 0
+        self.draw()
+
+    def go_up(self):
+        """
+        Go up one, wrap to end if necessary
+        """
+        if self.current_option > 0:
+            self.current_option += -1
+        else:
+            self.current_option = len(self.items) - 1
+        self.draw()
+
+    def clear_screen(self):
+        """
+        Clear the screen belonging to this menu
+        """
+        self.screen.clear()
+
+    def join(self, timeout=None):
+        """
+        Should be called at some point after :meth:`start()<cursesmenu.CursesMenu.start>` to block until the menu exits.
+        :param Number timeout: How long to wait before timing out
+        """
+        self._main_thread.join(timeout=timeout)
+
+    def is_running(self):
+        """
+        :return: True if the menu is started and hasn't been paused
+        """
+        return self._running.is_set()
+
+    def wait_for_start(self, timeout=None):
+        """
+        Block until the menu is started
+
+        :param timeout: How long to wait before timing out
+        :return: False if timeout is given and operation times out, True otherwise. None before Python 2.7
+        """
+        return self._running.wait(timeout)
+
+    def pause(self):
+        """
+        Temporarily pause the menu until resume is called
+        """
+        self._running.clear()
+
+    def resume(self):
+        """
+        Sets the currently active menu to this one and resumes it
+        """
+        CursesMenu.currently_active_menu = self
+        self._running.set()
+
+    def is_alive(self):
+        """
+        :return: True if the thread is still alive, False otherwise
+        """
+        return self._main_thread.is_alive()
+
+    def exit(self):
+        """
+        Signal the menu to exit, then block until it's done cleaning up
+        """
+        self.should_exit = True
+        self.join()
 
     def append_item(self, item):
         """
@@ -127,230 +353,6 @@ class CursesMenu(object):
                 del self.items[-1]
                 return True
         return False
-
-    def _wrap_start(self):
-        if self.parent is None:
-            curses.wrapper(self._main_loop)
-        else:
-            self._main_loop(None)
-        CursesMenu.currently_active_menu = None
-        self.clear_screen()
-        clear_terminal()
-        CursesMenu.currently_active_menu = self.previous_active_menu
-
-    def start(self, show_exit_option=None):
-        """
-        Start the menu in a new thread and allow the user to interact with it.
-        The thread is a daemon, so :meth:`join()<cursesmenu.CursesMenu.join>` should be called if there's a possibility\
-        that the main thread will exit before the menu is done
-
-        :param bool show_exit_option: Whether the exit item should be shown, defaults to\
-        the value set in the constructor
-        """
-
-        self.previous_active_menu = CursesMenu.currently_active_menu
-        CursesMenu.currently_active_menu = None
-
-        self.should_exit = False
-
-        if show_exit_option is None:
-            show_exit_option = self.show_exit_option
-
-        if show_exit_option:
-            self.add_exit()
-        else:
-            self.remove_exit()
-
-        try:
-            self._main_thread = threading.Thread(target=self._wrap_start, daemon=True)
-        except TypeError:
-            self._main_thread = threading.Thread(target=self._wrap_start)
-            self._main_thread.daemon = True
-
-        self._main_thread.start()
-
-    def show(self, show_exit_option=None):
-        """
-        Calls start and then immediately joins.
-
-        :param bool show_exit_option: Whether the exit item should be shown, defaults to the value set \
-        in the constructor
-        """
-        self.start(show_exit_option)
-        self.join()
-
-    def _main_loop(self, scr):
-        if scr is not None:
-            CursesMenu.stdscr = scr
-        self.screen = curses.newpad(len(self.items) + 6, CursesMenu.stdscr.getmaxyx()[1])
-        self._set_up_colors()
-        curses.curs_set(0)
-        CursesMenu.stdscr.refresh()
-        self.draw()
-        CursesMenu.currently_active_menu = self
-        self._running.set()
-        while self._running.wait() is not False and not self.should_exit:
-            self.process_user_input()
-
-    def draw(self):
-        """
-        Redraws the menu and refreshes the screen. Should be called whenever something changes that needs to be redrawn.
-        """
-
-        self.screen.border(0)
-        if self.title is not None:
-            self.screen.addstr(2, 2, self.title, curses.A_STANDOUT)
-        if self.subtitle is not None:
-            self.screen.addstr(4, 2, self.subtitle, curses.A_BOLD)
-
-        for index, item in enumerate(self.items):
-            if self.current_option == index:
-                text_style = self.highlight
-            else:
-                text_style = self.normal
-            self.screen.addstr(5 + index, 4, item.show(index), text_style)
-
-        screen_rows, screen_cols = CursesMenu.stdscr.getmaxyx()
-        top_row = 0
-        if 6 + len(self.items) > screen_rows:
-            if screen_rows + self.current_option < 6 + len(self.items):
-                top_row = self.current_option
-            else:
-                top_row = 6 + len(self.items) - screen_rows
-
-        self.screen.refresh(top_row, 0, 0, 0, screen_rows - 1, screen_cols - 1)
-
-    def is_running(self):
-        """
-        :return: True if the menu is started and hasn't been paused
-        """
-        return self._running.is_set()
-
-    def wait_for_start(self, timeout=None):
-        """
-        Block until the menu is started
-
-        :param timeout: How long to wait before timing out
-        :return: False if timeout is given and operation times out, True otherwise. None before Python 2.7
-        """
-        return self._running.wait(timeout)
-
-    def is_alive(self):
-        """
-        :return: True if the thread is still alive, False otherwise
-        """
-        return self._main_thread.is_alive()
-
-    def pause(self):
-        """
-        Temporarily pause the menu until resume is called
-        """
-        self._running.clear()
-
-    def resume(self):
-        """
-        Sets the currently active menu to this one and resumes it
-        """
-        CursesMenu.currently_active_menu = self
-        self._running.set()
-
-    def join(self, timeout=None):
-        """
-        Should be called at some point after :meth:`start()<cursesmenu.CursesMenu.start>` to block until the menu exits.
-        :param Number timeout: How long to wait before timing out
-        """
-        self._main_thread.join(timeout=timeout)
-
-    def get_input(self):
-        """
-        Can be overridden to change the input method.
-        Called in :meth:`process_user_input()<cursesmenu.CursesMenu.process_user_input>`
-
-        :return: the ordinal value of a single character
-        :rtype: int
-        """
-        return CursesMenu.stdscr.getch()
-
-    def process_user_input(self):
-        """
-        Gets the next single character and decides what to do with it
-        """
-        user_input = self.get_input()
-
-        go_to_max = ord("9") if len(self.items) >= 9 else ord(str(len(self.items)))
-
-        if ord('1') <= user_input <= go_to_max:
-            self.go_to(user_input - ord('0') - 1)
-        elif user_input == curses.KEY_DOWN:
-            self.go_down()
-        elif user_input == curses.KEY_UP:
-            self.go_up()
-        elif user_input == ord("\n"):
-            self.select()
-
-        return user_input
-
-    def go_to(self, option):
-        """
-        Go to the option entered by the user as a number
-
-        :param option: the option to go to
-        :type option: int
-        """
-        self.current_option = option
-        self.draw()
-
-    def go_down(self):
-        """
-        Go down one, wrap to beginning if necessary
-        """
-        if self.current_option < len(self.items) - 1:
-            self.current_option += 1
-        else:
-            self.current_option = 0
-        self.draw()
-
-    def go_up(self):
-        """
-        Go up one, wrap to end if necessary
-        """
-        if self.current_option > 0:
-            self.current_option += -1
-        else:
-            self.current_option = len(self.items) - 1
-        self.draw()
-
-    def select(self):
-        """
-        Select the current item and run it
-        """
-        self.selected_option = self.current_option
-        self.selected_item.set_up()
-        self.selected_item.action()
-        self.selected_item.clean_up()
-        self.returned_value = self.selected_item.get_return()
-        self.should_exit = self.selected_item.should_exit
-
-        if not self.should_exit:
-            self.draw()
-
-    def exit(self):
-        """
-        Signal the menu to exit, then block until it's done cleaning up
-        """
-        self.should_exit = True
-        self.join()
-
-    def _set_up_colors(self):
-        curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
-        self.highlight = curses.color_pair(1)
-        self.normal = curses.A_NORMAL
-
-    def clear_screen(self):
-        """
-        Clear the screen belonging to this menu
-        """
-        self.screen.clear()
 
 
 class MenuItem(object):

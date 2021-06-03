@@ -9,7 +9,7 @@ class CursesMenu(object):
     A class that displays a menu and allows the user to select an option
 
     :cvar CursesMenu cls.currently_active_menu: Class variable that holds the \
-    currently active menu or None if no menu
+    currently active menu or None if no menu\
     is currently active (E.G. when switching between menus)
     """
 

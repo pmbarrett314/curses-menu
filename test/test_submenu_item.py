@@ -11,7 +11,8 @@ class TestSubmenuItem(BaseTestCase):
         submenu3 = CursesMenu("submenu2", "test_init")
         menu_item_1 = SubmenuItem("menu_item_1", submenu1)
         menu_item_2 = SubmenuItem("menu_item_2", submenu2, root_menu, True)
-        menu_item_3 = SubmenuItem(text="menu_item_3", submenu=submenu3, menu=root_menu, should_exit=False)
+        menu_item_3 = SubmenuItem(text="menu_item_3", submenu=submenu3, menu=root_menu,
+                                  should_exit=False)
         self.assertEqual(menu_item_1.text, "menu_item_1")
         self.assertEqual(menu_item_2.text, "menu_item_2")
         self.assertEqual(menu_item_3.text, "menu_item_3")

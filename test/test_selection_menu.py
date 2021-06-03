@@ -1,8 +1,3 @@
-try:
-    from unittest.mock import Mock, patch
-except ImportError:
-    from mock import Mock, patch
-
 from base_test_case import BaseTestCase, ThreadedReturnGetter
 from cursesmenu import CursesMenu
 from cursesmenu import SelectionMenu

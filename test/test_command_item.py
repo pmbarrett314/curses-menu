@@ -3,10 +3,7 @@ import platform
 
 from cursesmenu import CursesMenu
 
-try:
-    from unittest.mock import patch
-except ImportError:
-    from mock import patch
+from unittest.mock import patch
 
 from cursesmenu.items import CommandItem
 from test_external_item import TestExternalItem
@@ -19,9 +16,12 @@ class TestCommandItem(TestExternalItem):
 
     def test_init(self):
         command_item_1 = CommandItem("command_item_1", "exit")
-        command_item_2 = CommandItem("command_item_2", "ls", ["-l", "-a", "~"], self.menu, True)
-        command_item_3 = CommandItem(text="command_item_3", command="rm", menu=self.menu,
-                                     arguments=["-r", "-f", "./test"], should_exit=False)
+        command_item_2 = CommandItem("command_item_2", "ls", ["-l", "-a", "~"],
+                                     self.menu, True)
+        command_item_3 = CommandItem(text="command_item_3", command="rm",
+                                     menu=self.menu,
+                                     arguments=["-r", "-f", "./test"],
+                                     should_exit=False)
 
         self.assertEqual(command_item_1.text, "command_item_1")
         self.assertEqual(command_item_2.text, "command_item_2")

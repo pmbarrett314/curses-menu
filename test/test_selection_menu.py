@@ -1,6 +1,6 @@
 from base_test_case import BaseTestCase, ThreadedReturnGetter
-from cursesmenu import CursesMenu
-from cursesmenu import SelectionMenu
+
+from cursesmenu import CursesMenu, SelectionMenu
 
 
 class TestSelectionMenu(BaseTestCase):
@@ -16,8 +16,11 @@ class TestSelectionMenu(BaseTestCase):
 
     def test_get_selection(self):
         menu = []
-        menu_thread = ThreadedReturnGetter(SelectionMenu.get_selection, args=[["One", "Two", "Three"]],
-                                           kwargs={"_menu": menu})
+        menu_thread = ThreadedReturnGetter(
+            SelectionMenu.get_selection,
+            args=[["One", "Two", "Three"]],
+            kwargs={"_menu": menu},
+        )
 
         menu_thread.start()
         while not menu:
@@ -33,8 +36,11 @@ class TestSelectionMenu(BaseTestCase):
 
     def test_current_menu(self):
         menu = []
-        self.menu_thread = ThreadedReturnGetter(SelectionMenu.get_selection, args=[["One", "Two", "Three"]],
-                                                kwargs={"_menu": menu})
+        self.menu_thread = ThreadedReturnGetter(
+            SelectionMenu.get_selection,
+            args=[["One", "Two", "Three"]],
+            kwargs={"_menu": menu},
+        )
 
         self.menu_thread.start()
         while not menu:
@@ -51,9 +57,18 @@ class TestSelectionMenu(BaseTestCase):
 
     def test_init(self):
         selection_menu_1 = SelectionMenu(["1", "2", "3"])
-        selection_menu_2 = SelectionMenu(["4", "5"], "selection_menu_2", "test_init", True)
-        selection_menu_3 = SelectionMenu(strings=["6", "7", "8", "9"], title="selection_menu_3", subtitle="test_init",
-                                         show_exit_option=False)
+        selection_menu_2 = SelectionMenu(
+            ["4", "5"],
+            "selection_menu_2",
+            "test_init",
+            True,
+        )
+        selection_menu_3 = SelectionMenu(
+            strings=["6", "7", "8", "9"],
+            title="selection_menu_3",
+            subtitle="test_init",
+            show_exit_option=False,
+        )
         self.assertIsNone(selection_menu_1.title)
         self.assertEqual(selection_menu_2.title, "selection_menu_2")
         self.assertEqual(selection_menu_3.title, "selection_menu_3")

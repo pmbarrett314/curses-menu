@@ -8,9 +8,11 @@ class CursesMenu(object):
     """
     A class that displays a menu and allows the user to select an option
 
-    :cvar CursesMenu cls.currently_active_menu: Class variable that holds the currently active menu or None if no menu\
+    :cvar CursesMenu cls.currently_active_menu: Class variable that holds the \
+    currently active menu or None if no menu
     is currently active (E.G. when switching between menus)
     """
+
     currently_active_menu = None
     stdscr = None
 
@@ -18,17 +20,19 @@ class CursesMenu(object):
         """
         :ivar str title: The title of the menu
         :ivar str subtitle: The subtitle of the menu
-        :ivar bool show_exit_option: Whether this menu should show an exit item by default. Can be overridden \
-        when the menu is started
+        :ivar bool show_exit_option: Whether this menu should show an exit \
+        item by default. Can be overridden when the menu is started
         :ivar items: The list of MenuItems that the menu will display
         :vartype items: list[:class:`MenuItem<cursesmenu.items.MenuItem>`]
         :ivar CursesMenu parent: The parent of this menu
-        :ivar CursesMenu previous_active_menu: the previously active menu to be restored into the class's \
-        currently active menu
+        :ivar CursesMenu previous_active_menu: the previously active menu to be \
+        restored into the class's currently active menu
         :ivar int current_option: The currently highlighted menu option
-        :ivar MenuItem current_item: The item corresponding to the menu option that is currently highlighted
+        :ivar MenuItem current_item: The item corresponding to the menu option \
+        that is currently highlighted
         :ivar int selected_option: The option that the user has most recently selected
-        :ivar MenuItem selected_item: The item in :attr:`items` that the user most recently selected
+        :ivar MenuItem selected_item: The item in :attr:`items` that the user most \
+        recently selected
         :ivar returned_value: The value returned by the most recently selected item
         :ivar screen: the curses window associated with this menu
         :ivar normal: the normal text color pair for this menu
@@ -43,7 +47,7 @@ class CursesMenu(object):
         self.highlight = None
         self.normal = None
 
-        self.items = list()
+        self.items = []
 
         self.exit_item = ExitItem(menu=self)
         self.show_exit_option = show_exit_option
@@ -90,8 +94,8 @@ class CursesMenu(object):
         """
         Calls start and then immediately joins.
 
-        :param bool show_exit_option: Whether the exit item should be shown, defaults to the value set \
-        in the constructor
+        :param bool show_exit_option: Whether the exit item should be shown, \
+        defaults to the value set in the constructor
         """
         self.start(show_exit_option)
         self.join()
@@ -99,11 +103,12 @@ class CursesMenu(object):
     def start(self, show_exit_option=None):
         """
         Start the menu in a new thread and allow the user to interact with it.
-        The thread is a daemon, so :meth:`join()<cursesmenu.CursesMenu.join>` should be called if there's a possibility\
-        that the main thread will exit before the menu is done
+        The thread is a daemon, so :meth:`join()<cursesmenu.CursesMenu.join>` \
+        should be called if there's a possibility that the main thread will \
+        exit before the menu is done
 
-        :param bool show_exit_option: Whether the exit item should be shown, defaults to\
-        the value set in the constructor
+        :param bool show_exit_option: Whether the exit item should be shown, \
+        defaults to the value set in the constructor
         """
 
         self.previous_active_menu = CursesMenu.currently_active_menu
@@ -140,8 +145,10 @@ class CursesMenu(object):
     def _main_loop(self, scr):
         if scr is not None:
             CursesMenu.stdscr = scr
-        self.screen = curses.newpad(len(self.items) + 6,
-                                    CursesMenu.stdscr.getmaxyx()[1])
+        self.screen = curses.newpad(
+            len(self.items) + 6,
+            CursesMenu.stdscr.getmaxyx()[1],
+        )
         self._set_up_colors()
         curses.curs_set(0)
         CursesMenu.stdscr.refresh()
@@ -158,7 +165,8 @@ class CursesMenu(object):
 
     def draw(self):
         """
-        Redraws the menu and refreshes the screen. Should be called whenever something changes that needs to be redrawn.
+        Redraws the menu and refreshes the screen. Should be called whenever \
+        something changes that needs to be redrawn.
         """
 
         self.screen.border(0)
@@ -192,8 +200,8 @@ class CursesMenu(object):
 
         go_to_max = ord("9") if len(self.items) >= 9 else ord(str(len(self.items)))
 
-        if ord('1') <= user_input <= go_to_max:
-            self.go_to(user_input - ord('0') - 1)
+        if ord("1") <= user_input <= go_to_max:
+            self.go_to(user_input - ord("0") - 1)
         elif user_input == curses.KEY_DOWN:
             self.go_down()
         elif user_input == curses.KEY_UP:
@@ -265,7 +273,8 @@ class CursesMenu(object):
 
     def join(self, timeout=None):
         """
-        Should be called at some point after :meth:`start()<cursesmenu.CursesMenu.start>` to block until the menu exits.
+        Should be called at some point after \
+        :meth:`start()<cursesmenu.CursesMenu.start>` to block until the menu exits.
         :param Number timeout: How long to wait before timing out
         """
         self._main_thread.join(timeout=timeout)
@@ -281,7 +290,8 @@ class CursesMenu(object):
         Block until the menu is started
 
         :param timeout: How long to wait before timing out
-        :return: False if timeout is given and operation times out, True otherwise. None before Python 2.7
+        :return: False if timeout is given and operation times out, \
+        True otherwise. None before Python 2.7
         """
         return self._running.wait(timeout)
 
@@ -330,7 +340,8 @@ class CursesMenu(object):
 
     def add_exit(self):
         """
-        Add the exit item if necessary. Used to make sure there aren't multiple exit items
+        Add the exit item if necessary. Used to make sure there \
+        aren't multiple exit items
 
         :return: True if item needed to be added, False otherwise
         :rtype: bool
@@ -343,7 +354,8 @@ class CursesMenu(object):
 
     def remove_exit(self):
         """
-        Remove the exit item if necessary. Used to make sure we only remove the exit item, not something else
+        Remove the exit item if necessary. Used to make sure we only \
+        remove the exit item, not something else
 
         :return: True if item needed to be removed, False otherwise
         :rtype: bool
@@ -364,7 +376,8 @@ class MenuItem(object):
         """
         :ivar str text: The text shown for this menu item
         :ivar CursesMenu menu: The menu to which this item belongs
-        :ivar bool should_exit: Whether the menu should exit once this item's action is done
+        :ivar bool should_exit: Whether the menu should exit once this \
+        item's action is done
         """
         self.text = text
         self.menu = menu
@@ -375,7 +388,8 @@ class MenuItem(object):
 
     def show(self, index):
         """
-        How this item should be displayed in the menu. Can be overridden, but should keep the same signature.
+        How this item should be displayed in the menu. Can be overridden, \
+        but should keep the same signature.
 
         Default is:
 
@@ -436,9 +450,10 @@ class ExitItem(MenuItem):
 
 def clear_terminal():
     """
-    Call the platform specific function to clear the terminal: cls on windows, reset otherwise
+    Call the platform specific function to clear the terminal: cls on windows, \
+    reset otherwise
     """
     if platform.system().lower() == "windows":
-        os.system('cls')
+        os.system("cls")
     else:
-        os.system('reset')
+        os.system("reset")

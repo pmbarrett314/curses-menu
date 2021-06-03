@@ -1,12 +1,11 @@
 import os.path
 import platform
-
-from cursesmenu import CursesMenu
-
 from unittest.mock import patch
 
-from cursesmenu.items import CommandItem
 from test_external_item import TestExternalItem
+
+from cursesmenu import CursesMenu
+from cursesmenu.items import CommandItem
 
 
 class TestCommandItem(TestExternalItem):
@@ -16,12 +15,20 @@ class TestCommandItem(TestExternalItem):
 
     def test_init(self):
         command_item_1 = CommandItem("command_item_1", "exit")
-        command_item_2 = CommandItem("command_item_2", "ls", ["-l", "-a", "~"],
-                                     self.menu, True)
-        command_item_3 = CommandItem(text="command_item_3", command="rm",
-                                     menu=self.menu,
-                                     arguments=["-r", "-f", "./test"],
-                                     should_exit=False)
+        command_item_2 = CommandItem(
+            "command_item_2",
+            "ls",
+            ["-l", "-a", "~"],
+            self.menu,
+            True,
+        )
+        command_item_3 = CommandItem(
+            text="command_item_3",
+            command="rm",
+            menu=self.menu,
+            arguments=["-r", "-f", "./test"],
+            should_exit=False,
+        )
 
         self.assertEqual(command_item_1.text, "command_item_1")
         self.assertEqual(command_item_2.text, "command_item_2")
@@ -50,7 +57,7 @@ class TestCommandItem(TestExternalItem):
         self.assertEqual(return_command_item.get_return(), 1)
 
     def test_run(self):
-        create_item = CommandItem("create_item", 'echo hello>test.txt')
+        create_item = CommandItem("create_item", "echo hello>test.txt")
         if platform.system().lower() == "windows":
             delete_item = CommandItem("delete_item", "del test.txt")
             expected_contents = "hello \n"
@@ -61,14 +68,14 @@ class TestCommandItem(TestExternalItem):
         self.assertEqual(create_item.get_return(), 0)
         self.assertTrue(os.path.isfile("test.txt"))
 
-        with open("test.txt", 'r') as text:
+        with open("test.txt", "r") as text:
             self.assertEqual(text.read(), expected_contents)
 
         delete_item.action()
         self.assertEqual(delete_item.get_return(), 0)
         self.assertFalse(os.path.isfile("test.txt"))
 
-    @patch('cursesmenu.items.command_item.subprocess')
+    @patch("cursesmenu.items.command_item.subprocess")
     def test_call(self, mock_class):
         command_item = CommandItem("command_item", "ls", ["-l", "-a", "~"])
         command_item.action()

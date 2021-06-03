@@ -1,6 +1,6 @@
 import subprocess
 
-from cursesmenu.items import ExternalItem
+from cursesmenu.items.external_item import ExternalItem
 
 
 class CommandItem(ExternalItem):
@@ -11,8 +11,10 @@ class CommandItem(ExternalItem):
     def __init__(self, text, command, arguments=None, menu=None, should_exit=False):
         """
         :ivar str command: The console command to be executed
-        :ivar list[str] arguments: An optional list of string arguments to be passed to the command
-        :ivar int exit_status: the exit status of the command, None if it hasn't been run yet
+        :ivar list[str] arguments: An optional list of string arguments to be passed \
+        to the command
+        :ivar int exit_status: the exit status of the command, None if it hasn't \
+        been run yet
         """
         super(CommandItem, self).__init__(text=text, menu=menu, should_exit=should_exit)
         self.command = command

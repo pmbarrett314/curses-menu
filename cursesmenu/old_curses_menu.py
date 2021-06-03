@@ -1,12 +1,13 @@
 from enum import Enum
 
-from cursesmenu.items import CommandItem
-from cursesmenu.items import SubmenuItem
-
 from cursesmenu import CursesMenu
-from cursesmenu.items import ExitItem
-from cursesmenu.items import SelectionItem
-from cursesmenu.items import FunctionItem
+from cursesmenu.items import (
+    CommandItem,
+    ExitItem,
+    FunctionItem,
+    SelectionItem,
+    SubmenuItem,
+)
 
 
 class menuItem(Enum):
@@ -25,7 +26,7 @@ def parse_old_menu(menu_data):
     :return: A new CursesMenu
     :rtype: CursesMenu
     """
-    menu_title = menu_data['title']
+    menu_title = menu_data["title"]
     menu = CursesMenu(menu_title)
     for item in menu_data["options"]:
         item_type = item["type"]

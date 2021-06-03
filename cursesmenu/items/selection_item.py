@@ -1,4 +1,4 @@
-from cursesmenu.items import MenuItem
+from cursesmenu.curses_menu import MenuItem
 
 
 class SelectionItem(MenuItem):
@@ -8,7 +8,8 @@ class SelectionItem(MenuItem):
 
     def __init__(self, text, index, menu=None):
         """
-        :ivar int index: The index of this item in the list used to initialize the :class:`cursesmenu.SelectionMenu`
+        :ivar int index: The index of this item in the list used to initialize \
+        the :class:`cursesmenu.SelectionMenu`
         """
         super(SelectionItem, self).__init__(text=text, menu=menu, should_exit=True)
         self.index = index

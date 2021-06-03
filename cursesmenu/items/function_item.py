@@ -1,4 +1,4 @@
-from cursesmenu.items import ExternalItem
+from cursesmenu.items.external_item import ExternalItem
 
 
 class FunctionItem(ExternalItem):
@@ -6,14 +6,28 @@ class FunctionItem(ExternalItem):
     A menu item to call a Python function
     """
 
-    def __init__(self, text, function, args=None, kwargs=None, menu=None, should_exit=False):
+    def __init__(
+        self,
+        text,
+        function,
+        args=None,
+        kwargs=None,
+        menu=None,
+        should_exit=False,
+    ):
         """
         :ivar function: The function to be called
         :ivar list args: An optional list of arguments to be passed to the function
-        :ivar dict kwargs: An optional dictionary of keyword arguments to be passed to the function
-        :ivar return_value: the value returned by the function, None if it hasn't been called yet.
+        :ivar dict kwargs: An optional dictionary of keyword arguments to be passed \
+        to the function
+        :ivar return_value: the value returned by the function, \
+        None if it hasn't been called yet.
         """
-        super(FunctionItem, self).__init__(text=text, menu=menu, should_exit=should_exit)
+        super(FunctionItem, self).__init__(
+            text=text,
+            menu=menu,
+            should_exit=should_exit,
+        )
 
         self.function = function
 

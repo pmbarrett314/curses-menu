@@ -1,5 +1,5 @@
-from cursesmenu import *
-from cursesmenu.items import *
+from cursesmenu import CursesMenu, SelectionMenu
+from cursesmenu.items import CommandItem, FunctionItem, MenuItem, SubmenuItem
 
 
 def main():

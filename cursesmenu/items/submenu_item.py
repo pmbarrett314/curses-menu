@@ -1,6 +1,6 @@
 import curses
 
-from cursesmenu.items import MenuItem
+from cursesmenu.curses_menu import MenuItem
 
 
 class SubmenuItem(MenuItem):
@@ -10,7 +10,8 @@ class SubmenuItem(MenuItem):
 
     def __init__(self, text, submenu, menu=None, should_exit=False):
         """
-        :ivar CursesMenu self.submenu: The submenu to be opened when this item is selected
+        :ivar CursesMenu self.submenu: The submenu to be opened when \
+        this item is selected
         """
         super(SubmenuItem, self).__init__(text=text, menu=menu, should_exit=should_exit)
 

@@ -5,8 +5,9 @@ try:
 except ImportError:
     from mock import MagicMock
 
-from cursesmenu.items import FunctionItem
 from test_external_item import TestExternalItem
+
+from cursesmenu.items import FunctionItem
 
 
 def fun1():
@@ -40,9 +41,22 @@ class TestFunctionItem(TestExternalItem):
 
     def test_init(self):
         function_item_1 = FunctionItem("function_item_1", fun1)
-        function_item_2 = FunctionItem("function_item_2", fun1, ["-l", "-a", "~"], {"test": 12}, self.menu, True)
-        function_item_3 = FunctionItem(text="function_item_3", function=fun2, args=[1, 2, 3],
-                                       kwargs={1: "thing", 16: "other"}, menu=self.menu, should_exit=False)
+        function_item_2 = FunctionItem(
+            "function_item_2",
+            fun1,
+            ["-l", "-a", "~"],
+            {"test": 12},
+            self.menu,
+            True,
+        )
+        function_item_3 = FunctionItem(
+            text="function_item_3",
+            function=fun2,
+            args=[1, 2, 3],
+            kwargs={1: "thing", 16: "other"},
+            menu=self.menu,
+            should_exit=False,
+        )
         self.assertEqual(function_item_1.text, "function_item_1")
         self.assertEqual(function_item_2.text, "function_item_2")
         self.assertEqual(function_item_3.text, "function_item_3")

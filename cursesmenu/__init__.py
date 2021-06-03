@@ -1,7 +1,6 @@
-from .curses_menu import CursesMenu
-from .curses_menu import clear_terminal
-from .selection_menu import SelectionMenu
 from . import items
-from .version import __version__
+from .curses_menu import CursesMenu
+from .selection_menu import SelectionMenu
+from .version import __version__  # noqa: F401
 
-__all__ = ['CursesMenu', 'SelectionMenu', 'items', 'clear_terminal']
+__all__ = ["CursesMenu", "SelectionMenu", "items"]

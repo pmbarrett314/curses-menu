@@ -1,7 +1,7 @@
 import curses
 
-from cursesmenu import clear_terminal
-from cursesmenu.items import MenuItem
+import cursesmenu.curses_menu
+from cursesmenu.curses_menu import MenuItem
 
 
 class ExternalItem(MenuItem):
@@ -13,7 +13,11 @@ class ExternalItem(MenuItem):
 
     def __init__(self, text, menu=None, should_exit=False):
         # Here so Sphinx doesn't copy extraneous info from the superclass's docstring
-        super(ExternalItem, self).__init__(text=text, menu=menu, should_exit=should_exit)
+        super(ExternalItem, self).__init__(
+            text=text,
+            menu=menu,
+            should_exit=should_exit,
+        )
 
     def set_up(self):
         """
@@ -21,7 +25,7 @@ class ExternalItem(MenuItem):
         """
         self.menu.pause()
         curses.def_prog_mode()
-        clear_terminal()
+        cursesmenu.curses_menu.clear_terminal()
         self.menu.clear_screen()
 
     def clean_up(self):

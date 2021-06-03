@@ -1,6 +1,7 @@
 from unittest.mock import MagicMock
 
 from base_test_case import BaseTestCase
+
 from cursesmenu.items import ExternalItem
 
 

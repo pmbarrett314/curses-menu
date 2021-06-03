@@ -52,7 +52,7 @@ It’s designed to be pretty simple to use. Here’s an example
     function_item = FunctionItem("Call a Python function", input, ["Enter an input"])
 
     # A CommandItem runs a console command
-    command_item = CommandItem("Run a console command",  "touch hello.txt")
+    command_item = CommandItem("Run a console command", "touch hello.txt")
 
     # A SelectionMenu constructs a menu from a list of strings
     selection_menu = SelectionMenu(["item1", "item2", "item3"])

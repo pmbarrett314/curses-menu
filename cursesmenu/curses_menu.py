@@ -384,7 +384,8 @@ class MenuItem(object):
         self.should_exit = should_exit
 
     def __str__(self):
-        return "%s %s" % (self.menu.title, self.text)
+        title = self.menu.title if self.menu else ""
+        return "%s %s" % (title, self.text)
 
     def show(self, index):
         """
@@ -426,7 +427,9 @@ class MenuItem(object):
         Override to change what the item returns.
         Otherwise just returns the same value the last selected item did.
         """
-        return self.menu.returned_value
+        if self.menu:
+            return self.menu.returned_value
+        return None
 
 
 class ExitItem(MenuItem):

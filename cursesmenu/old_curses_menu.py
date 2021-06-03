@@ -1,13 +1,8 @@
 from enum import Enum
 
 from cursesmenu import CursesMenu
-from cursesmenu.items import (
-    CommandItem,
-    ExitItem,
-    FunctionItem,
-    SelectionItem,
-    SubmenuItem,
-)
+from cursesmenu.curses_menu import _SelectionItem
+from cursesmenu.items import CommandItem, ExitItem, FunctionItem, SubmenuItem
 
 
 class menuItem(Enum):
@@ -40,7 +35,7 @@ def parse_old_menu(menu_data):
         elif item_type == menuItem.EXITMENU:
             menu.append_item(ExitItem(item_title, menu))
         elif item_type == menuItem.NUMBER:
-            menu.append_item(SelectionItem(item_title, menu))
+            menu.append_item(_SelectionItem(item_title, menu))
         elif item_type == menuItem.MENU:
             new_menu = parse_old_menu(item)
             menu.append_item(SubmenuItem(item_title, menu, new_menu))

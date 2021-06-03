@@ -1,4 +1,4 @@
-from cursesmenu import CursesMenu, SelectionMenu
+from cursesmenu import CursesMenu
 from cursesmenu.items import CommandItem, FunctionItem, MenuItem, SubmenuItem
 
 
@@ -7,7 +7,7 @@ def main():
     item1 = MenuItem("Item 1", menu)
     function_item = FunctionItem("Fun item", input, ["Enter an input: "])
     command_item = CommandItem("Command", "python examples/example.py")
-    submenu = SelectionMenu(["item1", "item2", "item3"])
+    submenu = CursesMenu.make_selection_menu(["item1", "item2", "item3"])
     submenu_item = SubmenuItem("Submenu item", submenu=submenu)
     submenu_item.set_menu(menu)
     submenu_2 = CursesMenu("Submenu Title", "Submenu subtitle")

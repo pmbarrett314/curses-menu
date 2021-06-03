@@ -70,6 +70,58 @@ class CursesMenu(object):
     def __repr__(self):
         return "%s: %s. %d items" % (self.title, self.subtitle, len(self.items))
 
+    @classmethod
+    def make_selection_menu(
+        cls,
+        selections,
+        title,
+        subtitle,
+        show_exit_option=False,
+    ):
+        """
+        Create a menu from a list of strings.
+
+        The return value of the menu will be an index into the list of strings.
+
+        :param selections: A list of strings to be selected from
+        :param title: The title of the menu
+        :param subtitle: The subtitle of the menu
+        :param show_exit_option: If the exit item should be shown.\
+        If it is  and the user selects it, the return value will be None
+        :return: A CursesMenu with items for each selection
+        """
+        menu = cls(title=title, subtitle=subtitle, show_exit_option=show_exit_option)
+        for index, selection in enumerate(selections):
+            menu.append_item(
+                _SelectionItem(text=selection, index=index, should_exit=True),
+            )
+        return menu
+
+    @classmethod
+    def get_selection(
+        cls,
+        selections,
+        title,
+        subtitle,
+    ):
+        """
+        Present the user with a menu built from a list of strings and get the index\
+        of their selection.
+
+        :param selections: The list of string possibilities
+        :param title: The title of the menu
+        :param subtitle: The subtitle of the menu
+        :return: The index in the list of strings that the user selected
+        """
+        menu = cls.make_selection_menu(
+            selections=selections,
+            title=title,
+            subtitle=subtitle,
+            show_exit_option=False,
+        )
+        menu.show()
+        return menu.returned_value
+
     @property
     def current_item(self):
         """
@@ -86,7 +138,7 @@ class CursesMenu(object):
         :rtype: MenuItem|None
         """
         if self.items and self.selected_option != -1:
-            return self.items[self.current_option]
+            return self.items[self.selected_option]
         else:
             return None
 
@@ -225,6 +277,9 @@ class CursesMenu(object):
         """
         Select the current item and run it
         """
+        if not self.items:
+            self.should_exit = True
+            return
         self.selected_option = self.current_option
         self.selected_item.set_up()
         self.selected_item.action()
@@ -449,6 +504,25 @@ class ExitItem(MenuItem):
         else:
             self.text = "Exit"
         return super(ExitItem, self).show(index)
+
+
+class _SelectionItem(MenuItem):
+    def __init__(
+        self,
+        text,
+        index,
+        should_exit=False,
+        menu=None,
+    ):
+        super(_SelectionItem, self).__init__(
+            text=text,
+            should_exit=should_exit,
+            menu=menu,
+        )
+        self.index = index
+
+    def get_return(self):
+        return self.index
 
 
 def clear_terminal():

@@ -1,6 +1,6 @@
 import curses
 import os
-import platform
+import sys
 import threading
 
 
@@ -525,12 +525,13 @@ class _SelectionItem(MenuItem):
         return self.index
 
 
-def clear_terminal():
+def clear_terminal() -> None:
     """
-    Call the platform specific function to clear the terminal: cls on windows, \
-    reset otherwise
+    Call the platform specific function to clear the terminal.
+
+    Cls on windows, reset otherwise.
     """
-    if platform.system().lower() == "windows":
+    if sys.platform.startswith("win"):
         os.system("cls")
     else:
         os.system("reset")

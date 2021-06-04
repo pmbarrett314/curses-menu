@@ -28,7 +28,7 @@ def test_return_with_menu(item_with_menu: MenuItem):
 
 
 def test_show(basic_item: MenuItem):
-    assert basic_item.show(0) == "1 - item"
+    assert basic_item.show("1") == "1 - item"
 
 
 def test_set_up(basic_item: MenuItem):

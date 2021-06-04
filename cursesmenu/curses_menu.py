@@ -232,7 +232,7 @@ class CursesMenu(object):
                 text_style = self.highlight
             else:
                 text_style = self.normal
-            self.screen.addstr(5 + index, 4, item.show(index), text_style)
+            self.screen.addstr(5 + index, 4, item.show(str(index + 1)), text_style)
 
         screen_rows, screen_cols = CursesMenu.stdscr.getmaxyx()
         top_row = 0
@@ -457,7 +457,7 @@ class MenuItem(object):
         :return: The representation of the item to be shown in a menu
         :rtype: str
         """
-        return "%d - %s" % (index + 1, self.text)
+        return "%s - %s" % (index, self.text)
 
     def set_up(self):
         """

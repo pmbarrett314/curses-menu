@@ -55,7 +55,7 @@ class CursesMenu(object):
         self.current_option = 0
         self.selected_option = -1
 
-        self._main_thread = None
+        self._main_thread = threading.Thread(target=self._wrap_start, daemon=True)
 
         self._running = threading.Event()
 
@@ -176,12 +176,6 @@ class CursesMenu(object):
         else:
             self.remove_exit()
 
-        try:
-            self._main_thread = threading.Thread(target=self._wrap_start, daemon=True)
-        except TypeError:
-            self._main_thread = threading.Thread(target=self._wrap_start)
-            self._main_thread.daemon = True
-
         self._main_thread.start()
 
     def _wrap_start(self):
@@ -209,6 +203,7 @@ class CursesMenu(object):
         self._running.set()
         while self._running.wait() is not False and not self.should_exit:
             self.process_user_input()
+        self._running.clear()
 
     def _set_up_colors(self):
         curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)

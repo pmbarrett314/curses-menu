@@ -8,26 +8,36 @@ class SubmenuItem(MenuItem):
     A menu item to open a submenu
     """
 
-    def __init__(self, text, submenu, menu=None, should_exit=False):
+    def __init__(self, text, submenu=None, menu=None, should_exit=False):
         """
         :ivar CursesMenu self.submenu: The submenu to be opened when \
         this item is selected
         """
+        self._submenu = submenu
+        self._menu = menu
+        if self._submenu:
+            self._submenu.parent = menu
         super(SubmenuItem, self).__init__(text=text, menu=menu, should_exit=should_exit)
 
-        self.submenu = submenu
-        if menu:
-            self.submenu.parent = menu
+    @property
+    def submenu(self):
+        return self._submenu
 
-    def set_menu(self, menu):
-        """
-        Sets the menu of this item.
-        Should be used instead of directly accessing the menu attribute for this class.
+    @submenu.setter
+    def submenu(self, submenu):
+        self._submenu = submenu
+        if self._submenu is not None:
+            self._submenu.parent = self._menu
 
-        :param CursesMenu menu: the menu
-        """
-        self.menu = menu
-        self.submenu.parent = menu
+    @property
+    def menu(self):
+        return self._menu
+
+    @menu.setter
+    def menu(self, menu):
+        self._menu = menu
+        if self._submenu is not None:
+            self._submenu.parent = menu
 
     def set_up(self):
         """
@@ -58,4 +68,6 @@ class SubmenuItem(MenuItem):
         """
         :return: The returned value in the submenu
         """
-        return self.submenu.returned_value
+        if self.submenu:
+            return self.submenu.returned_value
+        return None

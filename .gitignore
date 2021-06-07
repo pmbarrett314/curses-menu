@@ -240,5 +240,5 @@ crashlytics-build.properties
 fabric.properties
 
 
-/tmp/
+/scratch/
 .ackrc

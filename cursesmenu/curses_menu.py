@@ -3,6 +3,8 @@ import os
 import sys
 import threading
 
+MIN_SIZE = 6  # Top bar, space, title, space, subtitle, space, bottom bar
+
 
 class CursesMenu(object):
     """
@@ -127,7 +129,9 @@ class CursesMenu(object):
         """
         :rtype: MenuItem|None
         """
-        if self.items:
+        if self.current_option == len(self.items) and self.show_exit_item:
+            return self.exit_item
+        elif self.items:
             return self.items[self.current_option]
         else:
             return None
@@ -137,10 +141,20 @@ class CursesMenu(object):
         """
         :rtype: MenuItem|None
         """
-        if self.items and self.selected_option != -1:
-            return self.items[self.selected_option]
-        else:
+        if self.selected_option == -1:
             return None
+        elif self.selected_option == len(self.items) and self.show_exit_item:
+            return self.exit_item
+        else:
+            return self.items[self.selected_option]
+
+    @property
+    def menu_height(self) -> int:
+        return len(self.items) + MIN_SIZE + (1 if self.show_exit_item else 0)
+
+    @property
+    def last_item_index(self) -> int:
+        return len(self.items) if self.show_exit_item else len(self.items) - 1
 
     def show(self, show_exit_item=None):
         """
@@ -166,16 +180,6 @@ class CursesMenu(object):
         self.previous_active_menu = CursesMenu.currently_active_menu
         CursesMenu.currently_active_menu = None
 
-        self.should_exit = False
-
-        if show_exit_item is None:
-            show_exit_item = self.show_exit_item
-
-        if show_exit_item:
-            self.add_exit()
-        else:
-            self.remove_exit()
-
         self._main_thread.start()
 
     def _wrap_start(self):
@@ -191,10 +195,7 @@ class CursesMenu(object):
     def _main_loop(self, scr):
         if scr is not None:
             CursesMenu.stdscr = scr
-        self.screen = curses.newpad(
-            len(self.items) + 6,
-            CursesMenu.stdscr.getmaxyx()[1],
-        )
+        self.screen = curses.newpad(self.menu_height, CursesMenu.stdscr.getmaxyx()[1])
         self._set_up_colors()
         curses.curs_set(0)
         CursesMenu.stdscr.refresh()
@@ -221,19 +222,33 @@ class CursesMenu(object):
         self.screen.addstr(4, 2, self.subtitle, curses.A_BOLD)
 
         for index, item in enumerate(self.items):
-            if self.current_option == index:
-                text_style = self.highlight
-            else:
-                text_style = self.normal
-            self.screen.addstr(5 + index, 4, item.show(str(index + 1)), text_style)
+            self.draw_item(index, item)
+        if self.show_exit_item:
+            self.draw_item(len(self.items), self.exit_item, "q")
 
+        self.refresh_screen()
+
+    def draw_item(self, index, item, index_text=None):
+        if index_text is None:
+            index_text = str(index + 1)
+        text_style = self.highlight if self.current_option == index else self.normal
+        assert self.screen is not None and text_style is not None
+
+        self.screen.addstr(
+            MIN_SIZE - 1 + index,
+            4,
+            item.show(index_text),
+            text_style,
+        )
+
+    def refresh_screen(self) -> None:
+        assert CursesMenu.stdscr is not None
         screen_rows, screen_cols = CursesMenu.stdscr.getmaxyx()
-        top_row = 0
-        if 6 + len(self.items) > screen_rows:
-            if screen_rows + self.current_option < 6 + len(self.items):
-                top_row = self.current_option
-            else:
-                top_row = 6 + len(self.items) - screen_rows
+
+        if self.menu_height > screen_rows:
+            top_row = min(self.menu_height - screen_rows, self.current_option)
+        else:
+            top_row = 0
 
         self.screen.refresh(top_row, 0, 0, 0, screen_rows - 1, screen_cols - 1)
 
@@ -307,11 +322,16 @@ class CursesMenu(object):
             self.current_option = user_input - ord("0") - 1
             self.draw()
 
+    def go_to_exit(self):
+        if self.show_exit_item:
+            self.current_option = len(self.items)
+            self.draw()
+
     def go_down(self):
         """
         Go down one, wrap to beginning if necessary
         """
-        if self.current_option < len(self.items) - 1:
+        if self.current_option < self.last_item_index:
             self.current_option += 1
         else:
             self.current_option = 0
@@ -324,14 +344,8 @@ class CursesMenu(object):
         if self.current_option > 0:
             self.current_option += -1
         else:
-            self.current_option = len(self.items) - 1
+            self.current_option = self.last_item_index
         self.draw()
-
-    def go_to_exit(self):
-        if not self.show_exit_item:
-            return
-        else:
-            self.current_option = len(self.items) - 1
 
     def clear_screen(self):
         """
@@ -395,44 +409,14 @@ class CursesMenu(object):
 
         :param MenuItem item: The item to be added
         """
-        did_remove = self.remove_exit()
         item.menu = self
         self.items.append(item)
-        if did_remove:
-            self.add_exit()
+
         if self.screen:
             max_row, max_cols = self.screen.getmaxyx()
-            if max_row < 6 + len(self.items):
-                self.screen.resize(6 + len(self.items), max_cols)
+            if max_row < MIN_SIZE + len(self.items):
+                self.screen.resize(self.menu_height, max_cols)
             self.draw()
-
-    def add_exit(self):
-        """
-        Add the exit item if necessary. Used to make sure there \
-        aren't multiple exit items
-
-        :return: True if item needed to be added, False otherwise
-        :rtype: bool
-        """
-        if self.items:
-            if self.items[-1] is not self.exit_item:
-                self.items.append(self.exit_item)
-                return True
-        return False
-
-    def remove_exit(self):
-        """
-        Remove the exit item if necessary. Used to make sure we only \
-        remove the exit item, not something else
-
-        :return: True if item needed to be removed, False otherwise
-        :rtype: bool
-        """
-        if self.items:
-            if self.items[-1] is self.exit_item:
-                del self.items[-1]
-                return True
-        return False
 
 
 class MenuItem(object):

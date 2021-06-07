@@ -28,17 +28,13 @@ class FunctionItem(ExternalItem):
             menu=menu,
             should_exit=should_exit,
         )
-
         self.function = function
-
-        if args is not None:
-            self.args = args
-        else:
-            self.args = []
-        if kwargs is not None:
-            self.kwargs = kwargs
-        else:
-            self.kwargs = {}
+        if args is None:
+            args = []
+        self.args = args
+        if kwargs is None:
+            kwargs = {}
+        self.kwargs = kwargs
 
         self.return_value = None
 

@@ -217,10 +217,8 @@ class CursesMenu(object):
         """
 
         self.screen.border(0)
-        if self.title is not None:
-            self.screen.addstr(2, 2, self.title, curses.A_STANDOUT)
-        if self.subtitle is not None:
-            self.screen.addstr(4, 2, self.subtitle, curses.A_BOLD)
+        self.screen.addstr(2, 2, self.title, curses.A_STANDOUT)
+        self.screen.addstr(4, 2, self.subtitle, curses.A_BOLD)
 
         for index, item in enumerate(self.items):
             if self.current_option == index:

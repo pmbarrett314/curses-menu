@@ -16,11 +16,11 @@ class CursesMenu(object):
     currently_active_menu = None
     stdscr = None
 
-    def __init__(self, title=None, subtitle=None, show_exit_option=True):
+    def __init__(self, title=None, subtitle=None, show_exit_item=True):
         """
         :ivar str title: The title of the menu
         :ivar str subtitle: The subtitle of the menu
-        :ivar bool show_exit_option: Whether this menu should show an exit \
+        :ivar bool show_exit_item: Whether this menu should show an exit \
         item by default. Can be overridden when the menu is started
         :ivar items: The list of MenuItems that the menu will display
         :vartype items: list[:class:`MenuItem<cursesmenu.items.MenuItem>`]
@@ -50,7 +50,7 @@ class CursesMenu(object):
         self.items = []
 
         self.exit_item = ExitItem(menu=self)
-        self.show_exit_option = show_exit_option
+        self.show_exit_item = show_exit_item
 
         self.current_option = 0
         self.selected_option = -1
@@ -76,7 +76,7 @@ class CursesMenu(object):
         selections,
         title,
         subtitle,
-        show_exit_option=False,
+        show_exit_item=False,
     ):
         """
         Create a menu from a list of strings.
@@ -86,11 +86,11 @@ class CursesMenu(object):
         :param selections: A list of strings to be selected from
         :param title: The title of the menu
         :param subtitle: The subtitle of the menu
-        :param show_exit_option: If the exit item should be shown.\
+        :param show_exit_item: If the exit item should be shown.\
         If it is  and the user selects it, the return value will be None
         :return: A CursesMenu with items for each selection
         """
-        menu = cls(title=title, subtitle=subtitle, show_exit_option=show_exit_option)
+        menu = cls(title=title, subtitle=subtitle, show_exit_item=show_exit_item)
         for index, selection in enumerate(selections):
             menu.append_item(
                 _SelectionItem(text=selection, index=index, should_exit=True),
@@ -117,7 +117,7 @@ class CursesMenu(object):
             selections=selections,
             title=title,
             subtitle=subtitle,
-            show_exit_option=False,
+            show_exit_item=False,
         )
         menu.show()
         return menu.returned_value
@@ -142,24 +142,24 @@ class CursesMenu(object):
         else:
             return None
 
-    def show(self, show_exit_option=None):
+    def show(self, show_exit_item=None):
         """
         Calls start and then immediately joins.
 
-        :param bool show_exit_option: Whether the exit item should be shown, \
+        :param bool show_exit_item: Whether the exit item should be shown, \
         defaults to the value set in the constructor
         """
-        self.start(show_exit_option)
+        self.start(show_exit_item)
         self.join()
 
-    def start(self, show_exit_option=None):
+    def start(self, show_exit_item=None):
         """
         Start the menu in a new thread and allow the user to interact with it.
         The thread is a daemon, so :meth:`join()<cursesmenu.CursesMenu.join>` \
         should be called if there's a possibility that the main thread will \
         exit before the menu is done
 
-        :param bool show_exit_option: Whether the exit item should be shown, \
+        :param bool show_exit_item: Whether the exit item should be shown, \
         defaults to the value set in the constructor
         """
 
@@ -168,10 +168,10 @@ class CursesMenu(object):
 
         self.should_exit = False
 
-        if show_exit_option is None:
-            show_exit_option = self.show_exit_option
+        if show_exit_item is None:
+            show_exit_item = self.show_exit_item
 
-        if show_exit_option:
+        if show_exit_item:
             self.add_exit()
         else:
             self.remove_exit()
@@ -330,7 +330,7 @@ class CursesMenu(object):
         self.draw()
 
     def go_to_exit(self):
-        if not self.show_exit_option:
+        if not self.show_exit_item:
             return
         else:
             self.current_option = len(self.items) - 1

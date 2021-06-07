@@ -29,7 +29,7 @@ def sample_menu(sample_items, mock_cursesmenu_curses_vary_window_size):
 
 @pytest.fixture
 def empty_menu():
-    menu = CursesMenu("menu", "empty menu", show_exit_option=False)
+    menu = CursesMenu("menu", "empty menu", show_exit_item=False)
     menu.start()
     menu.wait_for_start(timeout=10)
     yield menu
@@ -156,7 +156,7 @@ def test_append_while_running(sample_menu: CursesMenu):
 def test_init():
     menu1 = CursesMenu()
     menu2 = CursesMenu("menu2", "test_init", True)
-    menu3 = CursesMenu(title="menu3", subtitle="test_init", show_exit_option=False)
+    menu3 = CursesMenu(title="menu3", subtitle="test_init", show_exit_item=False)
 
     assert menu1.title is None
     assert menu2.title == "menu2"
@@ -166,14 +166,14 @@ def test_init():
     assert menu2.subtitle == "test_init"
     assert menu3.subtitle == "test_init"
 
-    assert menu1.show_exit_option
-    assert menu2.show_exit_option
-    assert not menu3.show_exit_option
+    assert menu1.show_exit_item
+    assert menu2.show_exit_item
+    assert not menu3.show_exit_item
 
 
 def test_null_screens_main_loop():
-    menu = CursesMenu("menu", "empty menu", show_exit_option=False)
-    second_menu = CursesMenu("menu", "empty menu", show_exit_option=False)
+    menu = CursesMenu("menu", "empty menu", show_exit_item=False)
+    second_menu = CursesMenu("menu", "empty menu", show_exit_item=False)
     CursesMenu.stdscr = None
     menu.get_input = menu._exit
     with pytest.raises(Exception):

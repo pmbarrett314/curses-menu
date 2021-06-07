@@ -245,10 +245,13 @@ class CursesMenu(object):
         """
         user_input = self.get_input()
 
+        if user_input is None:
+            return user_input
+
         go_to_max = ord("9") if len(self.items) >= 9 else ord(str(len(self.items)))
 
         if ord("1") <= user_input <= go_to_max:
-            self.go_to(user_input - ord("0") - 1)
+            self.go_to(user_input)
         elif user_input == curses.KEY_DOWN:
             self.go_down()
         elif user_input == curses.KEY_UP:
@@ -285,15 +288,26 @@ class CursesMenu(object):
         if not self.should_exit:
             self.draw()
 
-    def go_to(self, option):
+    def _exit(self):
+        self.should_exit = True
+
+    def go_to(self, user_input):
         """
         Go to the option entered by the user as a number
 
         :param option: the option to go to
         :type option: int
         """
-        self.current_option = option
-        self.draw()
+        if len(self.items) > 9:
+            go_to_max = ord("9")
+        elif len(self.items) < 0:
+            return
+        else:
+            go_to_max = ord(str(len(self.items)))
+
+        if ord("1") <= user_input <= go_to_max:
+            self.current_option = user_input - ord("0") - 1
+            self.draw()
 
     def go_down(self):
         """
@@ -314,6 +328,12 @@ class CursesMenu(object):
         else:
             self.current_option = len(self.items) - 1
         self.draw()
+
+    def go_to_exit(self):
+        if not self.show_exit_option:
+            return
+        else:
+            self.current_option = len(self.items) - 1
 
     def clear_screen(self):
         """

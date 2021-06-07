@@ -1,96 +1,189 @@
-from base_test_case import BaseTestCase
+from typing import List
 
-from cursesmenu import CursesMenu
+import pytest
+
+from cursesmenu.curses_menu import CursesMenu
 from cursesmenu.items import MenuItem
 
-
-class TestSampleMenu(BaseTestCase):
-    def setUp(self):
-        super(TestSampleMenu, self).setUp()
-
-        self.menu = CursesMenu("self.menu", "TestSampleMenu")
-        self.item1 = MenuItem("self.item1", self.menu)
-        self.item2 = MenuItem("self.item2", self.menu)
-        self.menu.append_item(self.item1)
-        self.menu.append_item(self.item2)
-        self.menu.start()
-        self.menu.wait_for_start(timeout=10)
-
-    def tearDown(self):
-        super(TestSampleMenu, self).tearDown()
-        self.menu.exit()
-        self.menu.join(timeout=10)
-
-    def test_go_down(self):
-        self.menu.go_down()
-        self.assertEqual(self.menu.current_option, 1)
-        self.assertIs(self.menu.current_item, self.item2)
-        self.menu.go_down()
-        self.assertEqual(self.menu.current_option, 2)
-        self.assertEqual(self.menu.current_item, self.menu.exit_item)
-        self.menu.go_down()
-        self.assertEqual(self.menu.current_option, 0)
-        self.assertIs(self.menu.current_item, self.item1)
-
-    def test_go_up(self):
-        self.menu.go_up()
-        self.assertEqual(self.menu.current_option, 2)
-        self.assertIs(self.menu.current_item, self.menu.exit_item)
-        self.menu.go_up()
-        self.assertEqual(self.menu.current_option, 1)
-        self.assertEqual(self.menu.current_item, self.item2)
-        self.menu.go_up()
-        self.assertEqual(self.menu.current_option, 0)
-        self.assertIs(self.menu.current_item, self.item1)
-
-    def test_go_to(self):
-        self.menu.go_to(1)
-        self.assertEqual(self.menu.current_option, 1)
-        self.assertEqual(self.menu.current_item, self.item2)
-
-    def test_select(self):
-        self.menu.select()
-        self.assertEqual(self.menu.selected_option, 0)
-        self.assertIs(self.menu.selected_item, self.item1)
-        self.menu.go_down()
-        self.menu.select()
-        self.assertEqual(self.menu.selected_option, 1)
-        self.assertIs(self.menu.selected_item, self.item2)
-        self.menu.go_down()
-        self.menu.select()
-        self.assertEqual(self.menu.selected_option, 2)
-        self.assertIs(self.menu.selected_item, self.menu.exit_item)
-        self.menu.join(timeout=10)
-        self.assertFalse(self.menu.is_alive())
-
-    def test_exit(self):
-        self.menu.exit()
-        self.menu.join(timeout=10)
-        self.assertFalse(self.menu.is_alive())
+pytestmark = pytest.mark.usefixtures("mock_cursesmenu_curses", "mock_clear")
 
 
-class TestCursesMenu(BaseTestCase):
-    def test_init(self):
-        menu1 = CursesMenu()
-        menu2 = CursesMenu("menu2", "test_init", True)
-        menu3 = CursesMenu(title="menu3", subtitle="test_init", show_exit_option=False)
-        self.assertIsNone(menu1.title)
-        self.assertEqual(menu2.title, "menu2")
-        self.assertEqual(menu3.title, "menu3")
-        self.assertIsNone(menu1.subtitle)
-        self.assertEqual(menu2.subtitle, "test_init")
-        self.assertEqual(menu3.subtitle, "test_init")
-        self.assertTrue(menu1.show_exit_option)
-        self.assertTrue(menu2.show_exit_option)
-        self.assertFalse(menu3.show_exit_option)
+@pytest.fixture
+def sample_items():
+    item0 = MenuItem("item0")
+    item1 = MenuItem("item1")
+    return [item0, item1]
 
-    def test_currently_active_menu(self):
-        menu1 = CursesMenu("menu1", "test_currently_active_menu")
-        menu2 = CursesMenu("menu2", "test_currently_active_menu")
-        self.assertIsNone(CursesMenu.currently_active_menu)
-        menu1.start()
-        menu1.wait_for_start(10)
-        self.assertIs(CursesMenu.currently_active_menu, menu1)
-        menu2.start()
-        menu2.wait_for_start(10)
-        self.assertIs(CursesMenu.currently_active_menu, menu2)
+
+@pytest.fixture
+def sample_menu(sample_items, mock_cursesmenu_curses_vary_window_size):
+    menu = CursesMenu("menu", "TestSampleMenu")
+    menu.append_item(sample_items[0])
+    menu.append_item(sample_items[1])
+    menu.start()
+    menu.wait_for_start(timeout=10)
+    yield menu
+    menu.exit()
+    menu.join(timeout=10)
+
+
+@pytest.fixture
+def empty_menu():
+    menu = CursesMenu("menu", "empty menu", show_exit_option=False)
+    menu.start()
+    menu.wait_for_start(timeout=10)
+    yield menu
+    menu.exit()
+    menu.join(timeout=10)
+
+
+@pytest.fixture
+def big_menu():
+    menu = CursesMenu("Test Menu")
+    for i in range(100):
+        menu.append_item(MenuItem("item{}".format(i), should_exit=True))
+    menu.start()
+    menu.wait_for_start(timeout=10)
+    yield menu
+    menu.exit()
+    menu.join(timeout=10)
+
+
+def test_empty_menu(empty_menu: CursesMenu):
+    assert empty_menu.current_item is None
+    assert empty_menu.selected_item is None
+    empty_menu.select()
+    empty_menu.go_to_exit()
+    empty_menu.join(timeout=10)
+    assert not empty_menu.is_alive()
+
+
+def test_big_menu(big_menu: CursesMenu):
+    pass
+
+
+def test_go_down(sample_menu: CursesMenu, sample_items: List[MenuItem]):
+    sample_menu.go_down()
+    assert sample_menu.current_option == 1
+    assert sample_menu.current_item is sample_items[1]
+    sample_menu.go_down()
+    assert sample_menu.current_option == 2
+    assert sample_menu.current_item is sample_menu.exit_item
+    sample_menu.go_down()
+    assert sample_menu.current_option == 0
+    assert sample_menu.current_item is sample_items[0]
+
+
+def test_go_up(sample_menu: CursesMenu, sample_items: List[MenuItem]):
+    sample_menu.go_up()
+    assert sample_menu.current_option == 2
+    assert sample_menu.current_item is sample_menu.exit_item
+    sample_menu.go_up()
+    assert sample_menu.current_option == 1
+    assert sample_menu.current_item is sample_items[1]
+    sample_menu.go_up()
+    assert sample_menu.current_option == 0
+    assert sample_menu.current_item is sample_items[0]
+
+
+def test_go_to(sample_menu: CursesMenu, sample_items: List[MenuItem]):
+    sample_menu.go_to(ord("2"))
+    assert sample_menu.current_option == 1
+    assert sample_menu.current_item is sample_items[1]
+    sample_menu.go_to(ord("7"))
+    assert sample_menu.current_option == 1
+    assert sample_menu.current_item is sample_items[1]
+
+
+def test_go_to_big(big_menu: CursesMenu):
+    big_menu.go_to(ord("8"))
+    assert big_menu.current_option == 7
+    assert big_menu.current_item == big_menu.items[7]
+
+
+def test_go_to_empty(empty_menu: CursesMenu):
+    empty_menu.go_to(ord("1"))
+
+
+def test_select(sample_menu: CursesMenu, sample_items: List[MenuItem]):
+    sample_menu.select()
+    assert sample_menu.current_option == 0
+    assert sample_menu.current_item is sample_items[0]
+    sample_menu.go_down()
+    sample_menu.select()
+    assert sample_menu.current_option == 1
+    assert sample_menu.current_item is sample_items[1]
+    sample_menu.go_down()
+    sample_menu.select()
+    assert sample_menu.current_option == 2
+    assert sample_menu.current_item is sample_menu.exit_item
+    sample_menu.join(timeout=10)
+    assert not sample_menu.is_alive()
+
+
+def test_go_to_exit(sample_menu: CursesMenu):
+    sample_menu.go_to_exit()
+    assert sample_menu.current_option == 2
+    assert sample_menu.current_item is sample_menu.exit_item
+
+
+def test_exit(sample_menu: CursesMenu):
+    sample_menu.exit()
+    sample_menu.join(timeout=10)
+    assert not sample_menu.is_alive()
+
+
+def test_basic_menu():
+    menu = CursesMenu("Test Menu")
+    menu.get_input = menu._exit
+    menu.show()
+
+
+def test_thread_stuff(sample_menu: CursesMenu):
+    assert sample_menu.is_running()
+    sample_menu.pause()
+    assert not sample_menu.is_running()
+    sample_menu.resume()
+    assert sample_menu.is_running()
+
+
+def test_append_while_running(sample_menu: CursesMenu):
+    for i in range(12):
+        new_item = MenuItem(f"item{i}")
+        sample_menu.append_item(new_item)
+
+
+def test_init():
+    menu1 = CursesMenu()
+    menu2 = CursesMenu("menu2", "test_init", True)
+    menu3 = CursesMenu(title="menu3", subtitle="test_init", show_exit_option=False)
+
+    assert menu1.title is None
+    assert menu2.title == "menu2"
+    assert menu3.title == "menu3"
+
+    assert menu1.subtitle is None
+    assert menu2.subtitle == "test_init"
+    assert menu3.subtitle == "test_init"
+
+    assert menu1.show_exit_option
+    assert menu2.show_exit_option
+    assert not menu3.show_exit_option
+
+
+def test_null_screens_main_loop():
+    menu = CursesMenu("menu", "empty menu", show_exit_option=False)
+    second_menu = CursesMenu("menu", "empty menu", show_exit_option=False)
+    CursesMenu.stdscr = None
+    menu.get_input = menu._exit
+    with pytest.raises(Exception):
+        menu._main_loop(None)
+
+    second_menu.start()
+    second_menu.wait_for_start(timeout=10)
+    menu._main_loop(second_menu.screen)
+    second_menu._exit()
+
+
+if __name__ == "__main__":
+    pytest.main()

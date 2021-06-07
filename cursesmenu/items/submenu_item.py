@@ -68,6 +68,6 @@ class SubmenuItem(MenuItem):
         """
         :return: The returned value in the submenu
         """
-        if self.submenu:
+        if self.submenu is not None:
             return self.submenu.returned_value
         return None

@@ -16,7 +16,7 @@ class CursesMenu(object):
     currently_active_menu = None
     stdscr = None
 
-    def __init__(self, title=None, subtitle=None, show_exit_item=True):
+    def __init__(self, title="", subtitle="", show_exit_item=True):
         """
         :ivar str title: The title of the menu
         :ivar str subtitle: The subtitle of the menu

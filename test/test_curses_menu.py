@@ -158,11 +158,11 @@ def test_init():
     menu2 = CursesMenu("menu2", "test_init", True)
     menu3 = CursesMenu(title="menu3", subtitle="test_init", show_exit_item=False)
 
-    assert menu1.title is None
+    assert menu1.title == ""
     assert menu2.title == "menu2"
     assert menu3.title == "menu3"
 
-    assert menu1.subtitle is None
+    assert menu1.subtitle == ""
     assert menu2.subtitle == "test_init"
     assert menu3.subtitle == "test_init"
 

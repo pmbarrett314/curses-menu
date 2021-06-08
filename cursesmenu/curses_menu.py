@@ -1,3 +1,5 @@
+"""Top level class and functions for a curses-based menu."""
+
 import curses
 import os
 import sys
@@ -17,11 +19,35 @@ else:
 MIN_SIZE = 6  # Top bar, space, title, space, subtitle, space, bottom bar
 
 
-class CursesMenu(object):
+class CursesMenu:
     """
-    A class that displays a menu and allows the user to select an option
+    A menu created with the curses library.
 
-    :cvar CursesMenu cls.currently_active_menu: Class variable that holds the \
+    :param title: The title of the menu
+    :param subtitle: The menu subtitle
+    :ivar screen: The curses window associated with the menu. \
+    Created using curses.newpad when the menu is started
+    :ivar highlight: Index of the curses color pair\
+    used to represent the highlighted item
+    :ivar normal: Index of the curses color pair used to represent other text
+    :ivar items: The list of items for the menu
+    :ivar exit_item: The ExitItem for this menu, will be displayed last.
+    :param show_exit_item: Whether the exit item is shown
+    :ivar current_option: The index of the currently highlighted menu item
+    :ivar selected_option: The index of the last item the user selected, initially -1
+    :ivar should_exit: Flag to signal that the menu should exit on \
+    its next pass through its main loop
+    :ivar returned_value: The value returned by the last selected item
+    :ivar parent: The parent menu of this one, or None if this menu is the root menu
+    :ivar user_input_handlers: A dictionary mapping character values to functions \
+    that handle those characters
+    :ivar current_item: The MenuItem that's currently highlighted
+    :ivar selected_item: The Menu item that's currently selected
+    :cvar stdscr: The root curses window
+    :ivar menu_height: The total height of the menu including the exit item
+    :ivar last_item_index: The index of the max item in the menu, \
+    including the exit item
+    :cvar currently_active_menu: Class variable that holds the \
     currently active menu or None if no menu\
     is currently active (E.G. when switching between menus)
     """
@@ -35,28 +61,7 @@ class CursesMenu(object):
         subtitle: str = "",
         show_exit_item: bool = True,
     ):
-        """
-        :ivar str title: The title of the menu
-        :ivar str subtitle: The subtitle of the menu
-        :ivar bool show_exit_item: Whether this menu should show an exit \
-        item by default. Can be overridden when the menu is started
-        :ivar items: The list of MenuItems that the menu will display
-        :vartype items: list[:class:`MenuItem<cursesmenu.items.MenuItem>`]
-        :ivar CursesMenu parent: The parent of this menu
-        :ivar CursesMenu previous_active_menu: the previously active menu to be \
-        restored into the class's currently active menu
-        :ivar int current_option: The currently highlighted menu option
-        :ivar MenuItem current_item: The item corresponding to the menu option \
-        that is currently highlighted
-        :ivar int selected_option: The option that the user has most recently selected
-        :ivar MenuItem selected_item: The item in :attr:`items` that the user most \
-        recently selected
-        :ivar returned_value: The value returned by the most recently selected item
-        :ivar screen: the curses window associated with this menu
-        :ivar normal: the normal text color pair for this menu
-        :ivar highlight: the highlight color pair associated with this window
-        """
-
+        """Initialize the menu."""
         self.title = title
         self.subtitle = subtitle
 
@@ -100,6 +105,7 @@ class CursesMenu(object):
         self.previous_active_menu = None
 
     def __repr__(self) -> str:
+        """Get a string representation of the menu."""
         return f"{self.title}: {self.subtitle}. {len(self.items)} items"
 
     @classmethod
@@ -155,9 +161,7 @@ class CursesMenu(object):
 
     @property
     def current_item(self) -> Optional[MenuItem]:
-        """
-        :rtype: MenuItem|None
-        """
+        """Get the currently selected MenuItem."""
         if self.current_option == len(self.items) and self.show_exit_item:
             return self.exit_item
         elif self.items:
@@ -167,9 +171,7 @@ class CursesMenu(object):
 
     @property
     def selected_item(self) -> Optional[MenuItem]:
-        """
-        :rtype: MenuItem|None
-        """
+        """Get the most recently selected MenuItem."""
         if self.selected_option == -1:
             return None
         elif self.selected_option == len(self.items) and self.show_exit_item:
@@ -179,33 +181,32 @@ class CursesMenu(object):
 
     @property
     def menu_height(self) -> int:
+        """Get the number of items to be shown."""
         return len(self.items) + MIN_SIZE + (1 if self.show_exit_item else 0)
 
     @property
     def last_item_index(self) -> int:
+        """Get the index of the last item in a list of items including the exit item \
+        if it's shown."""
         return len(self.items) if self.show_exit_item else len(self.items) - 1
 
     def show(self) -> Any:
         """
-        Calls start and then immediately joins.
+        Start the menu and blocks until it finishes.
 
-        :param bool show_exit_item: Whether the exit item should be shown, \
-        defaults to the value set in the constructor
+        :return: The return value from the last selected item
         """
         self.start()
         return self.join()
 
     def start(self) -> None:
         """
-        Start the menu in a new thread and allow the user to interact with it.
-        The thread is a daemon, so :meth:`join()<cursesmenu.CursesMenu.join>` \
-        should be called if there's a possibility that the main thread will \
-        exit before the menu is done
+        Start the menu's thread and return without blocking.
 
-        :param bool show_exit_item: Whether the exit item should be shown, \
-        defaults to the value set in the constructor
+        The menu's thread is a daemon, so if the calling script \
+        may exit before the user is finished interacting, use \
+        :meth:`join()<cursesmenu.CursesMenu.join>` to block until the menu exits.
         """
-
         self.previous_active_menu = CursesMenu.currently_active_menu
         CursesMenu.currently_active_menu = None
 
@@ -244,8 +245,9 @@ class CursesMenu(object):
 
     def draw(self) -> None:
         """
-        Redraws the menu and refreshes the screen. Should be called whenever \
-        something changes that needs to be redrawn.
+        Draw the menu.
+
+        Adds border, title and subtitle, and items, then refreshes the screen.
         """
         assert self.screen is not None
         self.screen.border(0)
@@ -265,6 +267,13 @@ class CursesMenu(object):
         item: MenuItem,
         index_text: Optional[str] = None,
     ) -> None:
+        """
+        Draw an individual item.
+
+        :param index: The numerical index of the item in the list
+        :param item: The item to be drawn
+        :param index_text: Text to override the index portion of the item
+        """
         if index_text is None:
             index_text = str(index + 1)
         text_style = self.highlight if self.current_option == index else self.normal
@@ -278,6 +287,7 @@ class CursesMenu(object):
         )
 
     def refresh_screen(self) -> None:
+        """Refresh what's onscreen to match the cursor's position."""
         assert CursesMenu.stdscr is not None
         assert self.screen is not None
         screen_rows, screen_cols = CursesMenu.stdscr.getmaxyx()
@@ -291,7 +301,9 @@ class CursesMenu(object):
 
     def process_user_input(self) -> int:
         """
-        Gets the next single character and decides what to do with it
+        Get and then handle the user's input.
+
+        :return: The character the user input.
         """
         user_input = self.get_input()
         self.user_input_handlers[user_input](user_input)
@@ -300,18 +312,18 @@ class CursesMenu(object):
     # noinspection PyMethodMayBeStatic
     def get_input(self) -> int:
         """
-        Can be overridden to change the input method.
-        Called in :meth:`process_user_input()<cursesmenu.CursesMenu.process_user_input>`
+        Get the user's input.
 
-        :return: the ordinal value of a single character
-        :rtype: int
+        :return: The character input by the user.
         """
         assert CursesMenu.stdscr is not None
         return CursesMenu.stdscr.getch()
 
     def select(self, _: int = 0) -> None:
         """
-        Select the current item and run it
+        Select the current item.
+
+        Called for the enter/return key.
         """
         if not self.items:
             self._exit()
@@ -333,10 +345,9 @@ class CursesMenu(object):
 
     def go_to(self, user_input: int) -> None:
         """
-        Go to the option entered by the user as a number
+        Go to a given numbered item.
 
-        :param option: the option to go to
-        :type option: int
+        Called on numerical input. Currently implentation only works on single digits.
         """
         if self.last_item_index > 9:
             go_to_max = ord("9")
@@ -351,13 +362,20 @@ class CursesMenu(object):
             self.draw()
 
     def go_to_exit(self, _: int = 0) -> None:
+        """
+        Go to the exit item.
+
+        Called for Q.
+        """
         if self.show_exit_item:
             self.current_option = len(self.items)
             self.draw()
 
     def go_down(self, _: int = 0) -> None:
         """
-        Go down one, wrap to beginning if necessary
+        Go down one item, wrap if necessary.
+
+        Called when the user presses the down arrow.
         """
         if self.current_option < self.last_item_index:
             self.current_option += 1
@@ -367,7 +385,9 @@ class CursesMenu(object):
 
     def go_up(self, _: int = 0) -> None:
         """
-        Go up one, wrap to end if necessary
+        Go up one item, wrap if necessary.
+
+        Called when the user presses the up arrow.
         """
         if self.current_option > 0:
             self.current_option += -1
@@ -376,68 +396,68 @@ class CursesMenu(object):
         self.draw()
 
     def clear_screen(self) -> None:
-        """
-        Clear the screen belonging to this menu
-        """
+        """Clear the screen for this menu."""
         assert self.screen is not None
         self.screen.clear()
 
     def join(self, timeout: Optional[int] = None) -> Any:
         """
-        Should be called at some point after \
-        :meth:`start()<cursesmenu.CursesMenu.start>` to block until the menu exits.
-        :param Number timeout: How long to wait before timing out
+        Block until the menu exits.
+
+        :param timeout: time in seconds until the menu is forced to close
+        :return: The value returned from the last selected item
         """
         self._main_thread.join(timeout=timeout)
         return self.returned_value
 
     def is_running(self) -> bool:
         """
-        :return: True if the menu is started and hasn't been paused
+        Check if the menu has is running (has not been paused).
+
+        :return: True if the menu has not been paused false otherwise.
         """
         return self._running.is_set()
 
     def wait_for_start(self, timeout: Optional[int] = None) -> bool:
         """
-        Block until the menu is started
+        Block until the menu starts.
 
-        :param timeout: How long to wait before timing out
-        :return: False if timeout is given and operation times out, \
-        True otherwise. None before Python 2.7
+        :param timeout: Timeout in seconds
+        :return: True unless the operation times out
         """
         return self._running.wait(timeout)
 
     def pause(self) -> None:
-        """
-        Temporarily pause the menu until resume is called
-        """
+        """Pause this menu's thread."""
         self._running.clear()
 
     def resume(self) -> None:
-        """
-        Sets the currently active menu to this one and resumes it
-        """
-        CursesMenu.currently_active_menu = self
+        """Resume this menu's thread."""
         self._running.set()
 
     def is_alive(self) -> bool:
         """
-        :return: True if the thread is still alive, False otherwise
+        Check if the menu's thread is running.
+
+        :return: True if the menu's thread is alive, false if not.
         """
         return self._main_thread.is_alive()
 
     def exit(self, timeout: Optional[int] = None) -> Any:
         """
-        Signal the menu to exit, then block until it's done cleaning up
+        Signal the menu to exit and block until it does.
+
+        :param timeout: timeout before the menu is forced to close
+        :return: the value of the last selected item
         """
         self._exit()
         return self.join(timeout)
 
     def append_item(self, item: MenuItem) -> None:
         """
-        Add an item to the end of the menu before the exit item
+        Append an item to the menu and redraw.
 
-        :param MenuItem item: The item to be added
+        :param item: A MenuItem to append to the list
         """
         item.menu = self
         self.items.append(item)
@@ -451,7 +471,13 @@ class CursesMenu(object):
 
 class MenuItem:
     """
-    A generic menu item
+    The base class for menu items.
+
+    Is displayed in a basic manner and does nothing when selected.
+
+    :param text: The text representing this menu item
+    :param should_exit: Whether the menu should exit when this item is selected
+    :param menu: The menu that owns this item
     """
 
     def __init__(
@@ -460,59 +486,53 @@ class MenuItem:
         menu: Optional[CursesMenu] = None,
         should_exit: bool = False,
     ):
-        """
-        :ivar str text: The text shown for this menu item
-        :ivar CursesMenu menu: The menu to which this item belongs
-        :ivar bool should_exit: Whether the menu should exit once this \
-        item's action is done
-        """
+        """Initialize the menu item."""
         self.text = text
         self.menu = menu
         self.should_exit = should_exit
 
     def __str__(self) -> str:
+        """Get a basic string representation of the item."""
         title = self.menu.title if self.menu else ""
         return f"{title} {self.text}"
 
     def show(self, index_text: str) -> str:
         """
-        How this item should be displayed in the menu. Can be overridden, \
-        but should keep the same signature.
+        Provide the representation that should be used for this item in a menu.
 
-        Default is:
+        The base class is simply "[index] - [text]"
 
-            1 - Item 1
-
-            2 - Another Item
-
-        :param int index: The index of the item in the items list of the menu
-        :return: The representation of the item to be shown in a menu
-        :rtype: str
+        :param index_text: The string used for the index, provided by the menu.
+        :return: The text representing the item.
         """
         return f"{index_text} - {self.text}"
 
     def set_up(self) -> None:
-        """
-        Override to add any setup actions necessary for the item
-        """
+        """Perform setup for the item."""
         pass
 
     def action(self) -> None:
         """
-        Override to carry out the main action for this item.
+        Do the main action for the item.
+
+        If you're just writing a simple subclass, you shouldn't need set_up or clean_up.
+        The menu just calls them in order. They are provided so you can make subclass
+        hierarchies where the superclass handles some setup and cleanup for its
+        subclasses.
         """
         pass
 
     def clean_up(self) -> None:
-        """
-        Override to add any cleanup actions necessary for the item
-        """
+        """Perform cleanup for the item."""
         pass
 
     def get_return(self) -> Any:
         """
-        Override to change what the item returns.
-        Otherwise just returns the same value the last selected item did.
+        Get the return value for this item.
+
+        For a basic MenuItem, just forwards the return value from the menu.
+
+        :return: The return value for the item.
         """
         if self.menu:
             return self.menu.returned_value
@@ -521,15 +541,24 @@ class MenuItem:
 
 class ExitItem(MenuItem):
     """
-    Used to exit the current menu. Handled by :class:`cursesmenu.CursesMenu`
+    The exit item for a menu.
+
+    Changes representation based on whether the menu is a submenu or the root menu.
+
+    :param menu: the menu for this item
     """
 
     def __init__(self, menu: Optional[CursesMenu] = None):
+        """Initialize the exit item."""
         super(ExitItem, self).__init__(text="Exit", menu=menu, should_exit=True)
 
     def show(self, index_text: str) -> str:
         """
-        This class overrides this method
+        Get the representation of this item \
+        dependent on whether it's in a submenu or the root menu.
+
+        :param index_text:
+        :return: The representation of this item
         """
         if self.menu and self.menu.parent:
             self.text = "Return to %s menu" % self.menu.parent.title

@@ -60,7 +60,7 @@ repos:
     rev: 6.1.1
     hooks:
       - id: pydocstyle
-        exclude: .*|__init__.py|^(docs/|test/|examples/|setup.py|conftest.py|cursesmenu/items)
+        exclude: __init__.py|^(docs/|test/|examples/|setup.py|conftest.py|cursesmenu/items|cursesmenu/old_curses_menu.py)
         additional_dependencies:
           - toml
 

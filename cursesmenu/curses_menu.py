@@ -67,9 +67,15 @@ class CursesMenu:
 
         self.screen: Optional[Window] = None
 
+        # TODO: can I initialize these to something basic?
         self.highlight: Optional[int] = None
         self.normal: Optional[int] = None
 
+        # TODO: add a list of items that floats at the end
+        # TODO: add a way to replace item indices with letters
+        # TODO: instead of  conditionally adding 1 for exit item, just combine
+        #  the regular list and the floating one
+        #  this way the consumer can add their own floating exit item
         self.items: List[MenuItem] = []
 
         self.exit_item = ExitItem(menu=self)
@@ -81,9 +87,10 @@ class CursesMenu:
         self._main_thread = threading.Thread(target=self._wrap_start, daemon=True)
 
         self._running = threading.Event()
-
+        # TODO:should this just depend on the thread?
         self.should_exit = False
 
+        # TODO: Should this be a property
         self.returned_value = None
 
         self.parent: Optional[CursesMenu] = None
@@ -253,7 +260,9 @@ class CursesMenu:
 
         for index, item in enumerate(self.items):
             self.draw_item(index, item)
+
         if self.show_exit_item:
+            # TODO: Replace this logic with like a dictionary of replacements
             self.draw_item(len(self.items), self.exit_item, "q")
 
         self.refresh_screen()
@@ -459,7 +468,7 @@ class CursesMenu:
         """
         item.menu = self
         self.items.append(item)
-
+        # TODO: Define subclass of ABC.orderedcollection to hold items
         if self.screen:
             max_row, max_cols = self.screen.getmaxyx()
             if max_row < MIN_SIZE + len(self.items):
@@ -559,6 +568,8 @@ class ExitItem(MenuItem):
         :return: The representation of this item
         """
         if self.menu and self.menu.parent:
+            # TODO: implement an item that exits the whole menu
+            #  hierarchy from a submenu.
             self.text = "Return to %s menu" % self.menu.parent.title
         else:
             self.text = "Exit"

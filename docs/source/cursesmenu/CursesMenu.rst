@@ -12,8 +12,6 @@ CursesMenu --- Standard menu class
         <h2>Item Management</h2>
 
     .. automethod:: cursesmenu.CursesMenu.append_item
-    .. automethod:: cursesmenu.CursesMenu.add_exit
-    .. automethod:: cursesmenu.CursesMenu.remove_exit
 
     .. raw:: html
 

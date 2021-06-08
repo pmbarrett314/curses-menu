@@ -83,7 +83,7 @@ class CursesMenu(object):
         self.previous_active_menu = None
 
     def __repr__(self):
-        return "%s: %s. %d items" % (self.title, self.subtitle, len(self.items))
+        return f"{self.title}: {self.subtitle}. {len(self.items)} items"
 
     @classmethod
     def make_selection_menu(
@@ -134,8 +134,7 @@ class CursesMenu(object):
             subtitle=subtitle,
             show_exit_item=False,
         )
-        menu.show()
-        return menu.returned_value
+        return menu.show()
 
     @property
     def current_item(self):
@@ -169,17 +168,17 @@ class CursesMenu(object):
     def last_item_index(self) -> int:
         return len(self.items) if self.show_exit_item else len(self.items) - 1
 
-    def show(self, show_exit_item=None):
+    def show(self):
         """
         Calls start and then immediately joins.
 
         :param bool show_exit_item: Whether the exit item should be shown, \
         defaults to the value set in the constructor
         """
-        self.start(show_exit_item)
-        self.join()
+        self.start()
+        return self.join()
 
-    def start(self, show_exit_item=None):
+    def start(self):
         """
         Start the menu in a new thread and allow the user to interact with it.
         The thread is a daemon, so :meth:`join()<cursesmenu.CursesMenu.join>` \
@@ -208,6 +207,8 @@ class CursesMenu(object):
     def _main_loop(self, scr):
         if scr is not None:
             CursesMenu.stdscr = scr
+        if CursesMenu.stdscr is None:
+            raise Exception("main loop entered without a root screen")
         self.screen = curses.newpad(self.menu_height, CursesMenu.stdscr.getmaxyx()[1])
         self._set_up_colors()
         curses.curs_set(0)
@@ -360,6 +361,7 @@ class CursesMenu(object):
         :param Number timeout: How long to wait before timing out
         """
         self._main_thread.join(timeout=timeout)
+        return self.returned_value
 
     def is_running(self):
         """
@@ -396,12 +398,12 @@ class CursesMenu(object):
         """
         return self._main_thread.is_alive()
 
-    def exit(self):
+    def exit(self, timeout=None):
         """
         Signal the menu to exit, then block until it's done cleaning up
         """
-        self.should_exit = True
-        self.join()
+        self._exit()
+        return self.join(timeout)
 
     def append_item(self, item):
         """
@@ -437,9 +439,9 @@ class MenuItem(object):
 
     def __str__(self):
         title = self.menu.title if self.menu else ""
-        return "%s %s" % (title, self.text)
+        return f"{title} {self.text}"
 
-    def show(self, index):
+    def show(self, index_text):
         """
         How this item should be displayed in the menu. Can be overridden, \
         but should keep the same signature.
@@ -454,7 +456,7 @@ class MenuItem(object):
         :return: The representation of the item to be shown in a menu
         :rtype: str
         """
-        return "%s - %s" % (index, self.text)
+        return f"{index_text} - {self.text}"
 
     def set_up(self):
         """
@@ -489,10 +491,10 @@ class ExitItem(MenuItem):
     Used to exit the current menu. Handled by :class:`cursesmenu.CursesMenu`
     """
 
-    def __init__(self, text="Exit", menu=None):
-        super(ExitItem, self).__init__(text=text, menu=menu, should_exit=True)
+    def __init__(self, menu=None):
+        super(ExitItem, self).__init__(text="Exit", menu=menu, should_exit=True)
 
-    def show(self, index):
+    def show(self, index_text):
         """
         This class overrides this method
         """
@@ -500,7 +502,7 @@ class ExitItem(MenuItem):
             self.text = "Return to %s menu" % self.menu.parent.title
         else:
             self.text = "Exit"
-        return super(ExitItem, self).show(index)
+        return super(ExitItem, self).show(index_text)
 
 
 class _SelectionItem(MenuItem):

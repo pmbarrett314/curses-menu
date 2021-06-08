@@ -22,7 +22,7 @@ def test_submenu():
     root_menu.append_item(submenu_item_1)
     root_menu.append_item(submenu_item_2)
 
-    assert submenu1.exit_item.show("q") == "q - Return to root_menu menu"
+    assert submenu1.end_items[0].show("q") == "q - Return to root_menu menu"
 
     root_menu.start()
     root_menu.wait_for_start(timeout=10)

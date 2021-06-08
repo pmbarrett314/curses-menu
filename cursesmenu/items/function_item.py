@@ -30,12 +30,14 @@ class FunctionItem(ExternalItem):
         kwargs: Optional[Dict[Any, Any]] = None,
         menu: Optional[CursesMenu] = None,
         should_exit: bool = False,
+        override_index: Optional[str] = None,
     ):
         """Initialize the item."""
         super(FunctionItem, self).__init__(
             text=text,
             menu=menu,
             should_exit=should_exit,
+            override_index=override_index,
         )
         self.function = function
         if args is None:

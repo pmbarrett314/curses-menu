@@ -2,7 +2,7 @@ from typing import List
 
 import pytest
 
-from cursesmenu.curses_menu import CursesMenu
+from cursesmenu.curses_menu import CursesMenu, ExitItem
 from cursesmenu.items import MenuItem
 
 pytestmark = pytest.mark.usefixtures("mock_cursesmenu_curses", "mock_clear")
@@ -68,7 +68,7 @@ def test_go_down(sample_menu: CursesMenu, sample_items: List[MenuItem]):
     assert sample_menu.current_item is sample_items[1]
     sample_menu.go_down()
     assert sample_menu.current_option == 2
-    assert sample_menu.current_item is sample_menu.exit_item
+    assert type(sample_menu.current_item) == ExitItem
     sample_menu.go_down()
     assert sample_menu.current_option == 0
     assert sample_menu.current_item is sample_items[0]
@@ -77,7 +77,7 @@ def test_go_down(sample_menu: CursesMenu, sample_items: List[MenuItem]):
 def test_go_up(sample_menu: CursesMenu, sample_items: List[MenuItem]):
     sample_menu.go_up()
     assert sample_menu.current_option == 2
-    assert sample_menu.current_item is sample_menu.exit_item
+    assert type(sample_menu.current_item) == ExitItem
     sample_menu.go_up()
     assert sample_menu.current_option == 1
     assert sample_menu.current_item is sample_items[1]
@@ -116,7 +116,7 @@ def test_select(sample_menu: CursesMenu, sample_items: List[MenuItem]):
     sample_menu.go_down()
     sample_menu.select()
     assert sample_menu.current_option == 2
-    assert sample_menu.current_item is sample_menu.exit_item
+    assert type(sample_menu.current_item) == ExitItem
     sample_menu.join(timeout=10)
     assert not sample_menu.is_alive()
 
@@ -124,7 +124,7 @@ def test_select(sample_menu: CursesMenu, sample_items: List[MenuItem]):
 def test_go_to_exit(sample_menu: CursesMenu):
     sample_menu.go_to_exit()
     assert sample_menu.current_option == 2
-    assert sample_menu.current_item is sample_menu.exit_item
+    assert type(sample_menu.current_item) == ExitItem
 
 
 def test_exit(sample_menu: CursesMenu):
@@ -165,10 +165,6 @@ def test_init():
     assert menu1.subtitle == ""
     assert menu2.subtitle == "test_init"
     assert menu3.subtitle == "test_init"
-
-    assert menu1.show_exit_item
-    assert menu2.show_exit_item
-    assert not menu3.show_exit_item
 
 
 def test_null_screens_main_loop():

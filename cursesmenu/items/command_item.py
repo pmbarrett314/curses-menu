@@ -36,11 +36,17 @@ class CommandItem(ExternalItem):
         arguments: Optional[List[str]] = None,
         menu: Optional[CursesMenu] = None,
         should_exit: bool = False,
+        override_index: Optional[str] = None,
         stdout_filepath: Optional[PathType] = None,
         **kwargs: Any,
     ):
         """Initialize the menu."""
-        super(CommandItem, self).__init__(text=text, menu=menu, should_exit=should_exit)
+        super(CommandItem, self).__init__(
+            text=text,
+            menu=menu,
+            should_exit=should_exit,
+            override_index=override_index,
+        )
         self.command = command
         self.arguments: List[str]
         if arguments:

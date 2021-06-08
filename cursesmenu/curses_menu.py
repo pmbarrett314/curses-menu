@@ -78,9 +78,9 @@ class CursesMenu:
         #  the regular list and the floating one
         #  this way the consumer can add their own floating exit item
         self.items: List[MenuItem] = []
-
-        self.exit_item = ExitItem(menu=self)
-        self.show_exit_item = show_exit_item
+        self.end_items: List[MenuItem] = []
+        if show_exit_item:
+            self.end_items.append(ExitItem(menu=self, override_index="q"))
 
         self.current_option = 0
         self.selected_option = -1
@@ -119,8 +119,8 @@ class CursesMenu:
     def make_selection_menu(
         cls,
         selections: List[str],
-        title: str,
-        subtitle: str,
+        title: str = "",
+        subtitle: str = "",
         show_exit_item: bool = False,
     ) -> "CursesMenu":
         """
@@ -146,8 +146,8 @@ class CursesMenu:
     def get_selection(
         cls,
         selections: List[str],
-        title: str,
-        subtitle: str,
+        title: str = "",
+        subtitle: str = "",
     ) -> int:
         """
         Present the user with a menu built from a list of strings and get the index\
@@ -167,35 +167,36 @@ class CursesMenu:
         return cast(int, menu.show())
 
     @property
+    def all_items(self) -> List[MenuItem]:
+        """Get the combined list of items."""
+        return self.items + self.end_items
+
+    @property
     def current_item(self) -> Optional[MenuItem]:
         """Get the currently selected MenuItem."""
-        if self.current_option == len(self.items) and self.show_exit_item:
-            return self.exit_item
-        elif self.items:
-            return self.items[self.current_option]
-        else:
+        if not self.all_items:
             return None
+        else:
+            return self.all_items[self.current_option]
 
     @property
     def selected_item(self) -> Optional[MenuItem]:
         """Get the most recently selected MenuItem."""
         if self.selected_option == -1:
             return None
-        elif self.selected_option == len(self.items) and self.show_exit_item:
-            return self.exit_item
         else:
-            return self.items[self.selected_option]
+            return self.all_items[self.selected_option]
 
     @property
     def menu_height(self) -> int:
         """Get the number of items to be shown."""
-        return len(self.items) + MIN_SIZE + (1 if self.show_exit_item else 0)
+        return len(self.all_items) + MIN_SIZE
 
     @property
     def last_item_index(self) -> int:
         """Get the index of the last item in a list of items including the exit item \
         if it's shown."""
-        return len(self.items) if self.show_exit_item else len(self.items) - 1
+        return len(self.all_items) - 1
 
     def show(self) -> Any:
         """
@@ -258,12 +259,8 @@ class CursesMenu:
         self.screen.addstr(2, 2, self.title, curses.A_STANDOUT)
         self.screen.addstr(4, 2, self.subtitle, curses.A_BOLD)
 
-        for index, item in enumerate(self.items):
+        for index, item in enumerate(self.all_items):
             self.draw_item(index, item)
-
-        if self.show_exit_item:
-            # TODO: Replace this logic with like a dictionary of replacements
-            self.draw_item(len(self.items), self.exit_item, "q")
 
         self.refresh_screen()
 
@@ -331,7 +328,7 @@ class CursesMenu:
 
         Called for the enter/return key.
         """
-        if not self.items:
+        if not self.all_items:
             self._exit()
             return
         self.selected_option = self.current_option
@@ -374,9 +371,8 @@ class CursesMenu:
 
         Called for Q.
         """
-        if self.show_exit_item:
-            self.current_option = len(self.items)
-            self.draw()
+        self.current_option = self.last_item_index
+        self.draw()
 
     def go_down(self, _: int = 0) -> None:
         """
@@ -471,7 +467,7 @@ class CursesMenu:
         # TODO: Define subclass of ABC.orderedcollection to hold items
         if self.screen:
             max_row, max_cols = self.screen.getmaxyx()
-            if max_row < MIN_SIZE + len(self.items):
+            if max_row < MIN_SIZE + len(self.all_items):
                 self.screen.resize(self.menu_height, max_cols)
             self.draw()
 
@@ -492,11 +488,13 @@ class MenuItem:
         text: str,
         menu: Optional[CursesMenu] = None,
         should_exit: bool = False,
+        override_index: Optional[str] = None,
     ):
         """Initialize the menu item."""
         self.text = text
         self.menu = menu
         self.should_exit = should_exit
+        self.override_index = override_index
 
     def __str__(self) -> str:
         """Get a basic string representation of the item."""
@@ -512,6 +510,8 @@ class MenuItem:
         :param index_text: The string used for the index, provided by the menu.
         :return: The text representing the item.
         """
+        if self.override_index is not None:
+            index_text = self.override_index
         return f"{index_text} - {self.text}"
 
     def set_up(self) -> None:
@@ -555,9 +555,18 @@ class ExitItem(MenuItem):
     :param menu: the menu for this item
     """
 
-    def __init__(self, menu: Optional[CursesMenu] = None):
+    def __init__(
+        self,
+        menu: Optional[CursesMenu] = None,
+        override_index: Optional[str] = None,
+    ):
         """Initialize the exit item."""
-        super(ExitItem, self).__init__(text="Exit", menu=menu, should_exit=True)
+        super(ExitItem, self).__init__(
+            text="Exit",
+            menu=menu,
+            should_exit=True,
+            override_index=override_index,
+        )
 
     def show(self, index_text: str) -> str:
         """
@@ -583,11 +592,13 @@ class _SelectionItem(MenuItem):
         index: int,
         should_exit: bool = False,
         menu: Optional[CursesMenu] = None,
+        override_index: Optional[str] = None,
     ):
         super(_SelectionItem, self).__init__(
             text=text,
             should_exit=should_exit,
             menu=menu,
+            override_index=override_index,
         )
         self.index = index
 

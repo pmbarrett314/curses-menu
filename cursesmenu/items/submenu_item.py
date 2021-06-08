@@ -27,13 +27,19 @@ class SubmenuItem(MenuItem):
         submenu: Optional[CursesMenu] = None,
         menu: Optional[CursesMenu] = None,
         should_exit: bool = False,
+        override_index: Optional[str] = None,
     ):
         """Initialize the item."""
         self._submenu: Optional[CursesMenu] = submenu
         self._menu: Optional[CursesMenu] = menu
         if self._submenu:
             self._submenu.parent = menu
-        super(SubmenuItem, self).__init__(text=text, menu=menu, should_exit=should_exit)
+        super(SubmenuItem, self).__init__(
+            text=text,
+            menu=menu,
+            should_exit=should_exit,
+            override_index=override_index,
+        )
 
     @property
     def submenu(self) -> Optional[CursesMenu]:

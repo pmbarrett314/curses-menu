@@ -16,7 +16,7 @@ def exit_item_with_parent():
 
     submenu_item = SubmenuItem("submenu_item_1", submenu, menu=root_menu)
     root_menu.append_item(submenu_item)
-    return submenu.exit_item
+    return submenu.end_items[0]
 
 
 def test_show(exit_item):

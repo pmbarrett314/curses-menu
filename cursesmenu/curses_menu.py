@@ -67,9 +67,10 @@ class CursesMenu:
 
         self.screen: Optional[Window] = None
 
-        # TODO: can I initialize these to something basic?
-        self.highlight: Optional[int] = None
-        self.normal: Optional[int] = None
+        # highlight should be initialized to black-on-white, but bold is a fine
+        # fallback that doesn't need the screen initialized first
+        self.highlight: int = curses.A_BOLD
+        self.normal: int = curses.A_NORMAL
 
         # TODO: add a list of items that floats at the end
         # TODO: add a way to replace item indices with letters
@@ -245,7 +246,6 @@ class CursesMenu:
     def _set_up_colors(self) -> None:
         curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
         self.highlight = curses.color_pair(1)
-        self.normal = curses.A_NORMAL
 
     def draw(self) -> None:
         """

@@ -2,6 +2,7 @@ import curses
 import os
 import sys
 import threading
+from collections import defaultdict
 
 MIN_SIZE = 6  # Top bar, space, title, space, subtitle, space, bottom bar
 
@@ -67,6 +68,18 @@ class CursesMenu(object):
 
         self.parent = None
 
+        self.user_input_handlers = defaultdict(null_input_factory)
+        self.user_input_handlers.update(
+            {
+                ord("\n"): self.select,
+                curses.KEY_UP: self.go_up,
+                curses.KEY_DOWN: self.go_down,
+                ord("q"): self.go_to_exit,
+            },
+        )
+        self.user_input_handlers.update(
+            {k: self.go_to for k in map(ord, map(str, range(1, 10)))},
+        )
         self.previous_active_menu = None
 
     def __repr__(self):
@@ -257,21 +270,7 @@ class CursesMenu(object):
         Gets the next single character and decides what to do with it
         """
         user_input = self.get_input()
-
-        if user_input is None:
-            return user_input
-
-        go_to_max = ord("9") if len(self.items) >= 9 else ord(str(len(self.items)))
-
-        if ord("1") <= user_input <= go_to_max:
-            self.go_to(user_input)
-        elif user_input == curses.KEY_DOWN:
-            self.go_down()
-        elif user_input == curses.KEY_UP:
-            self.go_up()
-        elif user_input == ord("\n"):
-            self.select()
-
+        self.user_input_handlers[user_input](user_input)
         return user_input
 
     def get_input(self):
@@ -284,12 +283,12 @@ class CursesMenu(object):
         """
         return CursesMenu.stdscr.getch()
 
-    def select(self):
+    def select(self, _=0):
         """
         Select the current item and run it
         """
         if not self.items:
-            self.should_exit = True
+            self._exit()
             return
         self.selected_option = self.current_option
         self.selected_item.set_up()
@@ -311,23 +310,24 @@ class CursesMenu(object):
         :param option: the option to go to
         :type option: int
         """
-        if len(self.items) > 9:
+        if self.last_item_index > 9:
             go_to_max = ord("9")
-        elif len(self.items) < 0:
+        elif self.last_item_index < 0:
             return
         else:
-            go_to_max = ord(str(len(self.items)))
-
+            go_to_max = ord(str(self.last_item_index))
+        # TODO: Make this use a buffer for multi-digit numbers
+        # TODO: also use for letters
         if ord("1") <= user_input <= go_to_max:
             self.current_option = user_input - ord("0") - 1
             self.draw()
 
-    def go_to_exit(self):
+    def go_to_exit(self, _=0):
         if self.show_exit_item:
             self.current_option = len(self.items)
             self.draw()
 
-    def go_down(self):
+    def go_down(self, _=0):
         """
         Go down one, wrap to beginning if necessary
         """
@@ -337,7 +337,7 @@ class CursesMenu(object):
             self.current_option = 0
         self.draw()
 
-    def go_up(self):
+    def go_up(self, _=0):
         """
         Go up one, wrap to end if necessary
         """
@@ -520,6 +520,11 @@ class _SelectionItem(MenuItem):
 
     def get_return(self):
         return self.index
+
+
+def null_input_factory():
+    """Create a lambda that takes a single input and does nothing."""
+    return lambda input_: None
 
 
 def clear_terminal() -> None:

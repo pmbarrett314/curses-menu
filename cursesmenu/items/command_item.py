@@ -1,6 +1,16 @@
+import os
 import subprocess
+from typing import TYPE_CHECKING, Any, List, Optional
 
 from cursesmenu.items.external_item import ExternalItem
+
+if TYPE_CHECKING:
+    from cursesmenu.curses_menu import CursesMenu
+
+    PathType = os.PathLike[Any]
+else:
+    CursesMenu = Any
+    PathType = Any
 
 
 class CommandItem(ExternalItem):
@@ -10,13 +20,13 @@ class CommandItem(ExternalItem):
 
     def __init__(
         self,
-        text,
-        command,
-        arguments=None,
-        menu=None,
-        should_exit=False,
-        stdout_filepath=None,
-        **kwargs,
+        text: str,
+        command: str,
+        arguments: Optional[List[str]] = None,
+        menu: Optional[CursesMenu] = None,
+        should_exit: bool = False,
+        stdout_filepath: Optional[PathType] = None,
+        **kwargs: Any,
     ):
         """
         :ivar str command: The console command to be executed
@@ -27,16 +37,16 @@ class CommandItem(ExternalItem):
         """
         super(CommandItem, self).__init__(text=text, menu=menu, should_exit=should_exit)
         self.command = command
-
+        self.arguments: List[str]
         if arguments:
             self.arguments = arguments
         else:
             self.arguments = []
         self.kwargs = kwargs
         self.stdout_filepath = stdout_filepath
-        self.exit_status = None
+        self.exit_status: Optional[int] = None
 
-    def action(self):
+    def action(self) -> None:
         """
         This class overrides this method
         """
@@ -50,7 +60,7 @@ class CommandItem(ExternalItem):
             completed_process = subprocess.run(args, shell=True, **self.kwargs)
         self.exit_status = completed_process.returncode
 
-    def get_return(self):
+    def get_return(self) -> Optional[int]:
         """
         :return: the exit status of the command
         :rtype: int

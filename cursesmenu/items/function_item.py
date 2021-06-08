@@ -1,4 +1,11 @@
+from typing import TYPE_CHECKING, Any, Callable, Dict, List, Optional
+
 from cursesmenu.items.external_item import ExternalItem
+
+if TYPE_CHECKING:
+    from cursesmenu.curses_menu import CursesMenu
+else:
+    CursesMenu = Any
 
 
 class FunctionItem(ExternalItem):
@@ -8,12 +15,12 @@ class FunctionItem(ExternalItem):
 
     def __init__(
         self,
-        text,
-        function,
-        args=None,
-        kwargs=None,
-        menu=None,
-        should_exit=False,
+        text: str,
+        function: Callable[..., Any],
+        args: Optional[List[Any]] = None,
+        kwargs: Optional[Dict[Any, Any]] = None,
+        menu: Optional[CursesMenu] = None,
+        should_exit: bool = False,
     ):
         """
         :ivar function: The function to be called
@@ -31,20 +38,20 @@ class FunctionItem(ExternalItem):
         self.function = function
         if args is None:
             args = []
-        self.args = args
+        self.args: List[Any] = args
         if kwargs is None:
             kwargs = {}
-        self.kwargs = kwargs
+        self.kwargs: Dict[Any, Any] = kwargs
 
-        self.return_value = None
+        self.return_value: Any = None
 
-    def action(self):
+    def action(self) -> None:
         """
         This class overrides this method
         """
         self.return_value = self.function(*self.args, **self.kwargs)
 
-    def get_return(self):
+    def get_return(self) -> Any:
         """
         :return: The return value from the function call
         """

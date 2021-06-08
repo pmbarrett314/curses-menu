@@ -30,6 +30,9 @@ repos:
     hooks:
       - id: mypy
         exclude: ^docs
+      - id: mypy
+        exclude: ^(docs/|test/|examples/|setup.py)
+        args: [--strict]
 
   - repo: https://github.com/pre-commit/pygrep-hooks
     rev: v1.8.0

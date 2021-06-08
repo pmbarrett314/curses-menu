@@ -11,19 +11,23 @@ class ExternalItem(MenuItem):
     Should probably be subclassed.
     """
 
-    def set_up(self):
+    def set_up(self) -> None:
         """
         This class overrides this method
         """
+        assert self.menu is not None
+
         self.menu.pause()
         curses.def_prog_mode()
         cursesmenu.curses_menu.clear_terminal()
         self.menu.clear_screen()
 
-    def clean_up(self):
+    def clean_up(self) -> None:
         """
         This class overrides this method
         """
+        assert self.menu is not None
+
         self.menu.clear_screen()
         curses.reset_prog_mode()
         curses.curs_set(1)  # reset doesn't do this right

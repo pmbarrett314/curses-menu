@@ -52,7 +52,7 @@ class CursesMenu:
     is currently active (E.G. when switching between menus)
     """
 
-    currently_active_menu = None
+    currently_active_menu: Optional["CursesMenu"] = None
     stdscr: Optional[Window] = None
 
     def __init__(
@@ -102,7 +102,6 @@ class CursesMenu:
         self.user_input_handlers.update(
             {k: self.go_to for k in map(ord, map(str, range(1, 10)))},
         )
-        self.previous_active_menu = None
 
     def __repr__(self) -> str:
         """Get a string representation of the menu."""
@@ -207,20 +206,17 @@ class CursesMenu:
         may exit before the user is finished interacting, use \
         :meth:`join()<cursesmenu.CursesMenu.join>` to block until the menu exits.
         """
-        self.previous_active_menu = CursesMenu.currently_active_menu
-        CursesMenu.currently_active_menu = None
-
         self._main_thread.start()
 
     def _wrap_start(self) -> None:
-        if self.parent is None:
-            curses.wrapper(self._main_loop)
-        else:
-            self._main_loop(None)
-        CursesMenu.currently_active_menu = None
-        self.clear_screen()
-        clear_terminal()
-        CursesMenu.currently_active_menu = self.previous_active_menu
+        try:
+            if self.parent is None:
+                curses.wrapper(self._main_loop)
+            else:
+                self._main_loop(None)
+        finally:
+            self.clear_screen()
+            clear_terminal()
 
     def _main_loop(self, scr: Optional[Window]) -> None:
         if scr is not None:
@@ -232,9 +228,10 @@ class CursesMenu:
         curses.curs_set(0)
         CursesMenu.stdscr.refresh()
         self.draw()
-        CursesMenu.currently_active_menu = self
+
         self._running.set()
         while self._running.wait() is not False and not self.should_exit:
+            CursesMenu.currently_active_menu = self
             self.process_user_input()
         self._running.clear()
 
@@ -334,6 +331,7 @@ class CursesMenu:
         self.selected_item.set_up()
         self.selected_item.action()
         self.selected_item.clean_up()
+
         self.returned_value = self.selected_item.get_return()
         self.should_exit = self.selected_item.should_exit
 

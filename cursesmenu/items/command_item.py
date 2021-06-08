@@ -1,3 +1,5 @@
+"""A  menu item that runs a shell command."""
+
 import os
 import subprocess
 from typing import TYPE_CHECKING, Any, List, Optional
@@ -15,7 +17,16 @@ else:
 
 class CommandItem(ExternalItem):
     """
-    A menu item to execute a console command
+    A  menu item that runs a shell command using subprocess.run.
+
+    :param text: The text for the menu item.
+    :param command: The shell command to run when the item is selected.
+    :param arguments: Additional arguments passed to the command.
+    :param menu: The menu that this item belongs to
+    :param should_exit: Whether the menu will exit when this item is selected
+    :param stdout_filepath: A filepath that the stdout for the command will be written \
+    to
+    :param kwargs: A list of kwargs to be passed to subprocess.run
     """
 
     def __init__(
@@ -28,13 +39,7 @@ class CommandItem(ExternalItem):
         stdout_filepath: Optional[PathType] = None,
         **kwargs: Any,
     ):
-        """
-        :ivar str command: The console command to be executed
-        :ivar list[str] arguments: An optional list of string arguments to be passed \
-        to the command
-        :ivar int exit_status: the exit status of the command, None if it hasn't \
-        been run yet
-        """
+        """Initialize the menu."""
         super(CommandItem, self).__init__(text=text, menu=menu, should_exit=should_exit)
         self.command = command
         self.arguments: List[str]
@@ -47,9 +52,7 @@ class CommandItem(ExternalItem):
         self.exit_status: Optional[int] = None
 
     def action(self) -> None:
-        """
-        This class overrides this method
-        """
+        """Run the command using subprocess.run."""
         args = [self.command] + self.arguments
         if self.stdout_filepath:
             with open(self.stdout_filepath, "w") as stdout:
@@ -61,8 +64,5 @@ class CommandItem(ExternalItem):
         self.exit_status = completed_process.returncode
 
     def get_return(self) -> Optional[int]:
-        """
-        :return: the exit status of the command
-        :rtype: int
-        """
+        """Get the exit status of the command or None if it hasn't been run."""
         return self.exit_status

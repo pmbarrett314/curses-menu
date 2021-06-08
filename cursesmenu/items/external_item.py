@@ -1,3 +1,5 @@
+"""A base class for menu items that need to exit the menu environment temporarily."""
+
 import curses
 
 import cursesmenu.curses_menu
@@ -5,16 +7,11 @@ from cursesmenu.curses_menu import MenuItem
 
 
 class ExternalItem(MenuItem):
-    """
-    A base class for items that need to do stuff on the console outside of curses mode.
-    Sets the terminal back to standard mode until the action is done.
-    Should probably be subclassed.
-    """
+    """A base class for menu items that need to exit the menu environment\
+     temporarily."""
 
     def set_up(self) -> None:
-        """
-        This class overrides this method
-        """
+        """Return the console to its original state and pauses the menu."""
         assert self.menu is not None
 
         self.menu.pause()
@@ -23,9 +20,7 @@ class ExternalItem(MenuItem):
         self.menu.clear_screen()
 
     def clean_up(self) -> None:
-        """
-        This class overrides this method
-        """
+        """Put the console back in curses mode and resumes the menu."""
         assert self.menu is not None
 
         self.menu.clear_screen()

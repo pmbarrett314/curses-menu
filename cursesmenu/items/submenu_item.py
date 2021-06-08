@@ -1,3 +1,5 @@
+"""A menu item that opens a submenu."""
+
 import curses
 from typing import TYPE_CHECKING, Any, Optional
 
@@ -11,7 +13,12 @@ else:
 
 class SubmenuItem(MenuItem):
     """
-    A menu item to open a submenu
+    A menu item that opens a submenu.
+
+    :param text: The text of the item
+    :param submenu: A CursesMenu to be displayed when the item is selected
+    :param menu: The menu that this item belongs to
+    :param should_exit: Whether the menu will exit when this item is selected
     """
 
     def __init__(
@@ -21,10 +28,7 @@ class SubmenuItem(MenuItem):
         menu: Optional[CursesMenu] = None,
         should_exit: bool = False,
     ):
-        """
-        :ivar CursesMenu self.submenu: The submenu to be opened when \
-        this item is selected
-        """
+        """Initialize the item."""
         self._submenu: Optional[CursesMenu] = submenu
         self._menu: Optional[CursesMenu] = menu
         if self._submenu:
@@ -33,44 +37,42 @@ class SubmenuItem(MenuItem):
 
     @property
     def submenu(self) -> Optional[CursesMenu]:
+        """Get the submenu associated with this item."""
         return self._submenu
 
     @submenu.setter
     def submenu(self, submenu: Optional[CursesMenu]) -> None:
+        """Set the submenu and update its parent."""
         self._submenu = submenu
         if self._submenu is not None:
             self._submenu.parent = self._menu
 
     @property  # type: ignore[override]
     def menu(self) -> Optional[CursesMenu]:  # type: ignore[override]
+        """Get the menu that this item belongs to."""
         return self._menu
 
     @menu.setter
     def menu(self, menu: Optional[CursesMenu]) -> None:
+        """Set the menu for the item and update the submenu's parent."""
         self._menu = menu
         if self._submenu is not None:
             self._submenu.parent = menu
 
     def set_up(self) -> None:
-        """
-        This class overrides this method
-        """
+        """Set the screen up for the submenu."""
         assert self.menu is not None
         self.menu.pause()
         curses.def_prog_mode()
         self.menu.clear_screen()
 
     def action(self) -> None:
-        """
-        This class overrides this method
-        """
+        """Start the submenu."""
         assert self.submenu is not None
         self.submenu.start()
 
     def clean_up(self) -> None:
-        """
-        This class overrides this method
-        """
+        """Block until the submenu is done and then return to the parent."""
         assert self.menu is not None
         assert self.submenu is not None
         self.submenu.join()
@@ -81,9 +83,7 @@ class SubmenuItem(MenuItem):
         self.menu.resume()
 
     def get_return(self) -> Any:
-        """
-        :return: The returned value in the submenu
-        """
+        """Get the returned value from the submenu."""
         if self.submenu is not None:
             return self.submenu.returned_value
         return None

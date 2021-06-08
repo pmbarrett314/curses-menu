@@ -21,7 +21,7 @@ Create menu items for each choice you need::
 
     function_item = FunctionItem("Call a function", input, ["Enter some input"])
 
-To add other menus as submenus, use a :py:class:`~cursesmenu.items.SubmenuItem`, setting the menu property in the constructor so the submenu's parent is set properly::
+To add other menus as submenus, use a :py:class:`~cursesmenu.items.SubmenuItem`::
 
     submenu = CursesMenu("This is the submenu")
 
@@ -54,11 +54,11 @@ Getting a selection
 If you have a list of strings, and you want to allow the user to select one, you can use a
 :py:class:`~cursesmenu.SelectionMenu`::
 
-    from cursesmenu import SelectionMenu
+    from cursesmenu CursesMenu
 
     a_list = ["red", "blue", "green"]
 
-    selection = SelectionMenu.get_selection(a_list)
+    selection = CursesMenu.get_selection(a_list)
 
 Which is equivalent to::
 
@@ -66,7 +66,7 @@ Which is equivalent to::
 
     a_list=["red", "blue", "green"]
 
-    menu = SelectionMenu(a_list,"Select an option")
+    menu = CursesMenu.make_selection_menu(a_list,"Select an option")
 
     menu.show()
 

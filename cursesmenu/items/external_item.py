@@ -3,6 +3,7 @@
 import curses
 
 import cursesmenu.curses_menu
+import cursesmenu.utils
 from cursesmenu.curses_menu import MenuItem
 
 
@@ -16,7 +17,7 @@ class ExternalItem(MenuItem):
 
         self.menu.pause()
         curses.def_prog_mode()
-        cursesmenu.curses_menu.clear_terminal()
+        cursesmenu.utils.clear_terminal()
         self.menu.clear_screen()
 
     def clean_up(self) -> None:

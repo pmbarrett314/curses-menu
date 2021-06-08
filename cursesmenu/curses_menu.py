@@ -1,11 +1,11 @@
 """Top level class and functions for a curses-based menu."""
 
 import curses
-import os
-import sys
 import threading
 from collections import defaultdict
 from typing import TYPE_CHECKING, Any, Callable, DefaultDict, List, Optional, cast
+
+from cursesmenu.utils import clear_terminal, null_input_factory
 
 if TYPE_CHECKING:
     # noinspection PyCompatibility,PyProtectedMember
@@ -584,20 +584,3 @@ class _SelectionItem(MenuItem):
 
     def get_return(self) -> int:
         return self.index
-
-
-def null_input_factory() -> Callable[[int], None]:
-    """Create a lambda that takes a single input and does nothing."""
-    return lambda input_: None
-
-
-def clear_terminal() -> None:
-    """
-    Call the platform specific function to clear the terminal.
-
-    Cls on windows, reset otherwise.
-    """
-    if sys.platform.startswith("win"):
-        os.system("cls")
-    else:
-        os.system("reset")

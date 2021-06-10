@@ -215,6 +215,8 @@ class CursesMenu:
         may exit before the user is finished interacting, use \
         :meth:`join()<cursesmenu.CursesMenu.join>` to block until the menu exits.
         """
+        self.should_exit = False
+        self._main_thread = threading.Thread(target=self._wrap_start, daemon=True)
         self._main_thread.start()
 
     def _wrap_start(self) -> None:

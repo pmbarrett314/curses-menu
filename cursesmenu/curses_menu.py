@@ -257,7 +257,7 @@ class CursesMenu:
         Adds border, title and subtitle, and items, then refreshes the screen.
         """
         assert self.screen is not None
-        self.screen.border(0)
+        self.screen.border()
         self.screen.addstr(2, 2, self.title, curses.A_STANDOUT)
         self.screen.addstr(4, 2, self.subtitle, curses.A_BOLD)
 

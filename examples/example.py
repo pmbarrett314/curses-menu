@@ -7,7 +7,7 @@ def main():
     item1 = MenuItem("Item 1", menu)
     function_item = FunctionItem("Fun item", input, ["Enter an input: "])
     command_item = CommandItem("Command", "python examples/example.py")
-    submenu = CursesMenu.make_selection_menu(["item1", "item2", "item3"])
+    submenu = CursesMenu.make_selection_menu([f"item{x}" for x in range(1, 10)])
     submenu_item = SubmenuItem("Submenu item", submenu=submenu, menu=menu)
     submenu_2 = CursesMenu("Submenu Title", "Submenu subtitle")
     function_item_2 = FunctionItem("Fun item", input, ["Enter an input"])

@@ -404,6 +404,7 @@ class CursesMenu:
         """Clear the screen for this menu."""
         assert self.screen is not None
         self.screen.clear()
+        self.refresh_screen()
 
     def join(self, timeout: Optional[int] = None) -> Any:
         """

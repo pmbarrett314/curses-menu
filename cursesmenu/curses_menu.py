@@ -1,7 +1,9 @@
 """Top level class and functions for a curses-based menu."""
 
 import curses
+import pathlib
 import threading
+import time
 from collections import defaultdict
 from typing import TYPE_CHECKING, Any, Callable, DefaultDict, List, Optional, cast
 
@@ -17,6 +19,8 @@ else:
     MenuItem = Any
 
 MIN_SIZE = 6  # Top bar, space, title, space, subtitle, space, bottom bar
+
+PROJECT_ROOT = pathlib.Path(__file__).parent.parent.absolute()
 
 
 class CursesMenu:
@@ -60,6 +64,7 @@ class CursesMenu:
         title: str = "",
         subtitle: str = "",
         show_exit_item: bool = True,
+        _debug_screens: bool = False,
     ):
         """Initialize the menu."""
         self.title = title
@@ -110,6 +115,8 @@ class CursesMenu:
         self.user_input_handlers.update(
             {k: self.go_to for k in map(ord, map(str, range(1, 10)))},
         )
+
+        self._debug_screens = _debug_screens
 
     def __repr__(self) -> str:
         """Get a string representation of the menu."""
@@ -265,6 +272,20 @@ class CursesMenu:
             self.draw_item(index, item)
 
         self.refresh_screen()
+        if self._debug_screens:
+            with open(
+                PROJECT_ROOT.joinpath("screendumps", f"{self.title}-{time.time()}"),
+                "wb",
+            ) as f:
+                self.screen.putwin(f)
+            with open(
+                PROJECT_ROOT.joinpath(
+                    "screendumps",
+                    f"stdscr-{self.title}-{time.time()}",
+                ),
+                "wb",
+            ) as f:
+                self.screen.putwin(f)
 
     def draw_item(
         self,

@@ -70,6 +70,13 @@ It’s designed to be pretty simple to use. Here’s an example
     # Finally, we call show to show the menu and allow the user to interact
     menu.show()
 
+Testing Information
+-------------------
+
+Currently the platforms I'm manually testing on are MacOS in iTerm2 on zsh with and without TMUX and Windows 10\
+with both powersehll and cmd.exe in and out of Windows Terminal. If a bug pops up on another configuration, \
+no promises that I'll be able to reproduce it.
+
 .. |Build Status| image:: https://travis-ci.org/pmbarrett314/curses-menu.svg
    :target: https://travis-ci.org/pmbarrett314/curses-menu
 .. |Documentation Status| image:: https://readthedocs.org/projects/curses-menu/badge/?version=latest

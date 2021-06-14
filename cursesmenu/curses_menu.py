@@ -37,7 +37,6 @@ class CursesMenu:
     used to represent the highlighted item
     :ivar normal: Index of the curses color pair used to represent other text
     :ivar items: The list of items for the menu
-    :ivar exit_item: The ExitItem for this menu, will be displayed last.
     :param show_exit_item: Whether the exit item is shown
     :ivar current_option: The index of the currently highlighted menu item
     :ivar selected_option: The index of the last item the user selected, initially -1
@@ -112,6 +111,7 @@ class CursesMenu:
                 curses.KEY_UP: self.go_up,
                 curses.KEY_DOWN: self.go_down,
                 ord("q"): self.go_to_exit,
+                curses.KEY_RESIZE: self.on_resize,
             },
         )
         self.user_input_handlers.update(
@@ -441,6 +441,13 @@ class CursesMenu:
             self.current_option += -1
         else:
             self.current_option = self.last_item_index
+        self.draw()
+
+    def on_resize(self, _: int = 0) -> None:
+        """Handle a terminal resize event."""
+        assert CursesMenu.stdscr is not None
+        screen_rows, screen_cols = CursesMenu.stdscr.getmaxyx()
+        curses.resizeterm(screen_rows, screen_cols)
         self.draw()
 
     def clear_screen(self) -> None:

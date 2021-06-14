@@ -1,6 +1,5 @@
 """A menu item that opens a submenu."""
 
-import curses
 from typing import TYPE_CHECKING, Any, Optional
 
 from cursesmenu.curses_menu import MenuItem
@@ -69,7 +68,6 @@ class SubmenuItem(MenuItem):
         """Set the screen up for the submenu."""
         assert self.menu is not None
         self.menu.pause()
-        curses.def_prog_mode()
         self.menu.clear_screen()
 
     def action(self) -> None:
@@ -82,10 +80,7 @@ class SubmenuItem(MenuItem):
         assert self.menu is not None
         assert self.submenu is not None
         self.submenu.join()
-        self.menu.clear_screen()
-        curses.reset_prog_mode()
-        curses.curs_set(1)  # reset doesn't do this right
-        curses.curs_set(0)
+        self.submenu.clear_screen()
         self.menu.resume()
 
     def get_return(self) -> Any:

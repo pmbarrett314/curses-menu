@@ -14,8 +14,9 @@ import cursesmenu.curses_menu
 
 @pytest.fixture()
 def mock_clear():
-    with mock.patch("cursesmenu.curses_menu.clear_terminal") as f:
-        yield f
+    with mock.patch("cursesmenu.utils.clear_terminal") as f:
+        with mock.patch("cursesmenu.utils.soft_clear_terminal") as g:
+            yield f, g
 
 
 @pytest.fixture(params=[3, 99999999])
@@ -81,10 +82,4 @@ def mock_cursesmenu_curses_vary_window_size(mock_curses_window_size):
 @pytest.fixture()
 def mock_externalitem_curses(mock_curses):
     with mock.patch("cursesmenu.items.external_item.curses", new=mock_curses) as f:
-        yield f
-
-
-@pytest.fixture()
-def mock_submenuitem_curses(mock_curses):
-    with mock.patch("cursesmenu.items.submenu_item.curses", new=mock_curses) as f:
         yield f

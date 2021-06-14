@@ -1,13 +1,15 @@
 """Top level class and functions for a curses-based menu."""
 
+import atexit
 import curses
+import os
 import pathlib
 import threading
 import time
 from collections import defaultdict
 from typing import TYPE_CHECKING, Any, Callable, DefaultDict, List, Optional, cast
 
-from cursesmenu.utils import clear_terminal, null_input_factory
+import cursesmenu.utils
 
 if TYPE_CHECKING:
     # noinspection PyCompatibility,PyProtectedMember
@@ -102,7 +104,7 @@ class CursesMenu:
         self.parent: Optional[CursesMenu] = None
 
         self.user_input_handlers: DefaultDict[int, Callable[[int], None]] = defaultdict(
-            null_input_factory,
+            cursesmenu.utils.null_input_factory,
         )
         self.user_input_handlers.update(
             {
@@ -227,20 +229,39 @@ class CursesMenu:
         self._main_thread.start()
 
     def _wrap_start(self) -> None:
-        try:
-            if self.parent is None:
-                curses.wrapper(self._main_loop)
-            else:
-                self._main_loop(None)
-        finally:
-            self.clear_screen()
-            clear_terminal()
+        if self.parent is None:
+            cursesmenu.utils.soft_clear_terminal()
 
-    def _main_loop(self, scr: Optional[Window]) -> None:
-        if scr is not None:
-            CursesMenu.stdscr = scr
-        if CursesMenu.stdscr is None:
-            raise Exception("main loop entered without a root screen")
+            # We only want to fully clear the screen at the exit of the outermost\
+            # Script that uses curses to prevent character handling from messing up
+            if os.getenv("CURSES_MENU_PID") is None:
+                pid = os.getpid()
+                os.environ["CURSES_MENU_PID"] = str(pid)
+                atexit.register(cursesmenu.utils.clear_terminal)
+
+            try:
+                CursesMenu.stdscr = curses.initscr()
+                curses.noecho()
+                curses.cbreak()
+                CursesMenu.stdscr.keypad(True)
+                # noinspection PyBroadException
+                try:
+                    curses.start_color()
+                except:  # noqa: E722
+                    pass
+                self._main_loop()
+            finally:
+                if CursesMenu.stdscr is not None:
+                    CursesMenu.stdscr.keypad(False)
+                curses.endwin()
+                curses.echo()
+                curses.nocbreak()
+                os.system("stty echo")
+        else:
+            self._main_loop()
+
+    def _main_loop(self) -> None:
+        assert CursesMenu.stdscr is not None
         self.screen = curses.newpad(self.menu_height, CursesMenu.stdscr.getmaxyx()[1])
         self._set_up_colors()
         curses.curs_set(0)
@@ -251,6 +272,7 @@ class CursesMenu:
         while self._running.wait() is not False and not self.should_exit:
             CursesMenu.currently_active_menu = self
             self.process_user_input()
+        self.clear_screen()
         self._running.clear()
 
     def _set_up_colors(self) -> None:

@@ -169,16 +169,10 @@ def test_init():
 
 def test_null_screens_main_loop():
     menu = CursesMenu("menu", "empty menu", show_exit_item=False)
-    second_menu = CursesMenu("menu", "empty menu", show_exit_item=False)
     CursesMenu.stdscr = None
     menu.get_input = menu._exit
     with pytest.raises(Exception):
-        menu._main_loop(None)
-
-    second_menu.start()
-    second_menu.wait_for_start(timeout=10)
-    menu._main_loop(second_menu.screen)
-    second_menu._exit()
+        menu._main_loop()
 
 
 if __name__ == "__main__":

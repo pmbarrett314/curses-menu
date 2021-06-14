@@ -20,3 +20,12 @@ def clear_terminal() -> None:
         os.system("cls")
     else:
         os.system("reset")
+
+
+def soft_clear_terminal() -> None:
+    """Use ANSI control sequences to clear the terminal."""
+    if sys.platform.startswith("win"):
+        # enables ANSI escape codes to work properly in bare cmd.exe
+        os.system("")
+    print(chr(27) + "[2J", end="")
+    print(chr(27) + "[1;1H", end="")

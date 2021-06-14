@@ -6,7 +6,6 @@ from cursesmenu.items import SubmenuItem
 pytestmark = pytest.mark.usefixtures(
     "mock_cursesmenu_curses",
     "mock_clear",
-    "mock_submenuitem_curses",
 )
 
 

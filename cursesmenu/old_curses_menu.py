@@ -8,8 +8,8 @@ from enum import Enum
 from typing import Any, Dict
 
 from cursesmenu import CursesMenu
-from cursesmenu.curses_menu import _SelectionItem
 from cursesmenu.items import CommandItem, ExitItem, FunctionItem, SubmenuItem
+from cursesmenu.items.selection_item import SelectionItem
 
 
 class MenuItemType(Enum):
@@ -44,7 +44,7 @@ def parse_old_menu(menu_data: Dict[str, Any]) -> CursesMenu:
         elif item_type == MenuItemType.EXITMENU:
             menu.append_item(ExitItem(menu=menu))
         elif item_type == MenuItemType.NUMBER:
-            menu.append_item(_SelectionItem(text=item_title, index=index, menu=menu))
+            menu.append_item(SelectionItem(text=item_title, index=index, menu=menu))
         elif item_type == MenuItemType.MENU:
             new_menu = parse_old_menu(item)
             menu.append_item(SubmenuItem(item_title, menu, new_menu))

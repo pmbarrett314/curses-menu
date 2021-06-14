@@ -1,6 +1,6 @@
 import pytest
 
-from cursesmenu.curses_menu import CursesMenu
+from cursesmenu import CursesMenu
 from cursesmenu.items import SubmenuItem
 
 pytestmark = pytest.mark.usefixtures(

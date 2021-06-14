@@ -16,6 +16,7 @@ if TYPE_CHECKING:
     from _curses import _CursesWindow
 
     Window = _CursesWindow
+    from cursesmenu.items.menu_item import MenuItem
 else:
     Window = Any
     MenuItem = Any
@@ -86,6 +87,8 @@ class CursesMenu:
         self.items: List[MenuItem] = []
         self.end_items: List[MenuItem] = []
         if show_exit_item:
+            from cursesmenu.items.exit_item import ExitItem
+
             self.end_items.append(ExitItem(menu=self, override_index="q"))
 
         self.current_option = 0
@@ -145,9 +148,11 @@ class CursesMenu:
         :return: A CursesMenu with items for each selection
         """
         menu = cls(title=title, subtitle=subtitle, show_exit_item=show_exit_item)
+        from cursesmenu.items.selection_item import SelectionItem
+
         for index, selection in enumerate(selections):
             menu.append_item(
-                _SelectionItem(text=selection, index=index, should_exit=True),
+                SelectionItem(text=selection, index=index, should_exit=True),
             )
         return menu
 
@@ -523,137 +528,3 @@ class CursesMenu:
             if max_row < MIN_SIZE + len(self.all_items):
                 self.screen.resize(self.menu_height, max_cols)
             self.draw()
-
-
-class MenuItem:
-    """
-    The base class for menu items.
-
-    Is displayed in a basic manner and does nothing when selected.
-
-    :param text: The text representing this menu item
-    :param should_exit: Whether the menu should exit when this item is selected
-    :param menu: The menu that owns this item
-    """
-
-    def __init__(
-        self,
-        text: str,
-        menu: Optional[CursesMenu] = None,
-        should_exit: bool = False,
-        override_index: Optional[str] = None,
-    ):
-        """Initialize the menu item."""
-        self.text = text
-        self.menu = menu
-        self.should_exit = should_exit
-        self.override_index = override_index
-
-    def __str__(self) -> str:
-        """Get a basic string representation of the item."""
-        title = self.menu.title if self.menu else ""
-        return f"{title} {self.text}"
-
-    def show(self, index_text: str) -> str:
-        """
-        Provide the representation that should be used for this item in a menu.
-
-        The base class is simply "[index] - [text]"
-
-        :param index_text: The string used for the index, provided by the menu.
-        :return: The text representing the item.
-        """
-        if self.override_index is not None:
-            index_text = self.override_index
-        return f"{index_text} - {self.text}"
-
-    def set_up(self) -> None:
-        """Perform setup for the item."""
-        pass
-
-    def action(self) -> None:
-        """
-        Do the main action for the item.
-
-        If you're just writing a simple subclass, you shouldn't need set_up or clean_up.
-        The menu just calls them in order. They are provided so you can make subclass
-        hierarchies where the superclass handles some setup and cleanup for its
-        subclasses.
-        """
-        pass
-
-    def clean_up(self) -> None:
-        """Perform cleanup for the item."""
-        pass
-
-    def get_return(self) -> Any:
-        """
-        Get the return value for this item.
-
-        For a basic MenuItem, just forwards the return value from the menu.
-
-        :return: The return value for the item.
-        """
-        if self.menu:
-            return self.menu.returned_value
-        return None
-
-
-class ExitItem(MenuItem):
-    """
-    The exit item for a menu.
-
-    Changes representation based on whether the menu is a submenu or the root menu.
-
-    :param menu: the menu for this item
-    """
-
-    def __init__(
-        self,
-        menu: Optional[CursesMenu] = None,
-        override_index: Optional[str] = None,
-    ):
-        """Initialize the exit item."""
-        super(ExitItem, self).__init__(
-            text="Exit",
-            menu=menu,
-            should_exit=True,
-            override_index=override_index,
-        )
-
-    def show(self, index_text: str) -> str:
-        """
-        Get the representation of this item \
-        dependent on whether it's in a submenu or the root menu.
-
-        :param index_text:
-        :return: The representation of this item
-        """
-        if self.menu and self.menu.parent:
-            # TODO: implement an item that exits the whole menu
-            #  hierarchy from a submenu.
-            self.text = "Return to %s menu" % self.menu.parent.title
-        else:
-            self.text = "Exit"
-        return super(ExitItem, self).show(index_text)
-
-
-class _SelectionItem(MenuItem):
-    def __init__(
-        self,
-        text: str,
-        index: int,
-        should_exit: bool = False,
-        menu: Optional[CursesMenu] = None,
-        override_index: Optional[str] = None,
-    ):
-        super(_SelectionItem, self).__init__(
-            text=text,
-            should_exit=should_exit,
-            menu=menu,
-            override_index=override_index,
-        )
-        self.index = index
-
-    def get_return(self) -> int:
-        return self.index

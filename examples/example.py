@@ -1,5 +1,3 @@
-import os
-
 from cursesmenu import CursesMenu
 from cursesmenu.items import CommandItem, FunctionItem, MenuItem, SubmenuItem
 

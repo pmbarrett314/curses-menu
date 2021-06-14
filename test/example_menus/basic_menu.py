@@ -1,8 +1,8 @@
-import cursesmenu.curses_menu
+import cursesmenu
 
 
 def main():
-    menu = cursesmenu.curses_menu.CursesMenu("Test Menu")
+    menu = cursesmenu.CursesMenu("Test Menu")
     menu.show()
 
 

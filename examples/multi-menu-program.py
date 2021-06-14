@@ -1,8 +1,5 @@
-import os
-
-import cursesmenu.utils
 from cursesmenu import CursesMenu
-from cursesmenu.curses_menu import MenuItem
+from cursesmenu.items import MenuItem
 
 
 def main():

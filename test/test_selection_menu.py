@@ -2,7 +2,7 @@ from unittest import mock
 
 import pytest
 
-from cursesmenu.curses_menu import CursesMenu
+from cursesmenu import CursesMenu
 
 pytestmark = pytest.mark.usefixtures("mock_cursesmenu_curses", "mock_clear")
 

@@ -2,7 +2,7 @@
 
 from typing import TYPE_CHECKING, Any, Optional
 
-from cursesmenu.curses_menu import MenuItem
+from cursesmenu.items.menu_item import MenuItem
 
 if TYPE_CHECKING:
     from cursesmenu.curses_menu import CursesMenu

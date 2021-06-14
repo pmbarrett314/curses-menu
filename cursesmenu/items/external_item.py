@@ -3,7 +3,7 @@
 import curses
 
 import cursesmenu.utils
-from cursesmenu.curses_menu import MenuItem
+from cursesmenu.items.menu_item import MenuItem
 
 
 class ExternalItem(MenuItem):

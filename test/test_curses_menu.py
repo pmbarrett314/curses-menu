@@ -2,8 +2,8 @@ from typing import List
 
 import pytest
 
-from cursesmenu.curses_menu import CursesMenu, ExitItem
-from cursesmenu.items import MenuItem
+from cursesmenu import CursesMenu
+from cursesmenu.items import ExitItem, MenuItem
 
 pytestmark = pytest.mark.usefixtures("mock_cursesmenu_curses", "mock_clear")
 

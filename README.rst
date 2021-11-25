@@ -52,7 +52,7 @@ It’s designed to be pretty simple to use. Here’s an example
     function_item = FunctionItem("Call a Python function", input, ["Enter an input"])
 
     # A CommandItem runs a console command
-    command_item = CommandItem("Run a console command",  "touch hello.txt")
+    command_item = CommandItem("Run a console command", "touch hello.txt")
 
     # A SelectionMenu constructs a menu from a list of strings
     selection_menu = SelectionMenu(["item1", "item2", "item3"])
@@ -62,13 +62,20 @@ It’s designed to be pretty simple to use. Here’s an example
     submenu_item = SubmenuItem("Submenu item", selection_menu, menu)
 
     # Once we're done creating them, we just add the items to the menu
-    menu.append_item(menu_item)
-    menu.append_item(function_item)
-    menu.append_item(command_item)
-    menu.append_item(submenu_item)
+    menu.items.append(menu_item)
+    menu.items.append(function_item)
+    menu.items.append(command_item)
+    menu.items.append(submenu_item)
 
     # Finally, we call show to show the menu and allow the user to interact
     menu.show()
+
+Testing Information
+-------------------
+
+Currently the platforms I'm manually testing on are MacOS in iTerm2 on zsh with and without TMUX and Windows 10\
+with both powersehll and cmd.exe in and out of Windows Terminal. If a bug pops up on another configuration, \
+no promises that I'll be able to reproduce it.
 
 .. |Build Status| image:: https://travis-ci.org/pmbarrett314/curses-menu.svg
    :target: https://travis-ci.org/pmbarrett314/curses-menu

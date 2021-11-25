@@ -1,19 +1,13 @@
-from base_test_case import BaseTestCase
-from cursesmenu import CursesMenu
-from cursesmenu.items import SelectionItem
+import pytest
+
+# noinspection PyProtectedMember
+from cursesmenu.items.selection_item import SelectionItem
 
 
-class TestSelectionItem(BaseTestCase):
-    def setUp(self):
-        super(TestSelectionItem, self).setUp()
-        self.menu = CursesMenu("self.menu", "TestSelectionItem")
+@pytest.fixture
+def selection_item():
+    yield SelectionItem("item", 1)
 
-    def test_init(self):
-        selection_item_1 = SelectionItem("selection_item_1", 1, self.menu)
-        selection_item_2 = SelectionItem(text="selection_item_2", index=2, menu=self.menu)
-        self.assertEqual(selection_item_1.text, "selection_item_1")
-        self.assertEqual(selection_item_2.text, "selection_item_2")
-        self.assertEqual(selection_item_1.menu, self.menu)
-        self.assertEqual(selection_item_2.menu, self.menu)
-        self.assertTrue(selection_item_1.should_exit)
-        self.assertTrue(selection_item_2.should_exit)
+
+def test_selection_item(selection_item: SelectionItem):
+    assert selection_item.get_return() == 1

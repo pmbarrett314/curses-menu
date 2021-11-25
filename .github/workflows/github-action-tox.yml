@@ -1,0 +1,29 @@
+on: [push]
+
+name: 'Tox test cursesmenu'
+
+jobs:
+  shellcheck:
+    name: Tox
+
+    strategy:
+      matrix:
+        #os: [macos-latest, ubuntu-latest, windows-latest]
+        os: [ubuntu-latest]
+        #python-version: [3.6, 3.7, 3.8, 3.9, pypy3]
+        python-version: [3.6, 3.7, 3.8, 3.9]
+        exclude:
+          - os: windows-latest
+            python-version: pypy3
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install Tox and any other packages
+        run: pip install tox
+      - name: Run Tox
+        # Run tox using the version of Python in `PATH`
+        run: tox -e py

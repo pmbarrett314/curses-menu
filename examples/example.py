@@ -1,29 +1,35 @@
-from cursesmenu import *
-from cursesmenu.items import *
+from cursesmenu import CursesMenu
+from cursesmenu.items import CommandItem, FunctionItem, MenuItem, SubmenuItem
 
 
 def main():
     menu = CursesMenu("Root Menu", "Root Menu Subtitle")
-    item1 = MenuItem("Item 1", menu)
-    function_item = FunctionItem("Fun item", input, ["Enter an input: "])
-    command_item = CommandItem("Command", "python examples/example.py")
-    submenu = SelectionMenu(["item1", "item2", "item3"])
-    submenu_item = SubmenuItem("Submenu item", submenu=submenu)
-    submenu_item.set_menu(menu)
+    item1 = MenuItem("Basic item that does nothing", menu)
+    function_item = FunctionItem("FunctionItem, get input", input, ["Enter an input: "])
+    print(__file__)
+    command_item = CommandItem(
+        "CommandItem that opens another menu",
+        f"python {__file__}",
+    )
+
+    submenu = CursesMenu.make_selection_menu([f"item{x}" for x in range(1, 20)])
+    submenu_item = SubmenuItem("Long Selection SubMenu", submenu=submenu, menu=menu)
+
     submenu_2 = CursesMenu("Submenu Title", "Submenu subtitle")
     function_item_2 = FunctionItem("Fun item", input, ["Enter an input"])
     item2 = MenuItem("Another Item")
-    submenu_2.append_item(function_item_2)
-    submenu_2.append_item(item2)
-    submenu_item_2 = SubmenuItem("Another submenu", submenu=submenu_2)
-    submenu_item_2.set_menu(menu)
-    menu.append_item(item1)
-    menu.append_item(function_item)
-    menu.append_item(command_item)
-    menu.append_item(submenu_item)
-    menu.append_item(submenu_item_2)
+    submenu_2.items.append(function_item_2)
+    submenu_2.items.append(item2)
+    submenu_item_2 = SubmenuItem("Short Submenu", submenu=submenu_2, menu=menu)
+
+    menu.items.append(item1)
+    menu.items.append(function_item)
+    menu.items.append(command_item)
+    menu.items.append(submenu_item)
+    menu.items.append(submenu_item_2)
+
     menu.start()
-    menu.join()
+    _ = menu.join()
 
 
 if __name__ == "__main__":

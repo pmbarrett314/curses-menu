@@ -4,6 +4,6 @@ API Reference
     :maxdepth: 4
 
     cursesmenu/CursesMenu
-    cursesmenu/SelectionMenu
+    cursesmenu/ItemGroup
     items
     cursesmenu/functions

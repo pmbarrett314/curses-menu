@@ -1,27 +1,43 @@
-from base_test_case import BaseTestCase
+import pytest
+
 from cursesmenu import CursesMenu
 from cursesmenu.items import MenuItem
 
 
-class TestMenuItem(BaseTestCase):
-    def setUp(self):
-        super(TestMenuItem, self).setUp()
-        self.menu = CursesMenu("self.menu", "TestMenuItem")
+@pytest.fixture
+def basic_item():
+    yield MenuItem("item")
 
-    def test_init(self):
-        menu_item_1 = MenuItem("menu_item_1", self.menu)
-        menu_item_2 = MenuItem("menu_item_2", self.menu, True)
-        menu_item_3 = MenuItem(text="menu_item_1", menu=self.menu, should_exit=False)
-        self.assertEqual(menu_item_1.text, "menu_item_1")
-        self.assertEqual(menu_item_2.text, "menu_item_2")
-        self.assertEqual(menu_item_3.text, "menu_item_1")
-        self.assertEqual(menu_item_1.menu, self.menu)
-        self.assertEqual(menu_item_2.menu, self.menu)
-        self.assertEqual(menu_item_3.menu, self.menu)
-        self.assertFalse(menu_item_1.should_exit)
-        self.assertTrue(menu_item_2.should_exit)
-        self.assertFalse(menu_item_3.should_exit)
 
-    def test_show(self):
-        menu_item = MenuItem("menu_item", self.menu)
-        self.assertEqual(menu_item.show(0), "1 - menu_item")
+@pytest.fixture
+def item_with_menu():
+    menu = CursesMenu()
+    yield MenuItem("item with menu", menu=menu)
+
+
+def test_str(basic_item: MenuItem):
+    assert str(basic_item) == " item"
+
+
+def test_return(basic_item: MenuItem):
+    assert basic_item.get_return() is None
+
+
+def test_return_with_menu(item_with_menu: MenuItem):
+    assert item_with_menu.get_return() is None
+
+
+def test_show(basic_item: MenuItem):
+    assert basic_item.show("1") == "1 - item"
+
+
+def test_set_up(basic_item: MenuItem):
+    basic_item.set_up()
+
+
+def test_action(basic_item: MenuItem):
+    basic_item.action()
+
+
+def test_clean_up(basic_item: MenuItem):
+    basic_item.clean_up()

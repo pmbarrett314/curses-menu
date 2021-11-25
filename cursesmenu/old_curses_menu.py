@@ -1,15 +1,20 @@
-from enum import Enum
+"""
+A parser for the format of menu that this library started out as.
 
-from cursesmenu.items import CommandItem
-from cursesmenu.items import SubmenuItem
+Kept around for compatibility, and because it's a nice format for simple menus.
+"""
+
+from enum import Enum
+from typing import Any, Dict
 
 from cursesmenu import CursesMenu
-from cursesmenu.items import ExitItem
-from cursesmenu.items import SelectionItem
-from cursesmenu.items import FunctionItem
+from cursesmenu.items import CommandItem, ExitItem, FunctionItem, SubmenuItem
+from cursesmenu.items.selection_item import SelectionItem
 
 
-class menuItem(Enum):
+class MenuItemType(Enum):
+    """An enum for the types of items in a simple menu."""
+
     MENU = "menu"
     COMMAND = "command"
     EXITMENU = "exitmenu"
@@ -17,31 +22,31 @@ class menuItem(Enum):
     NUMBER = "number"
 
 
-def parse_old_menu(menu_data):
+def parse_old_menu(menu_data: Dict[str, Any]) -> CursesMenu:
     """
-    Take an old-style menuData dictionary and return a CursesMenu
+    Take an old-style menuData dictionary and return a CursesMenu.
 
     :param dict menu_data:
     :return: A new CursesMenu
     :rtype: CursesMenu
     """
-    menu_title = menu_data['title']
+    menu_title = menu_data["title"]
     menu = CursesMenu(menu_title)
-    for item in menu_data["options"]:
+    for index, item in enumerate(menu_data["options"]):
         item_type = item["type"]
         item_title = item["title"]
-        if item_type == menuItem.COMMAND:
+        if item_type == MenuItemType.COMMAND:
             item_command = item["command"]
-            menu.append_item(CommandItem(item_title, item_command, menu))
-        elif item_type == menuItem.FUNCTION:
+            menu.items.append(CommandItem(item_title, item_command, menu=menu))
+        elif item_type == MenuItemType.FUNCTION:
             item_function = item["function"]
-            menu.append_item(FunctionItem(item_title, item_function, menu))
-        elif item_type == menuItem.EXITMENU:
-            menu.append_item(ExitItem(item_title, menu))
-        elif item_type == menuItem.NUMBER:
-            menu.append_item(SelectionItem(item_title, menu))
-        elif item_type == menuItem.MENU:
+            menu.items.append(FunctionItem(item_title, item_function, menu=menu))
+        elif item_type == MenuItemType.EXITMENU:
+            menu.items.append(ExitItem(menu=menu))
+        elif item_type == MenuItemType.NUMBER:
+            menu.items.append(SelectionItem(text=item_title, index=index, menu=menu))
+        elif item_type == MenuItemType.MENU:
             new_menu = parse_old_menu(item)
-            menu.append_item(SubmenuItem(item_title, menu, new_menu))
+            menu.items.append(SubmenuItem(item_title, menu, new_menu))
 
     return menu

@@ -9,5 +9,4 @@ Items
    cursesmenu/items/ExternalItem
    cursesmenu/items/FunctionItem
    cursesmenu/items/MenuItem
-   cursesmenu/items/SelectionItem
    cursesmenu/items/SubmenuItem

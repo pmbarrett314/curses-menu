@@ -15,7 +15,7 @@ def exit_item_with_parent():
     submenu = CursesMenu("submenu")
 
     submenu_item = SubmenuItem("submenu_item_1", submenu, menu=root_menu)
-    root_menu.append_item(submenu_item)
+    root_menu.items.append(submenu_item)
     return submenu.end_items[0]
 
 

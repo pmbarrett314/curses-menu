@@ -18,8 +18,8 @@ def test_submenu():
 
     submenu_item_1 = SubmenuItem("submenu_item_1", submenu1, menu=root_menu)
     submenu_item_2 = SubmenuItem("submenu_item_2", submenu2, menu=root_menu)
-    root_menu.append_item(submenu_item_1)
-    root_menu.append_item(submenu_item_2)
+    root_menu.items.append(submenu_item_1)
+    root_menu.items.append(submenu_item_2)
 
     assert submenu1.end_items[0].show("q") == "q - Return to root_menu menu"
 
@@ -80,8 +80,8 @@ def test_null_submenu():
     submenu_item_1 = SubmenuItem("submenu_item_1", submenu1, menu=root_menu)
     submenu_item_2 = SubmenuItem("submenu_item_2", menu=root_menu)
     submenu_item_2.submenu = submenu2
-    root_menu.append_item(submenu_item_1)
-    root_menu.append_item(submenu_item_2)
+    root_menu.items.append(submenu_item_1)
+    root_menu.items.append(submenu_item_2)
 
     submenu_item_1.submenu = None
     assert submenu_item_1.get_return() is None

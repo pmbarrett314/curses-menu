@@ -29,11 +29,11 @@ To add other menus as submenus, use a :py:class:`~cursesmenu.items.SubmenuItem`:
 
 Add the items to the menu::
 
-    menu.append_item(command_item)
+    menu.items.append(command_item)
 
-    menu.append_item(function_item)
+    menu.items.append(function_item)
 
-    menu.append_item(submenu_item)
+    menu.items.append(submenu_item)
 
 Then start the menu::
 

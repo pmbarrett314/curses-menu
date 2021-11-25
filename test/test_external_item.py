@@ -20,8 +20,8 @@ def external_items():
 @pytest.fixture
 def menu_with_external_items(external_items):
     menu = CursesMenu("menu", "Test External Items")
-    menu.append_item(external_items[0])
-    menu.append_item(external_items[1])
+    menu.items.append(external_items[0])
+    menu.items.append(external_items[1])
     menu.start()
     menu.wait_for_start(timeout=10)
     yield menu

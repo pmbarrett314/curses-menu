@@ -18,8 +18,8 @@ def sample_items():
 @pytest.fixture
 def sample_menu(sample_items, mock_cursesmenu_curses_vary_window_size):
     menu = CursesMenu("menu", "TestSampleMenu")
-    menu.append_item(sample_items[0])
-    menu.append_item(sample_items[1])
+    menu.items.append(sample_items[0])
+    menu.items.append(sample_items[1])
     menu.start()
     menu.wait_for_start(timeout=10)
     yield menu
@@ -41,7 +41,7 @@ def empty_menu():
 def big_menu():
     menu = CursesMenu("Test Menu")
     for i in range(100):
-        menu.append_item(MenuItem("item{}".format(i), should_exit=True))
+        menu.items.append(MenuItem("item{}".format(i), should_exit=True))
     menu.start()
     menu.wait_for_start(timeout=10)
     yield menu
@@ -150,7 +150,7 @@ def test_thread_stuff(sample_menu: CursesMenu):
 def test_append_while_running(sample_menu: CursesMenu):
     for i in range(12):
         new_item = MenuItem(f"item{i}")
-        sample_menu.append_item(new_item)
+        sample_menu.items.append(new_item)
 
 
 def test_init():
@@ -173,6 +173,27 @@ def test_null_screens_main_loop():
     menu.get_input = menu._exit
     with pytest.raises(Exception):
         menu._main_loop()
+
+
+def test_repr(sample_menu: CursesMenu):
+    assert (
+        repr(sample_menu) == f"<{sample_menu.title}: {sample_menu.subtitle}. "
+        f"{len(sample_menu.items)} items>"
+    )
+
+
+def test_draw_item(sample_menu):
+    sample_menu.draw_item(0, sample_menu.items[0], "1")
+    sample_menu.draw_item(0, sample_menu.items[0], None)
+
+
+def test_resize(sample_menu):
+    sample_menu.on_resize()
+
+
+def test_deprecated_append(sample_menu):
+    with pytest.deprecated_call():
+        sample_menu.append_item(MenuItem("Deprecated Append Item"))
 
 
 if __name__ == "__main__":

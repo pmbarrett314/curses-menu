@@ -10,5 +10,5 @@ class TestItem(ExternalItem):
 
 if __name__ == "__main__":
     menu = CursesMenu()
-    menu.append_item(TestItem("this is a test item"))
+    menu.items.append(TestItem("this is a test item"))
     menu.show()

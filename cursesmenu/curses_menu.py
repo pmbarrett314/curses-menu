@@ -9,7 +9,10 @@ import time
 from collections import defaultdict
 from typing import TYPE_CHECKING, Any, Callable, DefaultDict, List, Optional, cast
 
+from deprecated import deprecated
+
 import cursesmenu.utils
+from cursesmenu.item_group import ItemGroup
 
 if TYPE_CHECKING:
     # noinspection PyCompatibility,PyProtectedMember
@@ -79,13 +82,9 @@ class CursesMenu:
         self.highlight: int = curses.A_BOLD
         self.normal: int = curses.A_NORMAL
 
-        # TODO: add a list of items that floats at the end
         # TODO: add a way to replace item indices with letters
-        # TODO: instead of  conditionally adding 1 for exit item, just combine
-        #  the regular list and the floating one
-        #  this way the consumer can add their own floating exit item
-        self.items: List[MenuItem] = []
-        self.end_items: List[MenuItem] = []
+        self.items: ItemGroup = ItemGroup(self)
+        self.end_items: ItemGroup = ItemGroup(self)
         if show_exit_item:
             from cursesmenu.items.exit_item import ExitItem
 
@@ -97,7 +96,6 @@ class CursesMenu:
         self._main_thread = threading.Thread(target=self._wrap_start, daemon=True)
 
         self._running = threading.Event()
-        # TODO:should this just depend on the thread?
         self.should_exit = False
 
         # TODO: Should this be a property
@@ -125,7 +123,7 @@ class CursesMenu:
 
     def __repr__(self) -> str:
         """Get a string representation of the menu."""
-        return f"{self.title}: {self.subtitle}. {len(self.items)} items"
+        return f"<{self.title}: {self.subtitle}. {len(self.items)} items>"
 
     @classmethod
     def make_selection_menu(
@@ -151,7 +149,7 @@ class CursesMenu:
         from cursesmenu.items.selection_item import SelectionItem
 
         for index, selection in enumerate(selections):
-            menu.append_item(
+            menu.items.append(
                 SelectionItem(text=selection, index=index, should_exit=True),
             )
         return menu
@@ -181,7 +179,7 @@ class CursesMenu:
         return cast(int, menu.show())
 
     @property
-    def all_items(self) -> List[MenuItem]:
+    def all_items(self) -> ItemGroup:
         """Get the combined list of items."""
         return self.items + self.end_items
 
@@ -252,11 +250,14 @@ class CursesMenu:
                 # noinspection PyBroadException
                 try:
                     curses.start_color()
-                except:  # noqa: E722
+                except:  # noqa: E722 # pragma: no cover
                     pass
                 self._main_loop()
             finally:
-                if CursesMenu.stdscr is not None:
+                # I currently don't remember whether there's a situation where stdscr
+                # should be None at runtime, so I'm leaving this as an if
+                # as opposed to an assert, but using a pragma for coverage
+                if CursesMenu.stdscr is not None:  # pragma: no branch
                     CursesMenu.stdscr.keypad(False)
                 curses.endwin()
                 curses.echo()
@@ -299,7 +300,7 @@ class CursesMenu:
             self.draw_item(index, item)
 
         self.refresh_screen()
-        if self._debug_screens:
+        if self._debug_screens:  # pragma: no cover
             with open(
                 PROJECT_ROOT.joinpath("screendumps", f"{self.title}-{time.time()}"),
                 "wb",
@@ -401,7 +402,7 @@ class CursesMenu:
         """
         Go to a given numbered item.
 
-        Called on numerical input. Currently implentation only works on single digits.
+        Called on numerical input. Currently implementation only works on single digits.
         """
         if self.last_item_index > 9:
             go_to_max = ord("9")
@@ -514,17 +515,15 @@ class CursesMenu:
         self._exit()
         return self.join(timeout)
 
-    def append_item(self, item: MenuItem) -> None:
-        """
-        Append an item to the menu and redraw.
-
-        :param item: A MenuItem to append to the list
-        """
-        item.menu = self
-        self.items.append(item)
-        # TODO: Define subclass of ABC.orderedcollection to hold items
+    def adjust_screen_size(self) -> None:
+        """Adjust the screen size to match the length of the item list and redraw."""
         if self.screen:
             max_row, max_cols = self.screen.getmaxyx()
             if max_row < MIN_SIZE + len(self.all_items):
                 self.screen.resize(self.menu_height, max_cols)
             self.draw()
+
+    @deprecated(reason="Use self.items.append.", version="0.6.0")
+    def append_item(self, item: MenuItem) -> None:
+        """Append an item to the list of items."""
+        self.items.append(item)

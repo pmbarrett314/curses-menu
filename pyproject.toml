@@ -23,14 +23,20 @@ multi_line_output = 3
 exclude_lines = [
     "if __name__ == .__main__.:",
     "if TYPE_CHECKING:",
+    "pragma: no cover",
+    "if sys.version_info >= \\(3, [5-9]\\):",
+    "@overload",
 ]
-include = ['test', 'cursesmenu', '*.py']
+
 
 [tool.coverage.run]
 source = ['test', 'cursesmenu']
-omit = [".idea"]
+omit = ["cursesmenu/old_curses_menu.py"]
 branch = true
 
 
 [tool.pytest.ini_options]
 addopts = ["-Werror"]
+
+[tool.pydocstyle]
+add_ignore = "D105"

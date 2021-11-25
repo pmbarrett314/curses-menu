@@ -1,8 +1,11 @@
 """Base class for menu items."""
 
-from typing import Any, Optional
+from typing import TYPE_CHECKING, Any, Optional
 
-from cursesmenu.curses_menu import CursesMenu
+if TYPE_CHECKING:
+    from cursesmenu.curses_menu import CursesMenu
+else:
+    CursesMenu = Any
 
 
 class MenuItem:

@@ -62,10 +62,10 @@ It’s designed to be pretty simple to use. Here’s an example
     submenu_item = SubmenuItem("Submenu item", selection_menu, menu)
 
     # Once we're done creating them, we just add the items to the menu
-    menu.append_item(menu_item)
-    menu.append_item(function_item)
-    menu.append_item(command_item)
-    menu.append_item(submenu_item)
+    menu.items.append(menu_item)
+    menu.items.append(function_item)
+    menu.items.append(command_item)
+    menu.items.append(submenu_item)
 
     # Finally, we call show to show the menu and allow the user to interact
     menu.show()

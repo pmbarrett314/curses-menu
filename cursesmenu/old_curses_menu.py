@@ -37,16 +37,16 @@ def parse_old_menu(menu_data: Dict[str, Any]) -> CursesMenu:
         item_title = item["title"]
         if item_type == MenuItemType.COMMAND:
             item_command = item["command"]
-            menu.append_item(CommandItem(item_title, item_command, menu=menu))
+            menu.items.append(CommandItem(item_title, item_command, menu=menu))
         elif item_type == MenuItemType.FUNCTION:
             item_function = item["function"]
-            menu.append_item(FunctionItem(item_title, item_function, menu=menu))
+            menu.items.append(FunctionItem(item_title, item_function, menu=menu))
         elif item_type == MenuItemType.EXITMENU:
-            menu.append_item(ExitItem(menu=menu))
+            menu.items.append(ExitItem(menu=menu))
         elif item_type == MenuItemType.NUMBER:
-            menu.append_item(SelectionItem(text=item_title, index=index, menu=menu))
+            menu.items.append(SelectionItem(text=item_title, index=index, menu=menu))
         elif item_type == MenuItemType.MENU:
             new_menu = parse_old_menu(item)
-            menu.append_item(SubmenuItem(item_title, menu, new_menu))
+            menu.items.append(SubmenuItem(item_title, menu, new_menu))
 
     return menu

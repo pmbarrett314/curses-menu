@@ -30,9 +30,11 @@ repos:
     hooks:
       - id: mypy
         exclude: ^docs
+        additional_dependencies: [types-Deprecated]
       - id: mypy
         exclude: ^(docs/|test/|examples/|setup.py)
         args: [--strict]
+        additional_dependencies: [types-Deprecated]
 
   - repo: https://github.com/pre-commit/pygrep-hooks
     rev: v1.9.0
@@ -63,6 +65,7 @@ repos:
         exclude: __init__.py|^(docs/|test/|examples/|setup.py|conftest.py)
         additional_dependencies:
           - toml
+          - pydocstyle[toml]
 
   - repo: https://github.com/asottile/setup-cfg-fmt
     rev: v1.20.0

@@ -4,4 +4,4 @@ from .item_group import ItemGroup
 
 __all__ = ["CursesMenu", "ItemGroup", "items"]
 
-__version__ = "0.5.0"
+__version__ = "0.6.0"

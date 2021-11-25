@@ -1,4 +1,4 @@
-"""A list of items that belong to a CursesMenu."""
+"""A group of items that belong to a CursesMenu."""
 
 import sys
 from typing import (
@@ -28,14 +28,14 @@ else:
 
 class ItemGroup(MutableSequence[MenuItem]):
     """
-    A list of items that belong to a CursesMenu.
+    A group of items that belong to a CursesMenu.
 
     Holds the items and ensures that the menu updates when a new one is added.
-    Should mostly behave the same as a List.
+    Implements MutableSequence, so should act like a list.
     """
 
     def __init__(self, menu: CursesMenu, items: Optional[Iterable[MenuItem]] = None):
-        """Initialize the list."""
+        """Initialize the group."""
         if items is None:
             items = []
         self.items: List[MenuItem] = list(items)
@@ -100,7 +100,7 @@ class ItemGroup(MutableSequence[MenuItem]):
         self.menu.adjust_screen_size()
 
     def __len__(self) -> int:
-        """Get the length of the list."""
+        """Get the number of items in the group."""
         return len(self.items)
 
     def insert(self, index: int, item: MenuItem) -> None:
@@ -110,14 +110,14 @@ class ItemGroup(MutableSequence[MenuItem]):
         self.menu.adjust_screen_size()
 
     def __iter__(self) -> Iterator[MenuItem]:
-        """Get an iterator for the list."""
+        """Get an iterator for the group."""
         return iter(self.items)
 
     def __add__(self, other: "ItemGroup") -> "ItemGroup":
         """
-        Add two lists together.
+        Add two groups together.
 
-        The resulting list will have the menu of the first list.
+        The resulting group will have the menu of the first group.
         """
         return ItemGroup(self.menu, self.items + other.items)
 

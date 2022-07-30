@@ -17,14 +17,14 @@ test_file_path = pathlib.Path("test.txt")
 @pytest.fixture
 def create_item():
     if sys.platform.startswith("win"):  # pragma: no cover
-        yield CommandItem(
+        return CommandItem(
             "create_item",
             "echo",
             arguments=["hello"],
             stdout_filepath=test_file_path,
         )
     else:
-        yield CommandItem("create_item", "echo hello", stdout_filepath=test_file_path)
+        return CommandItem("create_item", "echo hello", stdout_filepath=test_file_path)
 
 
 @pytest.fixture
@@ -38,15 +38,15 @@ def delete_item():
 @pytest.fixture
 def exit_item():
     if sys.platform.startswith("win"):  # pragma: no cover
-        return CommandItem("return_command_item", "exit 1")
+        return CommandItem("return_command_item", "exit", arguments=["42"])
     else:
-        return CommandItem("return_command_item", "exit 1")
+        return CommandItem("return_command_item", "exit 42")
 
 
 def test_return(exit_item: CommandItem):
     exit_item.action()
 
-    assert exit_item.get_return() == 1
+    assert exit_item.get_return() == 42
 
 
 def test_create(create_item: CommandItem, delete_item: CommandItem):

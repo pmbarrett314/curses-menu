@@ -61,7 +61,9 @@ class CommandItem(ExternalItem):
     def action(self) -> None:
         """Run the command using subprocess.run."""
         args = [self.command] + self.arguments
-        if not sys.platform.startswith("win"):
+        if not sys.platform.startswith(
+            "win",
+        ):  # pragma: no cover macos # pragma: no cover linux
             args = [" ".join(args)]
         if self.stdout_filepath:
             with open(self.stdout_filepath, "w") as stdout:

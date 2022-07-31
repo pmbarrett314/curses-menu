@@ -1,3 +1,16 @@
 [coverage:report]
 exclude_lines =
     pragma: no cover {platform}
+    if __name__ == .__main__.:
+    if TYPE_CHECKING:
+    pragma: no cover
+    if sys.version_info >= \\(3, [5-9]\\):
+    @overload
+
+[coverage:run]
+branch = true
+source =
+    test
+    cursesmenu
+omit =
+    cursesmenu/old_curses_menu.py

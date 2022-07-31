@@ -16,9 +16,9 @@ from cursesmenu.item_group import ItemGroup
 
 if TYPE_CHECKING:
     # noinspection PyCompatibility,PyProtectedMember
-    from _curses import _CursesWindow
+    from _curses import window
 
-    Window = _CursesWindow
+    Window = window
     from cursesmenu.items.menu_item import MenuItem
 else:
     Window = Any

@@ -1,13 +1,22 @@
 """A script to make a coveragerc file for testing based on the platform."""
 
 import os
+import sys
 from pathlib import Path
 
 
 def main() -> None:
     """Make the file."""
     rcfile_path = os.environ["COVERAGE_RCFILE"]
-    platform = os.environ["PLATFORM"]
+
+    if sys.platform.startswith("win"):
+        platform = "windows"
+    elif sys.platform.startswith("darwin"):
+        platform = "macos"
+    elif sys.platform.startswith("linux"):
+        platform = "linux"
+    else:
+        raise Exception("Unidentified platform")
 
     extra_omit = "test/test_graphics.py" if platform == "windows" else ""
     Path(rcfile_path).write_text(

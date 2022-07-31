@@ -49,6 +49,13 @@ def exit_item():
         return CommandItem("return_command_item", "exit 42")
 
 
+def test_init():
+    item1 = CommandItem("return_command_item", "exit", arguments=["42"])
+    item2 = CommandItem("return_command_item", "exit 42")
+    assert item1.command == "exit"
+    assert item2.command == "exit 42"
+
+
 def test_return(exit_item: CommandItem):
     exit_item.action()
 

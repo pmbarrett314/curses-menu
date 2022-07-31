@@ -2,6 +2,7 @@
 
 import os
 import subprocess
+import sys
 from typing import TYPE_CHECKING, Any, List, Optional
 
 from cursesmenu.items.external_item import ExternalItem
@@ -60,6 +61,8 @@ class CommandItem(ExternalItem):
     def action(self) -> None:
         """Run the command using subprocess.run."""
         args = [self.command] + self.arguments
+        if not sys.platform.startswith("win"):
+            args = [" ".join(args)]
         if self.stdout_filepath:
             with open(self.stdout_filepath, "w") as stdout:
                 completed_process = subprocess.run(

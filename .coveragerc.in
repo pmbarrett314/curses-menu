@@ -14,3 +14,4 @@ source =
     cursesmenu
 omit =
     cursesmenu/old_curses_menu.py
+    {extra_omit}

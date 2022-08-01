@@ -1,6 +1,6 @@
-on: [push]
+on: [ push, pull_request ]
 
-name: 'Tests'
+name: Tests
 
 jobs:
   test:
@@ -8,10 +8,10 @@ jobs:
 
     strategy:
       matrix:
-        os: [macos-latest, ubuntu-latest, windows-latest]
+        python-version: [ "3.10", "3.9","3.8", "3.7" ]
+        os: [ ubuntu-latest, macos-latest, windows-latest ]
         #os: [ubuntu-latest]
         #python-version: [3.6, 3.7, 3.8, 3.9, pypy3]
-        python-version: ["3.7", "3.8", "3.9", "3.10"]
         exclude:
           - os: windows-latest
             python-version: pypy3

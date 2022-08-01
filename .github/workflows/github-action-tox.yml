@@ -27,8 +27,6 @@ jobs:
       - name: Run Tox
         # Run tox using the version of Python in `PATH`
         run: tox -e py
-      - name: coverage lcov
-        run: coverage lcov
       - name: Coveralls Parallel
         uses: coverallsapp/github-action@master
         with:
@@ -39,8 +37,6 @@ jobs:
     needs: test
     runs-on: ubuntu-latest
     steps:
-    - name: coverage lcov
-      run: coverage lcov
     - name: Coveralls Finished
       uses: coverallsapp/github-action@master
       with:

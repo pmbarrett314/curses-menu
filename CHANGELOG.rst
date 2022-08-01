@@ -1,3 +1,8 @@
+Version 0.6.3
+-------------
+
+* Actually fixed bug that breaks doc build
+
 Version 0.6.2
 -------------
 

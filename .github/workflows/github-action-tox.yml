@@ -24,6 +24,8 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: Install Poetry
         uses: snok/install-poetry@v1
+      - name: Install Tox and any other packages
+        run: pip install tox
       - name: Run Tox
         # Run tox using the version of Python in `PATH`
         run: tox -e py

@@ -31,12 +31,14 @@ jobs:
         uses: coverallsapp/github-action@master
         with:
           github-token: ${{ secrets.github_token }}
-          path-to-lcov: coverage.xml
+          path-to-lcov: coverage.lcov
           parallel: true
   finish:
     needs: test
     runs-on: ubuntu-latest
     steps:
+    - name: coverage lcov
+      run: coverage lcov
     - name: Coveralls Finished
       uses: coverallsapp/github-action@master
       with:

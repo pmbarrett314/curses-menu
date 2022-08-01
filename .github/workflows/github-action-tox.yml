@@ -15,7 +15,6 @@ jobs:
         exclude:
           - os: windows-latest
             python-version: pypy3
-    continue-on-error: ${{ matrix.os == 'windows-latest' }}
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2

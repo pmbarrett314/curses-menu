@@ -43,7 +43,10 @@ def test_init():
     item1 = CommandItem("return_command_item", "exit")
     item2 = CommandItem("return_command_item", "echo", arguments=["hello"])
     assert item1._get_args_list() == ["exit"]
-    assert item2._get_args_list() == ["echo hello"]
+    if sys.platform.startswith("win"):
+        assert item2._get_args_list() == ["echo", "hello"]
+    else:
+        assert item2._get_args_list() == ["echo hello"]
 
 
 def test_return(exit_item: CommandItem):

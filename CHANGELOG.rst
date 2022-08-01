@@ -1,8 +1,13 @@
+Version 0.6.2
+-------------
+
+* Fixed bug that breaks doc build
+
 Version 0.6.1
 -------------
 
 * Mostly just fixed bugs in tests
-* Improved cross-platform functionality of CommandITem
+* Improved cross-platform functionality of CommandItem
 
 Version 0.6.0
 -------------

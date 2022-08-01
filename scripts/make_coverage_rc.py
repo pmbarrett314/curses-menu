@@ -19,10 +19,13 @@ def main() -> None:
         raise Exception("Unidentified platform")
 
     extra_omit = "test/test_graphics.py" if platform == "windows" else ""
+    extra_exclude = (
+        'if sys.platform.startswith\\("win"\\):' if platform != "windows" else ""
+    )
     Path(rcfile_path).write_text(
         Path(".coveragerc.in")
         .read_text()
-        .format(platform=platform, extra_omit=extra_omit),
+        .format(platform=platform, extra_omit=extra_omit, extra_exclude=extra_exclude),
     )
 
 

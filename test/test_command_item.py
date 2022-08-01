@@ -45,7 +45,7 @@ def test_init():
     assert item1._get_args_list() == ["exit"]
     if sys.platform.startswith("win"):
         assert item2._get_args_list() == ["echo", "hello"]
-    else:
+    else:  # pragma: no cover windows
         assert item2._get_args_list() == ["echo hello"]
 
 

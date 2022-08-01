@@ -77,7 +77,7 @@ Currently the platforms I'm manually testing on are MacOS in iTerm2 on zsh with 
 with both powersehll and cmd.exe in and out of Windows Terminal. If a bug pops up on another configuration, \
 no promises that I'll be able to reproduce it.
 
-.. |Build Status| image:: https://travis-ci.org/pmbarrett314/curses-menu.svg
-   :target: https://travis-ci.org/pmbarrett314/curses-menu
+.. |Build Status| image:: https://github.com/pmbarrett314/curses-menu/actions/workflows/github-action-tox.yml/badge.svg
+   :target: https://github.com/pmbarrett314/curses-menu/actions/workflows/github-action-tox.yml/badge.svg
 .. |Documentation Status| image:: https://readthedocs.org/projects/curses-menu/badge/?version=latest
    :target: http://curses-menu.readthedocs.org/en/latest/?badge=latest

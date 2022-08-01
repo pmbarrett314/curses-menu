@@ -1,6 +1,6 @@
 on: [push]
 
-name: 'Tox test cursesmenu'
+name: 'Tests'
 
 jobs:
   shellcheck:

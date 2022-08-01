@@ -42,6 +42,7 @@ class CursesMenu:
     :ivar normal: Index of the curses color pair used to represent other text
     :ivar items: The list of items for the menu
     :param show_exit_item: Whether the exit item is shown
+    :param zero_pad: Zero pad the item indices to match the width of the biggest one
     :ivar current_option: The index of the currently highlighted menu item
     :ivar selected_option: The index of the last item the user selected, initially -1
     :ivar should_exit: Flag to signal that the menu should exit on \
@@ -68,12 +69,15 @@ class CursesMenu:
         self,
         title: str = "",
         subtitle: str = "",
+        *,
         show_exit_item: bool = True,
+        zero_pad: bool = False,
         _debug_screens: bool = False,
     ):
         """Initialize the menu."""
         self.title = title
         self.subtitle = subtitle
+        self.zero_pad = zero_pad
 
         self.screen: Optional[Window] = None
 
@@ -340,6 +344,10 @@ class CursesMenu:
         """
         if index_text is None:
             index_text = str(index + 1)
+            if self.zero_pad:
+                pad_width = len(str(len(self.items)))
+                index_text = index_text.zfill(pad_width)
+
         text_style = self.highlight if self.current_option == index else self.normal
         assert self.screen is not None and text_style is not None
 

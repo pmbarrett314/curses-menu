@@ -18,13 +18,13 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
           cache: "poetry"
-      - name: Install Poetry
-        uses: snok/install-poetry@v1
       - name: Install Tox and any other packages
         run: pip install tox
       - name: Run Tox

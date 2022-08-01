@@ -43,7 +43,9 @@ def test_init():
     item1 = CommandItem("return_command_item", "exit")
     item2 = CommandItem("return_command_item", "echo", arguments=["hello"])
     assert item1._get_args_list() == ["exit"]
-    if sys.platform.startswith("win"):
+    if sys.platform.startswith(
+        "win",
+    ):  # pragma: no cover macos # pragma: no cover linux
         assert item2._get_args_list() == ["echo", "hello"]
     else:  # pragma: no cover windows
         assert item2._get_args_list() == ["echo hello"]

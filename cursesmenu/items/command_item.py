@@ -60,11 +60,10 @@ class CommandItem(ExternalItem):
 
     def _get_args_list(self) -> List[str]:
         args = [self.command] + self.arguments
-        if not sys.platform.startswith(
-            "win",
-        ):  # pragma: no cover macos # pragma: no cover linux
-            args = [" ".join(args)]
-        return args
+        if not sys.platform.startswith("win"):  # pragma: no cover windows
+            return [" ".join(args)]
+        else:  # pragma: no cover macos # pragma: no cover linux
+            return args
 
     def action(self) -> None:
         """Run the command using subprocess.run."""

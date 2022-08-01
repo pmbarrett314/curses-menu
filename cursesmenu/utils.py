@@ -24,7 +24,7 @@ def clear_terminal() -> None:
 
 def soft_clear_terminal() -> None:
     """Use ANSI control sequences to clear the terminal."""
-    if sys.platform.startswith("win"):  # pragma: no cover
+    if sys.platform.startswith("win"):  # pragma: no cover all
         # enables ANSI escape codes to work properly in bare cmd.exe
         os.system("")
     print(chr(27) + "[2J", end="")

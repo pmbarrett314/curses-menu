@@ -116,7 +116,9 @@ class CursesMenu:
             },
         )
         # workaround for issue with windows-curses in vscode terminal
-        if os.environ.get("TERM_PROGRAM", default="") == "vscode":  # pragma: no cover
+        if (
+            os.environ.get("TERM_PROGRAM", default="") == "vscode"
+        ):  # pragma: no cover all
             self.user_input_handlers.update(
                 {
                     450: self.go_up,
@@ -258,7 +260,7 @@ class CursesMenu:
                 # noinspection PyBroadException
                 try:
                     curses.start_color()
-                except:  # noqa: E722 # pragma: no cover
+                except:  # noqa: E722 # pragma: no cover all
                     pass
                 self._main_loop()
             finally:
@@ -308,7 +310,7 @@ class CursesMenu:
             self.draw_item(index, item)
 
         self.refresh_screen()
-        if self._debug_screens:  # pragma: no cover
+        if self._debug_screens:  # pragma: no cover all
             with open(
                 PROJECT_ROOT.joinpath("screendumps", f"{self.title}-{time.time()}"),
                 "wb",

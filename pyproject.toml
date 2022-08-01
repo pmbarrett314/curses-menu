@@ -23,7 +23,7 @@ multi_line_output = 3
 exclude_lines = [
     "if __name__ == .__main__.:",
     "if TYPE_CHECKING:",
-    "pragma: no cover",
+    "pragma: no cover all",
     "if sys.version_info >= \\(3, [5-9]\\):",
     "@overload",
 ]

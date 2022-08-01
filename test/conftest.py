@@ -1,9 +1,9 @@
 import sys
 import unittest.mock as mock
 
-if not sys.platform.startswith("win"):  # pragma: no cover
+if not sys.platform.startswith("win"):  # pragma: no cover all
     import curses
-else:  # pragma: no cover
+else:  # pragma: no cover all
     curses = None
 
 import pytest
@@ -47,7 +47,7 @@ def mock_curses_(rows, cols):
     f.mock_window.getch.side_effect = lambda: 0
     f.mock_window.getmaxyx.return_value = (rows, cols)
 
-    def wrapper(function, *args, **kwargs):  # pragma: no cover
+    def wrapper(function, *args, **kwargs):  # pragma: no cover all
         return function(f.mock_window, *args, **kwargs)
 
     f.initscr.return_value = f.mock_window

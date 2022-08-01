@@ -44,21 +44,21 @@ class MenuTester:
                 dimensions=(self.rows, self.cols),
                 env=env,
             )
-        else:  # pragma: no cover
+        else:  # pragma: no cover all
             # this currently doesn't work on windows but I'm keeping this around
             # in case I decide to have another go at it later
             cmd = "{} {}".format(cmd, " ".join(args))
             return pexpect.popen_spawn.PopenSpawn(cmd, encoding="utf-8", env=env)
 
     def emulate_ansi_terminal(self, raw_output: str, clean=True):
-        if raw_output in [pexpect.EOF, pexpect.TIMEOUT]:  # pragma: no cover
+        if raw_output in [pexpect.EOF, pexpect.TIMEOUT]:  # pragma: no cover all
             return ""
         self.stream.feed(raw_output)
 
         lines = self.screen.display
         self.screen.reset()
 
-        if clean:  # pragma: no cover
+        if clean:  # pragma: no cover all
             lines = (line.rstrip() for line in lines)
             lines = (line for line in lines if line)
         lines = list(lines)

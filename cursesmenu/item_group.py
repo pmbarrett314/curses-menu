@@ -13,9 +13,9 @@ from typing import (
     overload,
 )
 
-if sys.version_info >= (3, 9):  # pragma: no cover
+if sys.version_info >= (3, 9):  # pragma: no cover all
     from collections.abc import MutableSequence
-else:  # pragma: no cover
+else:  # pragma: no cover all
     from typing import MutableSequence
 
 if TYPE_CHECKING:

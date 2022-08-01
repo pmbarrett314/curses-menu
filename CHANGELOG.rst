@@ -1,3 +1,8 @@
+Version 0.6.5
+-------------
+
+* Use Poetry, some github actions changes. Not pushing this one to pypi.
+
 Version 0.6.4
 -------------
 

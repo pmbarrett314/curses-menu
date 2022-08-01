@@ -1,4 +1,4 @@
-|Build Status|\ |Documentation Status|
+|Build Status|\ |Documentation Status|\ |Coverage Status|
 
 curses-menu
 ===========
@@ -81,3 +81,5 @@ no promises that I'll be able to reproduce it.
    :target: https://github.com/pmbarrett314/curses-menu/actions/workflows/github-action-tox.yml/badge.svg
 .. |Documentation Status| image:: https://readthedocs.org/projects/curses-menu/badge/?version=latest
    :target: http://curses-menu.readthedocs.org/en/latest/?badge=latest
+.. |Coverage Status| image:: https://coveralls.io/repos/github/pmbarrett314/curses-menu/badge.svg?branch=develop
+   :target: https://coveralls.io/github/pmbarrett314/curses-menu?branch=develop

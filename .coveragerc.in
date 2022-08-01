@@ -3,7 +3,7 @@ exclude_lines =
     pragma: no cover {platform}
     if __name__ == .__main__.:
     if TYPE_CHECKING:
-    pragma: no cover
+    pragma: no cover all
     if sys.version_info >= \\(3, [5-9]\\):
     @overload
     {extra_exclude}

@@ -244,3 +244,5 @@ fabric.properties
 .ackrc
 
 screendumps/
+
+coverage.lcov

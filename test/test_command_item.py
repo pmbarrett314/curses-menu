@@ -40,10 +40,10 @@ def exit_item():
 
 
 def test_init():
-    item1 = CommandItem("return_command_item", "exit", arguments=["42"])
+    item1 = CommandItem("return_command_item", "exit")
     item2 = CommandItem("return_command_item", "echo", arguments=["hello"])
-    assert item1.command == "exit"
-    assert item2.command == "echo"
+    assert item1._get_args_list() == ["exit"]
+    assert item2._get_args_list() == ["echo hello"]
 
 
 def test_return(exit_item: CommandItem):

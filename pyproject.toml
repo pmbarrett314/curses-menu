@@ -49,7 +49,7 @@ authors = ["Paul Barrett <pmbarrett314@gmail.com>"]
 license = "MIT"
 repository = "http://github.com/pmbarrett314/curses-menu"
 packages = [{ include = "cursesmenu" }]
-readme = "readme.rst"
+readme = "README.rst"
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Environment :: Console :: Curses",

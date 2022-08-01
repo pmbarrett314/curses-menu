@@ -115,6 +115,14 @@ class CursesMenu:
                 curses.KEY_RESIZE: self.on_resize,
             },
         )
+        # workaround for issue with windows-curses in vscode terminal
+        if os.environ.get("TERM_PROGRAM", default="") == "vscode":  # pragma: no cover
+            self.user_input_handlers.update(
+                {
+                    450: self.go_up,
+                    456: self.go_down,
+                },
+            )
         self.user_input_handlers.update(
             {k: self.go_to for k in map(ord, map(str, range(1, 10)))},
         )

@@ -27,6 +27,8 @@ jobs:
       - name: Run Tox
         # Run tox using the version of Python in `PATH`
         run: tox -e py
+      - name: coverage lcov
+        run: coverage lcov
       - name: Coveralls Parallel
         uses: coverallsapp/github-action@master
         with:
@@ -43,4 +45,5 @@ jobs:
       uses: coverallsapp/github-action@master
       with:
         github-token: ${{ secrets.github_token }}
+        path-to-lcov: coverage.lcov
         parallel-finished: true

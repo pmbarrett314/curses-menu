@@ -29,9 +29,9 @@ def delete_item():
     if sys.platform.startswith(
         "win",
     ):  # pragma: no cover macos # pragma: no cover linux
-        return CommandItem("delete_item", "del", arguments=[f"{str(test_file_path)}"])
+        return CommandItem("delete_item", "del", arguments=[str(test_file_path)])
     else:  # pragma: no cover windows
-        return CommandItem("delete_item", f"rm -f {str(test_file_path)}")
+        return CommandItem("delete_item", "rm", arguments=["-f", str(test_file_path)])
 
 
 @pytest.fixture
@@ -41,9 +41,9 @@ def exit_item():
 
 def test_init():
     item1 = CommandItem("return_command_item", "exit", arguments=["42"])
-    item2 = CommandItem("return_command_item", "exit 42")
+    item2 = CommandItem("return_command_item", "echo", arguments=["hello"])
     assert item1.command == "exit"
-    assert item2.command == "exit 42"
+    assert item2.command == "echo"
 
 
 def test_return(exit_item: CommandItem):

@@ -1,3 +1,8 @@
+Version 0.6.4
+-------------
+
+* Workaround vscode/windows-curses issue
+
 Version 0.6.3
 -------------
 

@@ -10,7 +10,7 @@ body:
     id: version
     attributes:
       label: Version
-      description: What version of our curses-menu are you running?
+      description: What version of curses-menu are you running?
       options:
         - 0.6.4
         - 0.5.0

@@ -23,8 +23,8 @@ platformdirs==2.5.2
 pluggy==1.0.0
 ptyprocess==0.7.0
 py==1.11.0
-pycodestyle==2.8.0
 pyflakes==2.5.0
+pycodestyle==2.9.0
 Pygments==2.12.0
 pyparsing==3.0.9
 pyte==0.8.1

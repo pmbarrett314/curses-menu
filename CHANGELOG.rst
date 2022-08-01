@@ -1,3 +1,9 @@
+Version 0.6.1
+-------------
+
+* Mostly just fixed bugs in tests
+* Improved cross-platform functionality of CommandITem
+
 Version 0.6.0
 -------------
 

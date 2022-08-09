@@ -1,0 +1,12 @@
+name: Type check with mypy
+
+on: [push, pull_request]
+
+jobs:
+  mypy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: jpetrucciani/mypy-check@master
+        with:
+          path: 'cursesmenu'
+          mypy_flags: '--config-file pyproject.toml'

@@ -1,7 +1,7 @@
 import os
 import pathlib
 import sys
-from typing import List
+from typing import Generator, List
 
 import pexpect
 import pexpect.popen_spawn
@@ -55,7 +55,7 @@ class MenuTester:
             return ""
         self.stream.feed(raw_output)
 
-        lines = self.screen.display
+        lines: List[str] | Generator[str, None, None] = self.screen.display
         self.screen.reset()
 
         if clean:  # pragma: no cover all

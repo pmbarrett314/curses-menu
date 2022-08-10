@@ -28,7 +28,7 @@ jobs:
           cache: 'poetry'
       - run: poetry install
       - run: poetry run pytest
-      - run: coverage lcov
+      - run: poetry run coverage lcov
       - name: Coveralls Parallel
         uses: coverallsapp/github-action@master
         with:

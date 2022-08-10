@@ -28,9 +28,9 @@ def create_item():
 def delete_item():
     if sys.platform.startswith(
         "win",
-    ):  # pragma: no cover macos # pragma: no cover linux
+    ):  # pragma: no-cover-nonwindows
         return CommandItem("delete_item", "del", arguments=[str(test_file_path)])
-    else:  # pragma: no cover windows
+    else:  # pragma: no-cover-windows
         return CommandItem("delete_item", "rm", arguments=["-f", str(test_file_path)])
 
 
@@ -45,9 +45,9 @@ def test_init():
     assert item1._get_args_list() == ["exit"]
     if sys.platform.startswith(
         "win",
-    ):  # pragma: no cover macos # pragma: no cover linux
+    ):  # pragma: no-cover-nonwindows
         assert item2._get_args_list() == ["echo", "hello"]
-    else:  # pragma: no cover windows
+    else:  # pragma: no-cover-windows
         assert item2._get_args_list() == ["echo hello"]
 
 

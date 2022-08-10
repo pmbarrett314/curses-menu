@@ -19,7 +19,7 @@ on_bad_platform = sys.platform.startswith("win") or (
     on_bad_platform,
     reason="Screen capture doesn't work on Windows",
 )
-class MenuTester:
+class MenuTester:  # pragma: no-cover-windows
     def su(self, rows: int, cols: int, filepath: pathlib.Path):
         self.rows = rows
         self.cols = cols
@@ -65,7 +65,7 @@ class MenuTester:
         return "\n".join(lines) + "\n"
 
 
-class TestBasicMenu(MenuTester):
+class TestBasicMenu(MenuTester):  # pragma: no-cover-windows
     def setup_method(
         self,
         _,
@@ -91,7 +91,7 @@ class TestBasicMenu(MenuTester):
         child.expect(pexpect.EOF, timeout=5)
 
 
-class TestMenuWithItems(MenuTester):
+class TestMenuWithItems(MenuTester):  # pragma: no-cover-windows
     def setup_method(
         self,
         method,

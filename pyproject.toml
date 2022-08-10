@@ -45,9 +45,7 @@ exclude_lines = [
     "if __name__ == .__main__.:",
     "if TYPE_CHECKING:",
     "pragma: no cover all",
-    "if sys.version_info >= \\(3, [5-9]\\):",
     "@overload",
-    "pragma: no cover ${PLATFORM-none}"
 ]
 
 
@@ -56,10 +54,18 @@ source = ['test', 'cursesmenu']
 omit = ["cursesmenu/old_curses_menu.py"]
 branch = true
 data_file = ".cov/.coverage"
+plugins = ["coverage_conditional_plugin"]
 
 [tool.coverage.lcov]
 output = ".cov/coverage.lcov"
 
+[tool.coverage.coverage_conditional_plugin.rules]
+no-cover-nonwindows = "not sys.platform.startswith('win')"
+no-cover-windows = "sys.platform.startswith('win')"
+py-gte-38 = "sys_version_info >= (3, 8)"
+py-lt-38 = "sys_version_info < (3, 8)"
+py-gte-39 = "sys_version_info >= (3, 9)"
+py-lt-39 = "sys_version_info < (3, 9)"
 
 
 [tool.pytest.ini_options]
@@ -111,3 +117,4 @@ Deprecated = "^1.2.13"
 types-Deprecated = "^1.2.9"
 pytest-cov = "^3.0.0"
 mypy = "^0.971"
+coverage-conditional-plugin = "^0.5.0"

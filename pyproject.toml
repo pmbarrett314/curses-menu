@@ -77,7 +77,6 @@ add_ignore = "D105"
 match = "(?!__init__.py|^(docs/|test/|examples/|setup.py|conftest.py))"
 
 [tool.mypy]
-mypy_path = "$MYPY_CONFIG_FILE_DIR/stubs"
 exclude = "^(scratch/|examples/)"
 warn_unused_configs = true
 warn_redundant_casts = true

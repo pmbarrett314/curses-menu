@@ -13,6 +13,7 @@ packages = [{ include = "cursesmenu" }]
 readme = "README.rst"
 classifiers = [
     "Development Status :: 3 - Alpha",
+    "Environment :: Console",
     "Environment :: Console :: Curses",
     "Intended Audience :: Developers",
     "License :: OSI Approved :: MIT License",
@@ -24,9 +25,11 @@ classifiers = [
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: Implementation :: CPython",
     "Programming Language :: Python :: Implementation :: PyPy",
     "Topic :: Software Development :: Libraries :: Python Modules",
+    "Typing :: Typed",
 ]
 include = ["*.rst", "*.md", "*.txt", "tox.ini", "docs/Makefile", "test/**/*.py", "docs/**/*.rst", "docs/**/*.py"]
 exclude = ["docs/_build"]

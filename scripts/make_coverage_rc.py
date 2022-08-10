@@ -4,6 +4,9 @@ import os
 import sys
 from pathlib import Path
 
+scripts_path = Path(__file__).parent
+rc_in_path = scripts_path / ".coveragerc.in"
+
 
 def main() -> None:
     """Make the file."""
@@ -23,9 +26,11 @@ def main() -> None:
         'if sys.platform.startswith\\("win"\\):' if platform != "windows" else ""
     )
     Path(rcfile_path).write_text(
-        Path(".coveragerc.in")
-        .read_text()
-        .format(platform=platform, extra_omit=extra_omit, extra_exclude=extra_exclude),
+        rc_in_path.read_text().format(
+            platform=platform,
+            extra_omit=extra_omit,
+            extra_exclude=extra_exclude,
+        ),
     )
 
 

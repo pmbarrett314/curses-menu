@@ -246,3 +246,4 @@ fabric.properties
 screendumps/
 
 coverage.lcov
+/.cov/

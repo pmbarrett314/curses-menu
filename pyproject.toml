@@ -47,6 +47,7 @@ exclude_lines = [
     "pragma: no cover all",
     "if sys.version_info >= \\(3, [5-9]\\):",
     "@overload",
+    "pragma: no cover ${PLATFORM-none}"
 ]
 
 
@@ -54,10 +55,16 @@ exclude_lines = [
 source = ['test', 'cursesmenu']
 omit = ["cursesmenu/old_curses_menu.py"]
 branch = true
+data_file = ".cov/.coverage"
+
+[tool.coverage.lcov]
+output = ".cov/coverage.lcov"
+
 
 
 [tool.pytest.ini_options]
-addopts = ["-Werror"]
+required_plugins = ["pytest-cov"]
+addopts = ["-Werror", "-vv", "--cov", "--cov-append", "--cov-report=term-missing", "--cov-report=xml:.cov/coverage.xml","--cov-fail-under=100","--no-cov-on-fail"]
 
 [tool.pydocstyle]
 add_ignore = "D105"

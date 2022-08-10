@@ -4,7 +4,7 @@ name: Tests
 
 jobs:
   test:
-    name: Tox
+    name: Tests
 
     strategy:
       matrix:
@@ -17,19 +17,14 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
-      - name: Install Poetry
-        uses: snok/install-poetry@v1
-      - name: Setup Python
-        uses: actions/setup-python@v4
+      - uses: snok/install-poetry@v1
+      - uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
-          cache: 'pip'
-          cache-dependency-path: 'poetry.lock'
-      - name: Install Tox and any other packages
-        run: pip install tox
-      - name: Run Tox
-        # Run tox using the version of Python in `PATH`
-        run: tox -e py
+          cache: 'poetry'
+      - run: poetry install
+      - run: poetry run pytest
+      - run: coverage lcov
       - name: Coveralls Parallel
         uses: coverallsapp/github-action@master
         with:

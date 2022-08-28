@@ -109,6 +109,11 @@ class CursesMenu:
         self.user_input_handlers.update(
             {
                 ord("\n"): self.select,
+                ord("h"): self.go_to_exit,
+                ord("l"): self.select,
+                ord("j"): self.go_down,
+                ord("k"): self.go_up,
+                ord("w"): self.on_resize,
                 curses.KEY_UP: self.go_up,
                 curses.KEY_DOWN: self.go_down,
                 ord("q"): self.go_to_exit,

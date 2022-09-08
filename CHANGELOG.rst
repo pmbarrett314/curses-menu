@@ -1,5 +1,9 @@
 Version 0.6.5
 -------------
+* Fix bug caused by not having Deprecated as install dependency.
+
+Version 0.6.5
+-------------
 
 * Use Poetry, some github actions changes. Not pushing this one to pypi.
 

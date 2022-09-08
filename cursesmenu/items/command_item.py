@@ -60,9 +60,9 @@ class CommandItem(ExternalItem):
 
     def _get_args_list(self) -> List[str]:
         args = [self.command] + self.arguments
-        if not sys.platform.startswith("win"):  # pragma: no cover windows
+        if not sys.platform.startswith("win"):  # pragma: no-cover-windows
             return [" ".join(args)]
-        else:  # pragma: no cover macos # pragma: no cover linux
+        else:  # pragma: no-cover-nonwindows
             return args
 
     def action(self) -> None:

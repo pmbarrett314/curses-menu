@@ -1,7 +1,7 @@
 import os
 import pathlib
 import sys
-from typing import List
+from typing import Generator, List
 
 import pexpect
 import pexpect.popen_spawn
@@ -19,7 +19,7 @@ on_bad_platform = sys.platform.startswith("win") or (
     on_bad_platform,
     reason="Screen capture doesn't work on Windows",
 )
-class MenuTester:
+class MenuTester:  # pragma: no-cover-windows
     def su(self, rows: int, cols: int, filepath: pathlib.Path):
         self.rows = rows
         self.cols = cols
@@ -55,7 +55,7 @@ class MenuTester:
             return ""
         self.stream.feed(raw_output)
 
-        lines = self.screen.display
+        lines: List[str] | Generator[str, None, None] = self.screen.display
         self.screen.reset()
 
         if clean:  # pragma: no cover all
@@ -65,7 +65,7 @@ class MenuTester:
         return "\n".join(lines) + "\n"
 
 
-class TestBasicMenu(MenuTester):
+class TestBasicMenu(MenuTester):  # pragma: no-cover-windows
     def setup_method(
         self,
         _,
@@ -91,7 +91,7 @@ class TestBasicMenu(MenuTester):
         child.expect(pexpect.EOF, timeout=5)
 
 
-class TestMenuWithItems(MenuTester):
+class TestMenuWithItems(MenuTester):  # pragma: no-cover-windows
     def setup_method(
         self,
         method,

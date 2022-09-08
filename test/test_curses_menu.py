@@ -155,7 +155,7 @@ def test_append_while_running(sample_menu: CursesMenu):
 
 def test_init():
     menu1 = CursesMenu()
-    menu2 = CursesMenu("menu2", "test_init", True)
+    menu2 = CursesMenu("menu2", "test_init", show_exit_item=True)
     menu3 = CursesMenu(title="menu3", subtitle="test_init", show_exit_item=False)
 
     assert menu1.title == ""

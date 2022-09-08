@@ -116,7 +116,6 @@ sphinx-autodoc-typehints = "^1.19.1"
 coverage = { version = "^6.4.2", extras = ["toml"] }
 pyte = "^0.8.1"
 pexpect = "^4.8.0"
-
 types-Deprecated = "^1.2.9"
 pytest-cov = "^3.0.0"
 mypy = "^0.971"

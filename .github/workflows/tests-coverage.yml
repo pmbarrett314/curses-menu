@@ -26,6 +26,7 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
           cache: 'poetry'
+      - run: poetry --version
       - run: poetry install
       - run: poetry run pytest
       - run: poetry run coverage lcov

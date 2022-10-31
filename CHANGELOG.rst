@@ -1,3 +1,8 @@
+Version 0.6.7
+-------------
+* Test on release python 3.11
+* Fix readme
+
 Version 0.6.5
 -------------
 * Fix bug caused by not having Deprecated as install dependency.

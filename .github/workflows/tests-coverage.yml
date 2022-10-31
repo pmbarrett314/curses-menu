@@ -17,7 +17,7 @@ jobs:
         exclude:
           - os: windows-latest
             python-version: pypy3
-    continue-on-error: ${{ matrix.python-version == '3.11' || matrix.python-version == 'pypy3.9' }}
+    continue-on-error: ${{ matrix.python-version == '3.11' || matrix.python-version == 'pypy3.9' || matrix.os == 'windows-latest' }}
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3

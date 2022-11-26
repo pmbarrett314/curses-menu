@@ -44,6 +44,12 @@ class ItemGroup(MutableSequence[MenuItem]):
         for item in items:
             item.menu = self.menu
 
+    def insert(self, index: int, item: MenuItem) -> None:
+        """Insert an item."""
+        item.menu = self.menu
+        self.items.insert(index, item)
+        self.menu.adjust_screen_size()
+
     @overload
     def __getitem__(self, i: int) -> MenuItem:
         ...
@@ -99,19 +105,13 @@ class ItemGroup(MutableSequence[MenuItem]):
         del self.items[i]
         self.menu.adjust_screen_size()
 
-    def __len__(self) -> int:
-        """Get the number of items in the group."""
-        return len(self.items)
-
-    def insert(self, index: int, item: MenuItem) -> None:
-        """Insert an item."""
-        item.menu = self.menu
-        self.items.insert(index, item)
-        self.menu.adjust_screen_size()
-
     def __iter__(self) -> Iterator[MenuItem]:
         """Get an iterator for the group."""
         return iter(self.items)
+
+    def __len__(self) -> int:
+        """Get the number of items in the group."""
+        return len(self.items)
 
     def __add__(self, other: "ItemGroup") -> "ItemGroup":
         """

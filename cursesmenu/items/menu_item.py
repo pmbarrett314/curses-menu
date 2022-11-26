@@ -32,11 +32,6 @@ class MenuItem:
         self.should_exit = should_exit
         self.override_index = override_index
 
-    def __str__(self) -> str:
-        """Get a basic string representation of the item."""
-        title = self.menu.title if self.menu else ""
-        return f"{title} {self.text}"
-
     def show(self, index_text: str) -> str:
         """
         Provide the representation that should be used for this item in a menu.
@@ -80,3 +75,8 @@ class MenuItem:
         if self.menu:
             return self.menu.returned_value
         return None
+
+    def __str__(self) -> str:
+        """Get a basic string representation of the item."""
+        title = self.menu.title if self.menu else ""
+        return f"{title} {self.text}"

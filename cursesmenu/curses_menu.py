@@ -135,10 +135,6 @@ class CursesMenu:
 
         self._debug_screens = _debug_screens
 
-    def __repr__(self) -> str:
-        """Get a string representation of the menu."""
-        return f"<{self.title}: {self.subtitle}. {len(self.items)} items>"
-
     @classmethod
     def make_selection_menu(
         cls,
@@ -391,6 +387,9 @@ class CursesMenu:
         assert CursesMenu.stdscr is not None
         return CursesMenu.stdscr.getch()
 
+    def _exit(self) -> None:
+        self.should_exit = True
+
     def select(self, _: int = 0) -> None:
         """
         Select the current item.
@@ -412,9 +411,6 @@ class CursesMenu:
 
         if not self.should_exit:
             self.draw()
-
-    def _exit(self) -> None:
-        self.should_exit = True
 
     def go_to(self, user_input: int) -> None:
         """
@@ -545,3 +541,7 @@ class CursesMenu:
     def append_item(self, item: MenuItem) -> None:
         """Append an item to the list of items."""
         self.items.append(item)
+
+    def __repr__(self) -> str:
+        """Get a string representation of the menu."""
+        return f"<{self.title}: {self.subtitle}. {len(self.items)} items>"

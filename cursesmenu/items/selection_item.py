@@ -13,8 +13,9 @@ class SelectionItem(MenuItem):
         self,
         text: str,
         index: int,
-        should_exit: bool = False,
         menu: Optional[CursesMenu] = None,
+        *,
+        should_exit: bool = False,
         override_index: Optional[str] = None,
     ):
         """Initialize the item."""

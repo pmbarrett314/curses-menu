@@ -23,6 +23,7 @@ class MenuItem:
         self,
         text: str,
         menu: Optional[CursesMenu] = None,
+        *,
         should_exit: bool = False,
         override_index: Optional[str] = None,
     ):

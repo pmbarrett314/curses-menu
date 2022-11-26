@@ -36,6 +36,7 @@ class CommandItem(ExternalItem):
         command: str,
         arguments: Optional[List[str]] = None,
         menu: Optional[CursesMenu] = None,
+        *,
         should_exit: bool = False,
         override_index: Optional[str] = None,
         stdout_filepath: Optional[PathType] = None,

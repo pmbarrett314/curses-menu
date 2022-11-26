@@ -18,6 +18,7 @@ class ExitItem(MenuItem):
     def __init__(
         self,
         menu: Optional[CursesMenu] = None,
+        *,
         override_index: Optional[str] = None,
     ):
         """Initialize the exit item."""

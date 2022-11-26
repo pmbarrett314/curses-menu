@@ -141,6 +141,7 @@ class CursesMenu:
         selections: List[str],
         title: str = "",
         subtitle: str = "",
+        *,
         show_exit_item: bool = False,
     ) -> "CursesMenu":
         """
@@ -256,7 +257,7 @@ class CursesMenu:
                 CursesMenu.stdscr = curses.initscr()
                 curses.noecho()
                 curses.cbreak()
-                CursesMenu.stdscr.keypad(True)
+                CursesMenu.stdscr.keypad(True)  # noqa: FBT003
                 # noinspection PyBroadException
                 try:
                     curses.start_color()
@@ -268,7 +269,7 @@ class CursesMenu:
                 # should be None at runtime, so I'm leaving this as an if
                 # as opposed to an assert, but using a pragma for coverage
                 if CursesMenu.stdscr is not None:  # pragma: no branch
-                    CursesMenu.stdscr.keypad(False)
+                    CursesMenu.stdscr.keypad(False)  # noqa: FBT003
                 curses.endwin()
                 curses.echo()
                 curses.nocbreak()

@@ -9,7 +9,7 @@ else:  # pragma: no cover all
 import pytest
 
 # noinspection PyUnresolvedReferences
-import cursesmenu.curses_menu
+import cursesmenu.curses_menu  # noqa: F401
 
 
 @pytest.fixture()

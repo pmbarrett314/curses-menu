@@ -43,6 +43,9 @@ include = '\.pyi?$'
 profile = "black"
 multi_line_output = 3
 
+[tool.ruff]
+extend-exclude=["examples/*"]
+
 [tool.coverage.report]
 exclude_lines = [
     "if __name__ == .__main__.:",

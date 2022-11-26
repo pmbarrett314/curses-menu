@@ -52,6 +52,11 @@ repos:
     hooks:
       - id: flake8
 
+  - repo: https://github.com/charliermarsh/ruff-pre-commit
+    rev: v0.0.139
+    hooks:
+      - id: ruff
+
   - repo: https://github.com/PyCQA/pydocstyle
     rev: 6.1.1
     hooks:

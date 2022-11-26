@@ -47,6 +47,12 @@ repos:
       - id: ssort
         exclude: '^cursesmenu/curses_menu.py$'
 
+#  - repo: https://github.com/asottile/pyupgrade
+#    rev: v3.2.2
+#    hooks:
+#    - id: pyupgrade
+#      args: [--py37-plus]
+
   - repo: https://github.com/PyCQA/flake8
     rev: 6.0.0
     hooks:

@@ -135,7 +135,7 @@ def test_exit(sample_menu: CursesMenu):
 
 def test_basic_menu():
     menu = CursesMenu("Test Menu")
-    menu.get_input = menu._exit
+    menu.get_input = menu._exit_with_return
     menu.show()
 
 
@@ -170,7 +170,7 @@ def test_init():
 def test_null_screens_main_loop():
     menu = CursesMenu("menu", "empty menu", show_exit_item=False)
     CursesMenu.stdscr = None
-    menu.get_input = menu._exit
+    menu.get_input = menu._exit_with_return
     with pytest.raises(Exception):
         menu._main_loop()
 

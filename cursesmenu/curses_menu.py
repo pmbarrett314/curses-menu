@@ -391,6 +391,11 @@ class CursesMenu:
     def _exit(self) -> None:
         self.should_exit = True
 
+    def _exit_with_return(self) -> int:
+        """Identical to _exit, but return in for type checking"""
+        self.should_exit = True
+        return 0
+
     def select(self, _: int = 0) -> None:
         """
         Select the current item.

@@ -87,3 +87,15 @@ repos:
     hooks:
       - id: mypy
         additional_dependencies: [ types-Deprecated ]
+
+  - repo: https://github.com/RobertCraigie/pyright-python
+    rev: v1.1.281
+    hooks:
+      - id: pyright
+        additional_dependencies:
+          - types-Deprecated
+          - pytest
+          - pyte
+          - pexpect
+          - importlib-metadata
+          - deprecated

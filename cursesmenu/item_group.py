@@ -59,7 +59,7 @@ class ItemGroup(MutableSequence[MenuItem]):
         ...
 
     @overload
-    def __getitem__(self, s: slice) -> "ItemGroup":
+    def __getitem__(self, i: slice) -> "ItemGroup":
         ...
 
     def __getitem__(self, i: Union[int, slice]) -> Union[MenuItem, "ItemGroup"]:
@@ -73,7 +73,7 @@ class ItemGroup(MutableSequence[MenuItem]):
         ...
 
     @overload
-    def __setitem__(self, s: slice, items: Iterable[MenuItem]) -> None:
+    def __setitem__(self, i: slice, item: Iterable[MenuItem]) -> None:
         ...
 
     def __setitem__(
@@ -101,7 +101,7 @@ class ItemGroup(MutableSequence[MenuItem]):
         ...
 
     @overload
-    def __delitem__(self, s: slice) -> None:
+    def __delitem__(self, i: slice) -> None:
         ...
 
     def __delitem__(self, i: Union[int, slice]) -> None:

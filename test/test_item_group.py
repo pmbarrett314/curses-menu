@@ -61,8 +61,8 @@ def test_slice_methods(sample_item_list, sample_menu):
 
 def test_eq(sample_item_list):
     assert sample_item_list != 1
-
-    item_list_2 = ItemGroup(None, sample_item_list.items)
+    test_menu = CursesMenu("Test menu", "TestEqSampleMenu")
+    item_list_2 = ItemGroup(test_menu, sample_item_list.items)
     assert sample_item_list != item_list_2
     new_item = MenuItem("Item 6")
     item_list_3 = ItemGroup(

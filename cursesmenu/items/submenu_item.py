@@ -28,7 +28,7 @@ class SubmenuItem(MenuItem):
         *,
         should_exit: bool = False,
         override_index: Optional[str] = None,
-    ):
+    ) -> None:
         """Initialize the item."""
         self._submenu: Optional[CursesMenu] = submenu
         self._menu: Optional[CursesMenu] = menu
@@ -84,7 +84,7 @@ class SubmenuItem(MenuItem):
         self.submenu.clear_screen()
         self.menu.resume()
 
-    def get_return(self) -> Any:
+    def get_return(self) -> Any:  # noqa: ANN401
         """Get the returned value from the submenu."""
         if self.submenu is not None:
             return self.submenu.returned_value

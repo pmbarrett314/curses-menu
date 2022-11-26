@@ -44,11 +44,14 @@ profile = "black"
 multi_line_output = 3
 
 [tool.ruff]
-select = ["E", "F", "I", "N", "S", "C", "FBT", "B", "A", "T", "Q", "YTT", "RUF", "M"]
+select = ["E", "F", "I", "N", "S", "C", "FBT", "B", "A", "T", "Q", "YTT", "RUF", "M", "ANN"]
 #unused: D (pydocstyle), U(pyupgrade), BLE (blind except), ANN (annotations), C(mccabe)
 extend-exclude=["examples/*"]
-extend-ignore = [ "S101" ]
-
+extend-ignore = [ "S101", "ANN101", "ANN102"]
+# S101 (assert used): ignored because we use assert for type narrowing and tests
+# ANN101 (no self annotation): ignored because self annotations feel redundant
+# ANN102 (no cls annotation): ignored because cls annotations also feel redundant
+per-file-ignores={"test/*"=["ANN"]}
 
 
 [tool.coverage.report]

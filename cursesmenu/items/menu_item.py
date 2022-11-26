@@ -26,7 +26,7 @@ class MenuItem:
         *,
         should_exit: bool = False,
         override_index: Optional[str] = None,
-    ):
+    ) -> None:
         """Initialize the menu item."""
         self.text = text
         self.menu = menu
@@ -65,7 +65,7 @@ class MenuItem:
         """Perform cleanup for the item."""
         pass
 
-    def get_return(self) -> Any:
+    def get_return(self) -> Any:  # noqa: ANN401
         """
         Get the return value for this item.
 

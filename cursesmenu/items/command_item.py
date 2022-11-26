@@ -40,8 +40,8 @@ class CommandItem(ExternalItem):
         should_exit: bool = False,
         override_index: Optional[str] = None,
         stdout_filepath: Optional[PathType] = None,
-        **kwargs: Any,
-    ):
+        **kwargs: Any,  # noqa: ANN401
+    ) -> None:
         """Initialize the menu."""
         super(CommandItem, self).__init__(
             text=text,

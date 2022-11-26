@@ -73,7 +73,7 @@ class CursesMenu:
         show_exit_item: bool = True,
         zero_pad: bool = False,
         _debug_screens: bool = False,
-    ):
+    ) -> None:
         """Initialize the menu."""
         self.title = title
         self.subtitle = subtitle
@@ -221,7 +221,7 @@ class CursesMenu:
         if it's shown."""
         return len(self.all_items) - 1
 
-    def show(self) -> Any:
+    def show(self) -> Any:  # noqa: ANN401
         """
         Start the menu and blocks until it finishes.
 
@@ -477,7 +477,7 @@ class CursesMenu:
         self.screen.clear()
         self.refresh_screen()
 
-    def join(self, timeout: Optional[int] = None) -> Any:
+    def join(self, timeout: Optional[int] = None) -> Any:  # noqa: ANN401
         """
         Block until the menu exits.
 
@@ -520,7 +520,7 @@ class CursesMenu:
         """
         return self._main_thread.is_alive()
 
-    def exit(self, timeout: Optional[int] = None) -> Any:  # noqa: A003
+    def exit(self, timeout: Optional[int] = None) -> Any:  # noqa: A003, ANN401
         """
         Signal the menu to exit and block until it does.
 

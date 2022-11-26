@@ -34,7 +34,11 @@ class ItemGroup(MutableSequence[MenuItem]):
     Implements MutableSequence, so should act like a list.
     """
 
-    def __init__(self, menu: CursesMenu, items: Optional[Iterable[MenuItem]] = None):
+    def __init__(
+        self,
+        menu: CursesMenu,
+        items: Optional[Iterable[MenuItem]] = None,
+    ) -> None:
         """Initialize the group."""
         if items is None:
             items = []

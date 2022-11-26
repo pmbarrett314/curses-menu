@@ -20,7 +20,7 @@ class ExitItem(MenuItem):
         menu: Optional[CursesMenu] = None,
         *,
         override_index: Optional[str] = None,
-    ):
+    ) -> None:
         """Initialize the exit item."""
         super(ExitItem, self).__init__(
             text="Exit",

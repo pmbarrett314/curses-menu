@@ -32,7 +32,7 @@ class FunctionItem(ExternalItem):
         *,
         should_exit: bool = False,
         override_index: Optional[str] = None,
-    ):
+    ) -> None:
         """Initialize the item."""
         super(FunctionItem, self).__init__(
             text=text,
@@ -54,7 +54,7 @@ class FunctionItem(ExternalItem):
         """Call the function with the provided arguments."""
         self.return_value = self.function(*self.args, **self.kwargs)
 
-    def get_return(self) -> Any:
+    def get_return(self) -> Any:  # noqa: ANN401
         """
         Get the returned value from the function.
 

@@ -17,7 +17,7 @@ class SelectionItem(MenuItem):
         *,
         should_exit: bool = False,
         override_index: Optional[str] = None,
-    ):
+    ) -> None:
         """Initialize the item."""
         super(SelectionItem, self).__init__(
             text=text,

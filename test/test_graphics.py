@@ -9,6 +9,8 @@ import pyte
 import pytest
 
 TEST_DIR_PATH = pathlib.Path(__file__).parent.absolute()
+BASIC_MENU_PATH = TEST_DIR_PATH.joinpath("example_menus", "basic_menu.py")
+ITEM_MENU_PATH = TEST_DIR_PATH.joinpath("example_menus", "menu_with_items.py")
 
 on_bad_platform = sys.platform.startswith("win") or (
     "PYCHARM_HOSTED" in os.environ and "TOX_WORK_DIR" not in os.environ
@@ -71,7 +73,7 @@ class TestBasicMenu(MenuTester):  # pragma: no-cover-windows
         _,
         rows=10,
         cols=40,
-        filepath=TEST_DIR_PATH.joinpath("example_menus", "basic_menu.py"),
+        filepath=BASIC_MENU_PATH,
     ):
         super(TestBasicMenu, self).su(rows, cols, filepath)
 
@@ -97,7 +99,7 @@ class TestMenuWithItems(MenuTester):  # pragma: no-cover-windows
         method,
         rows=10,
         cols=40,
-        filepath=TEST_DIR_PATH.joinpath("example_menus", "menu_with_items.py"),
+        filepath=ITEM_MENU_PATH,
     ):
         super(TestMenuWithItems, self).su(rows, cols, filepath)
 

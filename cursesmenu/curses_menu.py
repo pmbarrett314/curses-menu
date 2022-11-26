@@ -520,7 +520,7 @@ class CursesMenu:
         """
         return self._main_thread.is_alive()
 
-    def exit(self, timeout: Optional[int] = None) -> Any:
+    def exit(self, timeout: Optional[int] = None) -> Any:  # noqa: A003
         """
         Signal the menu to exit and block until it does.
 

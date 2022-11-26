@@ -44,9 +44,9 @@ profile = "black"
 multi_line_output = 3
 
 [tool.ruff]
-select = ["E", "F", "I", "N", "S", "C", "FBT"]
-#Unused  "FBT", "B", "A", "T", "Q", "ANN", "YTT","RUF","M"
-#unused: D,U BLE C
+select = ["E", "F", "I", "N", "S", "C", "FBT", "B", "A"]
+#Unused  "T", "Q", "ANN", "YTT","RUF","M"
+#unused: D,U BLE
 extend-exclude=["examples/*"]
 extend-ignore = [ "S101" ]
 

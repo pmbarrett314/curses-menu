@@ -44,9 +44,8 @@ profile = "black"
 multi_line_output = 3
 
 [tool.ruff]
-select = ["E", "F", "I", "N", "S", "C", "FBT", "B", "A"]
-#Unused  "T", "Q", "ANN", "YTT","RUF","M"
-#unused: D,U BLE
+select = ["E", "F", "I", "N", "S", "C", "FBT", "B", "A", "T", "Q", "YTT", "RUF", "M"]
+#unused: D (pydocstyle), U(pyupgrade), BLE (blind except), ANN (annotations), C(mccabe)
 extend-exclude=["examples/*"]
 extend-ignore = [ "S101" ]
 

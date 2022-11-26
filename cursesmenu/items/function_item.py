@@ -34,7 +34,7 @@ class FunctionItem(ExternalItem):
         override_index: Optional[str] = None,
     ) -> None:
         """Initialize the item."""
-        super(FunctionItem, self).__init__(
+        super().__init__(
             text=text,
             menu=menu,
             should_exit=should_exit,

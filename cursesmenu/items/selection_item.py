@@ -19,7 +19,7 @@ class SelectionItem(MenuItem):
         override_index: Optional[str] = None,
     ) -> None:
         """Initialize the item."""
-        super(SelectionItem, self).__init__(
+        super().__init__(
             text=text,
             should_exit=should_exit,
             menu=menu,

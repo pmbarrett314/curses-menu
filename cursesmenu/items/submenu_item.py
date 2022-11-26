@@ -34,7 +34,7 @@ class SubmenuItem(MenuItem):
         self._menu: Optional[CursesMenu] = menu
         if self._submenu:
             self._submenu.parent = menu
-        super(SubmenuItem, self).__init__(
+        super().__init__(
             text=text,
             menu=menu,
             should_exit=should_exit,

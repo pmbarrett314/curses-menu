@@ -43,7 +43,7 @@ class CommandItem(ExternalItem):
         **kwargs: Any,  # noqa: ANN401
     ) -> None:
         """Initialize the menu."""
-        super(CommandItem, self).__init__(
+        super().__init__(
             text=text,
             menu=menu,
             should_exit=should_exit,

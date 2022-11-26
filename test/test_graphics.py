@@ -75,7 +75,7 @@ class TestBasicMenu(MenuTester):  # pragma: no-cover-windows
         cols=40,
         filepath=BASIC_MENU_PATH,
     ):
-        super(TestBasicMenu, self).su(rows, cols, filepath)
+        super().su(rows, cols, filepath)
 
     def test_basic_menu(self):
         child = self.spawn_process(self.shell_command, [])
@@ -101,7 +101,7 @@ class TestMenuWithItems(MenuTester):  # pragma: no-cover-windows
         cols=40,
         filepath=ITEM_MENU_PATH,
     ):
-        super(TestMenuWithItems, self).su(rows, cols, filepath)
+        super().su(rows, cols, filepath)
 
     def test_basic_menu(self):
         child = self.spawn_process(self.shell_command, [])

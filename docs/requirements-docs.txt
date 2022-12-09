@@ -2,7 +2,7 @@ alabaster==0.7.12
 appdirs==1.4.4
 attrs==22.1.0
 Babel==2.10.3
-certifi==2022.6.15
+certifi==2022.12.7
 chardet==5.0.0
 charset-normalizer==2.1.0
 Deprecated==1.2.13

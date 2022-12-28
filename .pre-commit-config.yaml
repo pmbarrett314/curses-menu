@@ -21,7 +21,7 @@ repos:
       - id: trailing-whitespace
       - id: check-merge-conflict
   - repo: https://github.com/psf/black
-    rev: 22.10.0
+    rev: 22.12.0
     hooks:
       - id: black
 
@@ -37,7 +37,7 @@ repos:
       - id: rst-inline-touching-normal
 
   - repo: https://github.com/pycqa/isort
-    rev: 5.10.1
+    rev: 5.11.4
     hooks:
       - id: isort
 
@@ -59,7 +59,7 @@ repos:
       - id: flake8
 
   - repo: https://github.com/charliermarsh/ruff-pre-commit
-    rev: v0.0.139
+    rev: v0.0.198
     hooks:
       - id: ruff
 
@@ -72,7 +72,7 @@ repos:
           - pydocstyle[toml]
 
   - repo: https://github.com/asottile/add-trailing-comma
-    rev: v2.3.0
+    rev: v2.4.0
     hooks:
       - id: add-trailing-comma
 
@@ -89,7 +89,7 @@ repos:
         additional_dependencies: [ types-Deprecated ]
 
   - repo: https://github.com/RobertCraigie/pyright-python
-    rev: v1.1.281
+    rev: v1.1.285
     hooks:
       - id: pyright
         additional_dependencies:

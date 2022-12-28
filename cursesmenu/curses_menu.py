@@ -73,7 +73,7 @@ class CursesMenu:
         show_exit_item: bool = True,
         zero_pad: bool = False,
         _debug_screens: bool = False,
-    ):
+    ) -> None:
         """Initialize the menu."""
         self.title = title
         self.subtitle = subtitle
@@ -135,16 +135,13 @@ class CursesMenu:
 
         self._debug_screens = _debug_screens
 
-    def __repr__(self) -> str:
-        """Get a string representation of the menu."""
-        return f"<{self.title}: {self.subtitle}. {len(self.items)} items>"
-
     @classmethod
     def make_selection_menu(
         cls,
         selections: List[str],
         title: str = "",
         subtitle: str = "",
+        *,
         show_exit_item: bool = False,
     ) -> "CursesMenu":
         """
@@ -224,7 +221,7 @@ class CursesMenu:
         if it's shown."""
         return len(self.all_items) - 1
 
-    def show(self) -> Any:
+    def show(self) -> Any:  # noqa: ANN401
         """
         Start the menu and blocks until it finishes.
 
@@ -260,7 +257,7 @@ class CursesMenu:
                 CursesMenu.stdscr = curses.initscr()
                 curses.noecho()
                 curses.cbreak()
-                CursesMenu.stdscr.keypad(True)
+                CursesMenu.stdscr.keypad(True)  # noqa: FBT003
                 # noinspection PyBroadException
                 try:
                     curses.start_color()
@@ -272,7 +269,7 @@ class CursesMenu:
                 # should be None at runtime, so I'm leaving this as an if
                 # as opposed to an assert, but using a pragma for coverage
                 if CursesMenu.stdscr is not None:  # pragma: no branch
-                    CursesMenu.stdscr.keypad(False)
+                    CursesMenu.stdscr.keypad(False)  # noqa: FBT003
                 curses.endwin()
                 curses.echo()
                 curses.nocbreak()
@@ -391,6 +388,14 @@ class CursesMenu:
         assert CursesMenu.stdscr is not None
         return CursesMenu.stdscr.getch()
 
+    def _exit(self) -> None:
+        self.should_exit = True
+
+    def _exit_with_return(self) -> int:
+        """Identical to _exit, but return in for type checking"""
+        self.should_exit = True
+        return 0
+
     def select(self, _: int = 0) -> None:
         """
         Select the current item.
@@ -412,9 +417,6 @@ class CursesMenu:
 
         if not self.should_exit:
             self.draw()
-
-    def _exit(self) -> None:
-        self.should_exit = True
 
     def go_to(self, user_input: int) -> None:
         """
@@ -480,7 +482,7 @@ class CursesMenu:
         self.screen.clear()
         self.refresh_screen()
 
-    def join(self, timeout: Optional[int] = None) -> Any:
+    def join(self, timeout: Optional[int] = None) -> Any:  # noqa: ANN401
         """
         Block until the menu exits.
 
@@ -523,7 +525,7 @@ class CursesMenu:
         """
         return self._main_thread.is_alive()
 
-    def exit(self, timeout: Optional[int] = None) -> Any:
+    def exit(self, timeout: Optional[int] = None) -> Any:  # noqa: A003, ANN401
         """
         Signal the menu to exit and block until it does.
 
@@ -545,3 +547,7 @@ class CursesMenu:
     def append_item(self, item: MenuItem) -> None:
         """Append an item to the list of items."""
         self.items.append(item)
+
+    def __repr__(self) -> str:
+        """Get a string representation of the menu."""
+        return f"<{self.title}: {self.subtitle}. {len(self.items)} items>"

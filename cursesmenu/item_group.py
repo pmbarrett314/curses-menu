@@ -34,7 +34,11 @@ class ItemGroup(MutableSequence[MenuItem]):
     Implements MutableSequence, so should act like a list.
     """
 
-    def __init__(self, menu: CursesMenu, items: Optional[Iterable[MenuItem]] = None):
+    def __init__(
+        self,
+        menu: CursesMenu,
+        items: Optional[Iterable[MenuItem]] = None,
+    ) -> None:
         """Initialize the group."""
         if items is None:
             items = []
@@ -44,12 +48,18 @@ class ItemGroup(MutableSequence[MenuItem]):
         for item in items:
             item.menu = self.menu
 
+    def insert(self, index: int, item: MenuItem) -> None:
+        """Insert an item."""
+        item.menu = self.menu
+        self.items.insert(index, item)
+        self.menu.adjust_screen_size()
+
     @overload
     def __getitem__(self, i: int) -> MenuItem:
         ...
 
     @overload
-    def __getitem__(self, s: slice) -> "ItemGroup":
+    def __getitem__(self, i: slice) -> "ItemGroup":
         ...
 
     def __getitem__(self, i: Union[int, slice]) -> Union[MenuItem, "ItemGroup"]:
@@ -63,7 +73,7 @@ class ItemGroup(MutableSequence[MenuItem]):
         ...
 
     @overload
-    def __setitem__(self, s: slice, items: Iterable[MenuItem]) -> None:
+    def __setitem__(self, i: slice, item: Iterable[MenuItem]) -> None:
         ...
 
     def __setitem__(
@@ -91,7 +101,7 @@ class ItemGroup(MutableSequence[MenuItem]):
         ...
 
     @overload
-    def __delitem__(self, s: slice) -> None:
+    def __delitem__(self, i: slice) -> None:
         ...
 
     def __delitem__(self, i: Union[int, slice]) -> None:
@@ -99,19 +109,13 @@ class ItemGroup(MutableSequence[MenuItem]):
         del self.items[i]
         self.menu.adjust_screen_size()
 
-    def __len__(self) -> int:
-        """Get the number of items in the group."""
-        return len(self.items)
-
-    def insert(self, index: int, item: MenuItem) -> None:
-        """Insert an item."""
-        item.menu = self.menu
-        self.items.insert(index, item)
-        self.menu.adjust_screen_size()
-
     def __iter__(self) -> Iterator[MenuItem]:
         """Get an iterator for the group."""
         return iter(self.items)
+
+    def __len__(self) -> int:
+        """Get the number of items in the group."""
+        return len(self.items)
 
     def __add__(self, other: "ItemGroup") -> "ItemGroup":
         """

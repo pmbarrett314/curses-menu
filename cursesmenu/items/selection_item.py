@@ -13,12 +13,13 @@ class SelectionItem(MenuItem):
         self,
         text: str,
         index: int,
-        should_exit: bool = False,
         menu: Optional[CursesMenu] = None,
+        *,
+        should_exit: bool = False,
         override_index: Optional[str] = None,
-    ):
+    ) -> None:
         """Initialize the item."""
-        super(SelectionItem, self).__init__(
+        super().__init__(
             text=text,
             should_exit=should_exit,
             menu=menu,

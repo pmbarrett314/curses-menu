@@ -27,5 +27,5 @@ def soft_clear_terminal() -> None:
     if sys.platform.startswith("win"):  # pragma: no cover all
         # enables ANSI escape codes to work properly in bare cmd.exe
         os.system("")
-    print(chr(27) + "[2J", end="")
-    print(chr(27) + "[1;1H", end="")
+    print(chr(27) + "[2J", end="")  # noqa: T201
+    print(chr(27) + "[1;1H", end="")  # noqa: T201

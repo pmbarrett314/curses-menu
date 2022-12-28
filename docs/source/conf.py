@@ -22,7 +22,7 @@ sys.path.insert(
 # -- Project information -----------------------------------------------------
 
 project = "curses-menu"
-copyright = "2021, Paul Barrett"
+copyright = "2021, Paul Barrett"  # noqa: A001
 author = "Paul Barrett"
 
 # -- General configuration ---------------------------------------------------

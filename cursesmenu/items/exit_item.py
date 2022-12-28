@@ -18,10 +18,11 @@ class ExitItem(MenuItem):
     def __init__(
         self,
         menu: Optional[CursesMenu] = None,
+        *,
         override_index: Optional[str] = None,
-    ):
+    ) -> None:
         """Initialize the exit item."""
-        super(ExitItem, self).__init__(
+        super().__init__(
             text="Exit",
             menu=menu,
             should_exit=True,
@@ -42,4 +43,4 @@ class ExitItem(MenuItem):
             self.text = "Return to %s menu" % self.menu.parent.title
         else:
             self.text = "Exit"
-        return super(ExitItem, self).show(index_text)
+        return super().show(index_text)

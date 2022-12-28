@@ -247,3 +247,5 @@ screendumps/
 
 coverage.lcov
 /.cov/
+
+.ruff-cache

@@ -1,5 +1,10 @@
 Version 0.6.7
 -------------
+* Update dev dependencies
+* Fix dependabot complaint in test/doc dependency
+
+Version 0.6.7
+-------------
 * Added some more pre-commit checks
 * Update dependencies for security fix in documentation build
 

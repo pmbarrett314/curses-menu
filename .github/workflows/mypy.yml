@@ -4,6 +4,7 @@ on: [push, pull_request]
 
 jobs:
   mypy:
+    name: Type check with mypy
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3

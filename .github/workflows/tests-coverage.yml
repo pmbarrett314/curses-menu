@@ -37,6 +37,7 @@ jobs:
           path-to-lcov: .cov/coverage.lcov
           parallel: true
   finish:
+    name: Upload data to coveralls
     needs: test
     runs-on: ubuntu-latest
     steps:

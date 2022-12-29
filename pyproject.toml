@@ -4,7 +4,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "curses-menu"
-version = "0.6.8"
+version = "0.6.9"
 description = "A simple console menu system using curses"
 authors = ["Paul Barrett <pmbarrett314@gmail.com>"]
 license = "MIT"
@@ -131,17 +131,17 @@ sphinx-autodoc-typehints = "^1.19.1"
 
 [tool.poetry.group.test.dependencies]
 pytest = "^7.1.2"
-tox = "^3.25.1"
-coverage = { version = "^6.4.2", extras = ["toml"] }
+tox = "^4.0.0"
+coverage = { version = "^7.0.0", extras = ["toml"] }
 pyte = "^0.8.1"
 pexpect = "^4.8.0"
 types-Deprecated = "^1.2.9"
 pytest-cov = "^4.0.0"
-coverage-conditional-plugin = "^0.5.0"
+coverage-conditional-plugin = "^0.8.0"
 
 [tool.poetry.group.type]
 
 [tool.poetry.group.type.dependencies]
 types-Deprecated = "^1.2.9"
-mypy = "^0.971"
+mypy = "^0.991"
 pytest = "^7.1.2"

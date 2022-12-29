@@ -143,5 +143,5 @@ coverage-conditional-plugin = "^0.8.0"
 
 [tool.poetry.group.type.dependencies]
 types-Deprecated = "^1.2.9"
-mypy = "^0.971"
+mypy = "^0.991"
 pytest = "^7.1.2"

@@ -32,5 +32,6 @@ build:
 python:
   install:
     - method: pip
+      path: .
       extra_requirements:
         - "Sphinx<=6.0"

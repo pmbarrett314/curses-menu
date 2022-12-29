@@ -1,9 +1,13 @@
-Version 0.6.7
+Version 0.6.10
+-------------
+* Testing automatic deployment
+
+Version 0.6.9
 -------------
 * Update dev dependencies
 * Fix dependabot complaint in test/doc dependency
 
-Version 0.6.7
+Version 0.6.8
 -------------
 * Added some more pre-commit checks
 * Update dependencies for security fix in documentation build

@@ -76,14 +76,15 @@ toml = ["tomli"]
 
 [[package]]
 name = "coverage-conditional-plugin"
-version = "0.5.0"
+version = "0.8.0"
 description = "Conditional coverage based on any rules you define!"
 category = "dev"
 optional = false
-python-versions = ">=3.6,<4.0"
+python-versions = ">=3.7,<4.0"
 
 [package.dependencies]
-coverage = ">=5,<7"
+coverage = ">=5,<8"
+importlib_metadata = {version = "*", markers = "python_version < \"3.10\""}
 packaging = ">=20.4"
 
 [[package]]
@@ -129,15 +130,15 @@ test = ["pytest (>=6)"]
 
 [[package]]
 name = "filelock"
-version = "3.8.2"
+version = "3.9.0"
 description = "A platform independent file lock."
 category = "dev"
 optional = false
 python-versions = ">=3.7"
 
 [package.extras]
-docs = ["furo (>=2022.9.29)", "sphinx (>=5.3)", "sphinx-autodoc-typehints (>=1.19.5)"]
-testing = ["covdefaults (>=2.2.2)", "coverage (>=6.5)", "pytest (>=7.2)", "pytest-cov (>=4)", "pytest-timeout (>=2.1)"]
+docs = ["furo (>=2022.12.7)", "sphinx (>=5.3)", "sphinx-autodoc-typehints (>=1.19.5)"]
+testing = ["covdefaults (>=2.2.2)", "coverage (>=7.0.1)", "pytest (>=7.2)", "pytest-cov (>=4)", "pytest-timeout (>=2.1)"]
 
 [[package]]
 name = "idna"
@@ -250,15 +251,18 @@ ptyprocess = ">=0.5"
 
 [[package]]
 name = "platformdirs"
-version = "2.6.0"
+version = "2.6.2"
 description = "A small Python package for determining appropriate platform-specific dirs, e.g. a \"user data dir\"."
 category = "dev"
 optional = false
 python-versions = ">=3.7"
 
+[package.dependencies]
+typing-extensions = {version = ">=4.4", markers = "python_version < \"3.8\""}
+
 [package.extras]
-docs = ["furo (>=2022.9.29)", "proselint (>=0.13)", "sphinx (>=5.3)", "sphinx-autodoc-typehints (>=1.19.4)"]
-test = ["appdirs (==1.4.4)", "pytest (>=7.2)", "pytest-cov (>=4)", "pytest-mock (>=3.10)"]
+docs = ["furo (>=2022.12.7)", "proselint (>=0.13)", "sphinx (>=5.3)", "sphinx-autodoc-typehints (>=1.19.5)"]
+test = ["appdirs (==1.4.4)", "covdefaults (>=2.2.2)", "pytest (>=7.2)", "pytest-cov (>=4)", "pytest-mock (>=3.10)"]
 
 [[package]]
 name = "pluggy"
@@ -650,7 +654,7 @@ testing = ["flake8 (<5)", "func-timeout", "jaraco.functools", "jaraco.itertools"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "4c7debc4e1d5300a5577bb2f4027b6e24926848f03aa0008e3c8ff23eb7a5a94"
+content-hash = "f5ffc9ce4b535d93e5ca620682dfa53181a31b02508e9807027ff0a4738f37c7"
 
 [metadata.files]
 alabaster = [
@@ -730,8 +734,8 @@ coverage = [
     {file = "coverage-6.5.0.tar.gz", hash = "sha256:f642e90754ee3e06b0e7e51bce3379590e76b7f76b708e1a71ff043f87025c84"},
 ]
 coverage-conditional-plugin = [
-    {file = "coverage-conditional-plugin-0.5.0.tar.gz", hash = "sha256:053af7b38b07131748c6c9548c77895fd8e6b24ac81cb657f337415b64bdd3c1"},
-    {file = "coverage_conditional_plugin-0.5.0-py3-none-any.whl", hash = "sha256:513d65ebafdd16f20455d5b0ac0b72807a12ce16b7937a0d09a1c3e810eea5c2"},
+    {file = "coverage-conditional-plugin-0.8.0.tar.gz", hash = "sha256:e6564944a32ccc962f8c0000ac618efa5f5ff232cb9bcc677ce98546dfa61e6d"},
+    {file = "coverage_conditional_plugin-0.8.0-py3-none-any.whl", hash = "sha256:421079fbf9676c48397dd14254746e5e2656280b87ef83835701dd233053b9cd"},
 ]
 Deprecated = [
     {file = "Deprecated-1.2.13-py2.py3-none-any.whl", hash = "sha256:64756e3e14c8c5eea9795d93c524551432a0be75629f8f29e67ab8caf076c76d"},
@@ -750,8 +754,8 @@ exceptiongroup = [
     {file = "exceptiongroup-1.1.0.tar.gz", hash = "sha256:bcb67d800a4497e1b404c2dd44fca47d3b7a5e5433dbab67f96c1a685cdfdf23"},
 ]
 filelock = [
-    {file = "filelock-3.8.2-py3-none-any.whl", hash = "sha256:8df285554452285f79c035efb0c861eb33a4bcfa5b7a137016e32e6a90f9792c"},
-    {file = "filelock-3.8.2.tar.gz", hash = "sha256:7565f628ea56bfcd8e54e42bdc55da899c85c1abfe1b5bcfd147e9188cebb3b2"},
+    {file = "filelock-3.9.0-py3-none-any.whl", hash = "sha256:f58d535af89bb9ad5cd4df046f741f8553a418c01a7856bf0d173bbc9f6bd16d"},
+    {file = "filelock-3.9.0.tar.gz", hash = "sha256:7b319f24340b51f55a2bf7a12ac0755a9b03e718311dac567a0f4f7fabd2f5de"},
 ]
 idna = [
     {file = "idna-3.4-py3-none-any.whl", hash = "sha256:90b77e79eaa3eba6de819a0c442c0b4ceefc341a7a2ab77d7562bf49f425c5c2"},
@@ -853,8 +857,8 @@ pexpect = [
     {file = "pexpect-4.8.0.tar.gz", hash = "sha256:fc65a43959d153d0114afe13997d439c22823a27cefceb5ff35c2178c6784c0c"},
 ]
 platformdirs = [
-    {file = "platformdirs-2.6.0-py3-none-any.whl", hash = "sha256:1a89a12377800c81983db6be069ec068eee989748799b946cce2a6e80dcc54ca"},
-    {file = "platformdirs-2.6.0.tar.gz", hash = "sha256:b46ffafa316e6b83b47489d240ce17173f123a9b9c83282141c3daf26ad9ac2e"},
+    {file = "platformdirs-2.6.2-py3-none-any.whl", hash = "sha256:83c8f6d04389165de7c9b6f0c682439697887bca0aa2f1c87ef1826be3584490"},
+    {file = "platformdirs-2.6.2.tar.gz", hash = "sha256:e1fea1fe471b9ff8332e229df3cb7de4f53eeea4998d3b6bfff542115e998bd2"},
 ]
 pluggy = [
     {file = "pluggy-1.0.0-py2.py3-none-any.whl", hash = "sha256:74134bbf457f031a36d68416e1509f34bd5ccc019f0bcc952c7b909d06b37bd3"},

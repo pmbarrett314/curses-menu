@@ -27,3 +27,10 @@ build:
       # Install dependencies with 'docs' dependency group
       # https://python-poetry.org/docs/managing-dependencies/#dependency-groups
       - poetry install --with docs
+
+
+python:
+  install:
+    - method: pip
+      extra_requirements:
+        - "Sphinx<=6.0"

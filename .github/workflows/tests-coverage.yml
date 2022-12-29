@@ -46,3 +46,17 @@ jobs:
           github-token: ${{ secrets.github_token }}
           path-to-lcov: .cov/coverage.lcov
           parallel-finished: true
+
+  results:
+    if: ${{ always() }}
+    runs-on: ubuntu-latest
+    name: Final Test Results
+    needs: [ test ]
+    steps:
+      - run: |
+          result="${{ needs.test.result }}"
+          if [[ $result == "success" || $result == "skipped" ]]; then
+            exit 0
+          else
+            exit 1
+          fi

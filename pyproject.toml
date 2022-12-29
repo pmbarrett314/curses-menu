@@ -132,7 +132,7 @@ sphinx-autodoc-typehints = "^1.19.1"
 [tool.poetry.group.test.dependencies]
 pytest = "^7.1.2"
 tox = "^3.25.1"
-coverage = { version = "^6.4.2", extras = ["toml"] }
+coverage = { version = "^7.0.0", extras = ["toml"] }
 pyte = "^0.8.1"
 pexpect = "^4.8.0"
 types-Deprecated = "^1.2.9"

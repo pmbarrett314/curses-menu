@@ -16,7 +16,7 @@ def sample_items():
 
 
 @pytest.fixture
-def sample_menu(sample_items, mock_cursesmenu_curses_vary_window_size):
+def sample_menu(sample_items, mock_cursesmenu_curses_vary_window_size):  # noqa: ARG001
     menu = CursesMenu("menu", "TestSampleMenu")
     menu.items.append(sample_items[0])
     menu.items.append(sample_items[1])
@@ -58,7 +58,7 @@ def test_empty_menu(empty_menu: CursesMenu):
     assert not empty_menu.is_alive()
 
 
-def test_big_menu(big_menu: CursesMenu):
+def test_big_menu(big_menu: CursesMenu):  # noqa: ARG001
     pass
 
 

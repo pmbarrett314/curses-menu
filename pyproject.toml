@@ -44,8 +44,43 @@ profile = "black"
 multi_line_output = 3
 
 [tool.ruff]
-select = ["E", "F", "I", "N", "S", "C", "FBT", "B", "A", "T", "Q", "YTT", "RUF", "ANN", "UP"]
-#unused: D (pydocstyle), BLE (blind except), C(mccabe)
+select =[
+    "F", # pyflakes
+    "E", # pycodestyle
+    "W", # pycodestyle
+    #"C90", # mccabe complexity
+    "I", # isort
+    #"D", # pydocstyle
+    "UP", # pyupgrade
+    "N", # pep8-naming
+    "YTT", # flake8-2020
+    "ANN", # flake8-annotations
+    "S", # flake8-bandit
+    #"BLE", # flake8-blind-except
+    "FBT", # flake8-boolean-trap
+    "B", # flake8-bugbear
+    "A", # flake8-builtins
+    #"C4", # flake8-comprehensions
+    #"T10", # flake8-debugger
+    #"EM",  # flake8-errmsg
+    #"ISC", # flake8-implicit-str-concat
+    #"ICN", # flake8-import-conventions
+    #"T20", # flake8-print
+    "Q", # flake8-quotes
+    #"RET", # flake8-return
+    #"SIM", # flake8-simplify
+    #"TID", # flake8-tidy-imports
+    #"ARG", # flake8-unused-arguments
+    #"DTZ", # flake8-datetimez
+    #"ERA", # eradicate
+    #"PD", # pandas-vet
+    #"PGH", # pygrep-hooks
+    #"PLC", # Pylint
+    #"PLE", # Pylint
+    #"PLR", # Pylint
+    #"PLW", # Pylint
+    #"RUF", # Ruff-specific rules
+    ]
 extend-exclude=["examples/*"]
 extend-ignore = [ "S101", "ANN101", "ANN102", "UP015"]
 # S101 (assert used): ignored because we use assert for type narrowing and tests

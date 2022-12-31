@@ -84,7 +84,7 @@ select =[
     "PLW", # Pylint
     "RUF", # Ruff-specific rules
     ]
-extend-exclude=["examples/*"]
+extend-exclude=["examples/*", "stubs/*"]
 extend-ignore = [ "S101", "ANN101", "ANN102", "UP015", "RET505"]
 # S101 (assert used): ignored because we use assert for type narrowing and tests
 # ANN101 (no self annotation): ignored because self annotations feel redundant

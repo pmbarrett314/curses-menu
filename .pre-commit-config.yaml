@@ -24,7 +24,7 @@ repos:
 
 
   - repo: https://github.com/python-poetry/poetry
-    rev: 1.3.1
+    rev: 1.3.0
     hooks:
       - id: poetry-check
       - id: poetry-lock
@@ -38,9 +38,11 @@ repos:
     rev: v1.9.0
     hooks:
       - id: python-check-blanket-noqa
+      - id: python-check-blanket-type-ignore
       - id: python-check-mock-methods
       - id: python-no-eval
       - id: python-no-log-warn
+      - id: python-use-type-annotations
       - id: rst-backticks
       - id: rst-directive-colons
       - id: rst-inline-touching-normal
@@ -56,11 +58,11 @@ repos:
       - id: ssort
         exclude: '^cursesmenu/curses_menu.py$'
 
-#  - repo: https://github.com/asottile/pyupgrade
-#    rev: v3.2.2
-#    hooks:
-#    - id: pyupgrade
-#      args: [--py37-plus]
+  #  - repo: https://github.com/asottile/pyupgrade
+  #    rev: v3.2.2
+  #    hooks:
+  #    - id: pyupgrade
+  #      args: [--py37-plus]
 
   - repo: https://github.com/PyCQA/flake8
     rev: 6.0.0
@@ -68,7 +70,7 @@ repos:
       - id: flake8
 
   - repo: https://github.com/charliermarsh/ruff-pre-commit
-    rev: v0.0.198
+    rev: v0.0.203
     hooks:
       - id: ruff
 
@@ -98,7 +100,7 @@ repos:
         additional_dependencies: [ types-Deprecated ]
 
   - repo: https://github.com/RobertCraigie/pyright-python
-    rev: v1.1.285
+    rev: v1.1.286
     hooks:
       - id: pyright
         additional_dependencies:

@@ -71,14 +71,17 @@ select =[
     "SIM", # flake8-simplify
     "TID", # flake8-tidy-imports
     "ARG", # flake8-unused-arguments
-    #"DTZ", # flake8-datetimez
-    #"ERA", # eradicate
+    "DTZ", # flake8-datetimez
+    # there shouldn't be datetimes in this repo anyways
+    "ERA", # eradicate
+    # this one passes for now, I'm not committed to leaving it on.
     #"PD", # pandas-vet
-    #"PGH", # pygrep-hooks
-    #"PLC", # Pylint
-    #"PLE", # Pylint
-    #"PLR", # Pylint
-    #"PLW", # Pylint
+    # leaving this one off since it would require an additional dependency to ever matter.
+    "PGH", # pygrep-hooks
+    "PLC", # Pylint
+    "PLE", # Pylint
+    "PLR", # Pylint
+    "PLW", # Pylint
     "RUF", # Ruff-specific rules
     ]
 extend-exclude=["examples/*"]

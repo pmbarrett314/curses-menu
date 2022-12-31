@@ -1,7 +1,7 @@
 import sys
 from unittest import mock
 
-import cursesmenu as cursesmenu
+import cursesmenu
 import cursesmenu.utils
 
 

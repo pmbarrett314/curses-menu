@@ -48,7 +48,7 @@ select =[
     "F", # pyflakes
     "E", # pycodestyle
     "W", # pycodestyle
-    #"C90", # mccabe complexity
+    "C90", # mccabe complexity
     "I", # isort
     #"D", # pydocstyle
     "UP", # pyupgrade
@@ -56,21 +56,21 @@ select =[
     "YTT", # flake8-2020
     "ANN", # flake8-annotations
     "S", # flake8-bandit
-    #"BLE", # flake8-blind-except
+    "BLE", # flake8-blind-except
     "FBT", # flake8-boolean-trap
     "B", # flake8-bugbear
     "A", # flake8-builtins
-    #"C4", # flake8-comprehensions
-    #"T10", # flake8-debugger
-    #"EM",  # flake8-errmsg
-    #"ISC", # flake8-implicit-str-concat
-    #"ICN", # flake8-import-conventions
-    #"T20", # flake8-print
+    "C4", # flake8-comprehensions
+    "T10", # flake8-debugger
+    "EM",  # flake8-errmsg
+    "ISC", # flake8-implicit-str-concat
+    "ICN", # flake8-import-conventions
+    "T20", # flake8-print
     "Q", # flake8-quotes
-    #"RET", # flake8-return
-    #"SIM", # flake8-simplify
-    #"TID", # flake8-tidy-imports
-    #"ARG", # flake8-unused-arguments
+    "RET", # flake8-return
+    "SIM", # flake8-simplify
+    "TID", # flake8-tidy-imports
+    "ARG", # flake8-unused-arguments
     #"DTZ", # flake8-datetimez
     #"ERA", # eradicate
     #"PD", # pandas-vet
@@ -79,15 +79,17 @@ select =[
     #"PLE", # Pylint
     #"PLR", # Pylint
     #"PLW", # Pylint
-    #"RUF", # Ruff-specific rules
+    "RUF", # Ruff-specific rules
     ]
 extend-exclude=["examples/*"]
-extend-ignore = [ "S101", "ANN101", "ANN102", "UP015"]
+extend-ignore = [ "S101", "ANN101", "ANN102", "UP015", "RET505"]
 # S101 (assert used): ignored because we use assert for type narrowing and tests
 # ANN101 (no self annotation): ignored because self annotations feel redundant
 # ANN102 (no cls annotation): ignored because cls annotations also feel redundant
 # U015 (redundant open mode): I like open("foo.txt", "r")
-per-file-ignores={"test/*"=["ANN"]}
+# RET505 (superfluous else return) I disagree with this, I think the explicit else adds clarity.
+# Similar hooks not disabled currently because they don't apply.
+per-file-ignores={"test/*"=["ANN","D"]}
 target-version="py37"
 
 

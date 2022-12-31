@@ -13,7 +13,7 @@ def sample_items():
 
 
 @pytest.fixture
-def sample_menu(sample_items, mock_cursesmenu_curses_vary_window_size):
+def sample_menu(sample_items, mock_cursesmenu_curses_vary_window_size):  # noqa: ARG001
     menu = CursesMenu("menu", "TestSampleMenu")
     menu.items.append(sample_items[0])
     menu.items.append(sample_items[1])

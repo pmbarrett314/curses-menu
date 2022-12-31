@@ -96,7 +96,7 @@ class TestBasicMenu(MenuTester):  # pragma: no-cover-windows
 class TestMenuWithItems(MenuTester):  # pragma: no-cover-windows
     def setup_method(
         self,
-        method,
+        _,
         rows=10,
         cols=40,
         filepath=ITEM_MENU_PATH,

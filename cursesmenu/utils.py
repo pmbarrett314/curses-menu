@@ -7,7 +7,7 @@ from typing import Callable
 
 def null_input_factory() -> Callable[[int], None]:
     """Create a lambda that takes a single input and does nothing."""
-    return lambda input_: None
+    return lambda _: None
 
 
 def clear_terminal() -> None:

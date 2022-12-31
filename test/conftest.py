@@ -1,5 +1,5 @@
 import sys
-import unittest.mock as mock
+from unittest import mock
 
 if not sys.platform.startswith("win"):  # pragma: no cover all
     import curses

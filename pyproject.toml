@@ -156,7 +156,7 @@ strict_concatenate = true
 
 [tool.poetry.dependencies]
 python = "^3.7"
-windows-curses = { version = "2.3.0", platform = "win32" }
+windows-curses = { version = "^2.3.1", platform = "win32" }
 importlib-metadata = { version = ">=1.7.0", python = "<3.8" }
 Deprecated = "^1.2.13"
 

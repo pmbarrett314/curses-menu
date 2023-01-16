@@ -8,7 +8,7 @@ env:
 
 jobs:
   pre-commit:
-    name: Pre-commit
+    name: Various quality checks with pre-commit
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -16,6 +16,8 @@ jobs:
         with:
           python-version: "3.11"
       - uses: pre-commit/action@v3.0.0
+        env:
+          SKIP: "mypy,flake8,ruff,black"
 
   black-format:
     name: Check format with black
@@ -33,6 +35,7 @@ jobs:
           python-version: "3.11"
       - uses: py-actions/flake8@v2
   ruff-lint:
+    name: Lint with ruff
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -59,7 +62,7 @@ jobs:
       - run: poetry run mypy .
 
   test:
-    name: Tests
+    name: Run tests with pytst through poetry
 
     strategy:
       matrix:
@@ -80,15 +83,17 @@ jobs:
       - run: poetry --version
       - run: poetry install
       - run: poetry run pytest
+        name: Run tests
       - run: poetry run coverage lcov
-      - name: Coveralls Parallel
+        name: Generate coverage report for this run
+      - name: Upload coverage report for this run to coveralls
         uses: coverallsapp/github-action@master
         with:
           github-token: ${{ secrets.github_token }}
           path-to-lcov: .cov/coverage.lcov
           parallel: true
   coveralls:
-    name: Upload data to coveralls
+    name: Finalize coveralls data
     needs: test
     runs-on: ubuntu-latest
     steps:
@@ -102,7 +107,7 @@ jobs:
   results:
     if: ${{ always() }}
     runs-on: ubuntu-latest
-    name: Final Test Results
+    name: Status of final test results
     needs: [ test ]
     steps:
       - run: |

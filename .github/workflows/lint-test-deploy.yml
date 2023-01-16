@@ -63,6 +63,12 @@ jobs:
 
   test:
     name: Pytest via poetry
+    needs:
+      - pre-commit
+      - black-format
+      - flake8-lint
+      - ruff-lint
+      - mypy
 
     strategy:
       matrix:

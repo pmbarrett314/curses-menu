@@ -73,7 +73,10 @@ class CommandItem(ExternalItem):
         if self.stdout_filepath:
             with open(self.stdout_filepath, "w") as stdout:
                 completed_process = subprocess.run(
-                    args, shell=True, stdout=stdout, **self.kwargs
+                    args,
+                    shell=True,
+                    stdout=stdout,
+                    **self.kwargs,
                 )
         else:
             completed_process = subprocess.run(args, shell=True, **self.kwargs)

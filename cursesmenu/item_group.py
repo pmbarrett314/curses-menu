@@ -132,7 +132,4 @@ class ItemGroup(MutableSequence[MenuItem]):
             return False
         if len(self) != len(other):
             return False
-        for item1, item2 in zip(self, other):
-            if item1 != item2:
-                return False
-        return True
+        return all(item1 == item2 for item1, item2 in zip(self, other))

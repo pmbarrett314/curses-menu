@@ -62,7 +62,7 @@ repos:
       - id: flake8
 
   - repo: https://github.com/charliermarsh/ruff-pre-commit
-    rev: v0.0.203
+    rev: v0.0.222
     hooks:
       - id: ruff
         args: ["--force-exclude"]

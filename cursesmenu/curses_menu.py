@@ -260,7 +260,7 @@ class CursesMenu:
                 curses.cbreak()
                 CursesMenu.stdscr.keypad(True)  # noqa: FBT003
                 # noinspection PyBroadException
-                try:
+                try:  # noqa: SIM105
                     curses.start_color()
                 except:  # noqa: E722 # pragma: no cover all
                     pass

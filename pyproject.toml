@@ -85,14 +85,17 @@ select =[
     "RUF", # Ruff-specific rules
     ]
 extend-exclude=["examples/*", "stubs/*"]
-extend-ignore = [ "S101", "ANN101", "ANN102", "UP015", "RET505"]
+extend-ignore = [ "S101", "ANN101", "ANN102", "UP015", "RET505", "PLR2004"]
 # S101 (assert used): ignored because we use assert for type narrowing and tests
 # ANN101 (no self annotation): ignored because self annotations feel redundant
 # ANN102 (no cls annotation): ignored because cls annotations also feel redundant
 # U015 (redundant open mode): I like open("foo.txt", "r")
 # RET505 (superfluous else return) I disagree with this, I think the explicit else adds clarity.
 # Similar hooks not disabled currently because they don't apply.
-per-file-ignores={"test/*"=["ANN","D"]}
+# PLR2004 interesting ideas about magic constants, but a little too aggressive
+per-file-ignores={"test/*"=["ANN","D"],"test/conftest.py"=["SIM117"]}
+# Don't be pedantic about types and documentation in tests.
+# conftest.py has some nested withs for clarity, don't complain about that.
 target-version="py37"
 
 

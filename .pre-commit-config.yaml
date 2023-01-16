@@ -27,7 +27,7 @@ repos:
       - id: black
 
   - repo: https://github.com/pre-commit/pygrep-hooks
-    rev: v1.9.0
+    rev: v1.10.0
     hooks:
       - id: python-check-blanket-noqa
       - id: python-check-blanket-type-ignore
@@ -68,7 +68,7 @@ repos:
         args: ["--force-exclude"]
 
   - repo: https://github.com/PyCQA/pydocstyle
-    rev: 6.1.1
+    rev: 6.2.3
     hooks:
       - id: pydocstyle
         additional_dependencies:
@@ -93,7 +93,7 @@ repos:
         additional_dependencies: [ types-Deprecated ]
 
   - repo: https://github.com/RobertCraigie/pyright-python
-    rev: v1.1.286
+    rev: v1.1.289
     hooks:
       - id: pyright
         additional_dependencies:

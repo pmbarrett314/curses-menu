@@ -4,6 +4,7 @@ import atexit
 import curses
 import os
 import pathlib
+import shutil
 import threading
 import time
 from collections import defaultdict
@@ -273,7 +274,10 @@ class CursesMenu:
                 curses.endwin()
                 curses.echo()
                 curses.nocbreak()
-                os.system("stty echo")
+                if (
+                    shutil.which("[") is not None and shutil.which("stty") is not None
+                ):  # pragma: no cover all
+                    os.system("[ -t 0 ] && stty echo")
         else:
             self._main_loop()
 

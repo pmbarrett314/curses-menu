@@ -4,7 +4,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "curses-menu"
-version = "0.6.10"
+version = "0.6.11"
 description = "A simple console menu system using curses"
 authors = ["Paul Barrett <pmbarrett314@gmail.com>"]
 license = "MIT"

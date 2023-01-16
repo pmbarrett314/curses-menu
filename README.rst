@@ -17,7 +17,7 @@ http://curses-menu.readthedocs.org/en/latest/
 Installation
 ~~~~~~~~~~~~
 
-Tested on Python 2.7, 3.3, 3.4, and 3.5, as well as pypy and pypy 3. Probably works on 2.6 as well.
+Tested on Python 3.7+ pypy and pypy3.
 
 The curses library comes bundled with python on Linux and MacOS. Windows
 users can visit http://www.lfd.uci.edu/~gohlke/pythonlibs/#curses and
@@ -36,39 +36,33 @@ It’s designed to be pretty simple to use. Here’s an example
 
 .. code:: python
 
-    # Import the necessary packages
-    from cursesmenu import *
-    from cursesmenu.items import *
+    menu = CursesMenu("Root Menu", "Root Menu Subtitle")
+    item1 = MenuItem("Basic item that does nothing", menu)
+    function_item = FunctionItem("FunctionItem, get input", input, ["Enter an input: "])
+    print(__file__)
+    command_item = CommandItem(
+        "CommandItem that opens another menu",
+        f"python {__file__}",
+    )
 
-    # Create the menu
-    menu = CursesMenu("Title", "Subtitle")
+    submenu = CursesMenu.make_selection_menu([f"item{x}" for x in range(1, 20)])
+    submenu_item = SubmenuItem("Long Selection SubMenu", submenu=submenu, menu=menu)
 
-    # Create some items
+    submenu_2 = CursesMenu("Submenu Title", "Submenu subtitle")
+    function_item_2 = FunctionItem("Fun item", input, ["Enter an input"])
+    item2 = MenuItem("Another Item")
+    submenu_2.items.append(function_item_2)
+    submenu_2.items.append(item2)
+    submenu_item_2 = SubmenuItem("Short Submenu", submenu=submenu_2, menu=menu)
 
-    # MenuItem is the base class for all items, it doesn't do anything when selected
-    menu_item = MenuItem("Menu Item")
-
-    # A FunctionItem runs a Python function when selected
-    function_item = FunctionItem("Call a Python function", input, ["Enter an input"])
-
-    # A CommandItem runs a console command
-    command_item = CommandItem("Run a console command", "touch hello.txt")
-
-    # A SelectionMenu constructs a menu from a list of strings
-    selection_menu = SelectionMenu(["item1", "item2", "item3"])
-
-    # A SubmenuItem lets you add a menu (the selection_menu above, for example)
-    # as a submenu of another menu
-    submenu_item = SubmenuItem("Submenu item", selection_menu, menu)
-
-    # Once we're done creating them, we just add the items to the menu
-    menu.items.append(menu_item)
+    menu.items.append(item1)
     menu.items.append(function_item)
     menu.items.append(command_item)
     menu.items.append(submenu_item)
+    menu.items.append(submenu_item_2)
 
-    # Finally, we call show to show the menu and allow the user to interact
-    menu.show()
+    menu.start()
+    _ = menu.join()
 
 Testing Information
 -------------------

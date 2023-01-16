@@ -23,19 +23,15 @@ class MenuItem:
         self,
         text: str,
         menu: Optional[CursesMenu] = None,
+        *,
         should_exit: bool = False,
         override_index: Optional[str] = None,
-    ):
+    ) -> None:
         """Initialize the menu item."""
         self.text = text
         self.menu = menu
         self.should_exit = should_exit
         self.override_index = override_index
-
-    def __str__(self) -> str:
-        """Get a basic string representation of the item."""
-        title = self.menu.title if self.menu else ""
-        return f"{title} {self.text}"
 
     def show(self, index_text: str) -> str:
         """
@@ -52,7 +48,6 @@ class MenuItem:
 
     def set_up(self) -> None:
         """Perform setup for the item."""
-        pass
 
     def action(self) -> None:
         """
@@ -63,13 +58,11 @@ class MenuItem:
         hierarchies where the superclass handles some setup and cleanup for its
         subclasses.
         """
-        pass
 
     def clean_up(self) -> None:
         """Perform cleanup for the item."""
-        pass
 
-    def get_return(self) -> Any:
+    def get_return(self) -> Any:  # noqa: ANN401
         """
         Get the return value for this item.
 
@@ -80,3 +73,8 @@ class MenuItem:
         if self.menu:
             return self.menu.returned_value
         return None
+
+    def __str__(self) -> str:
+        """Get a basic string representation of the item."""
+        title = self.menu.title if self.menu else ""
+        return f"{title} {self.text}"

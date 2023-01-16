@@ -14,7 +14,7 @@ pytestmark = pytest.mark.usefixtures(
 test_file_path = pathlib.Path("test.txt")
 
 
-@pytest.fixture
+@pytest.fixture()
 def create_item():
     return CommandItem(
         "create_item",
@@ -24,17 +24,17 @@ def create_item():
     )
 
 
-@pytest.fixture
+@pytest.fixture()
 def delete_item():
     if sys.platform.startswith(
         "win",
-    ):  # pragma: no cover macos # pragma: no cover linux
+    ):  # pragma: no-cover-nonwindows
         return CommandItem("delete_item", "del", arguments=[str(test_file_path)])
-    else:  # pragma: no cover windows
+    else:  # pragma: no-cover-windows
         return CommandItem("delete_item", "rm", arguments=["-f", str(test_file_path)])
 
 
-@pytest.fixture
+@pytest.fixture()
 def exit_item():
     return CommandItem("return_command_item", "exit", arguments=["42"])
 
@@ -45,9 +45,9 @@ def test_init():
     assert item1._get_args_list() == ["exit"]
     if sys.platform.startswith(
         "win",
-    ):  # pragma: no cover macos # pragma: no cover linux
+    ):  # pragma: no-cover-nonwindows
         assert item2._get_args_list() == ["echo", "hello"]
-    else:  # pragma: no cover windows
+    else:  # pragma: no-cover-windows
         assert item2._get_args_list() == ["echo hello"]
 
 

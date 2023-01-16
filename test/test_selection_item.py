@@ -4,9 +4,9 @@ import pytest
 from cursesmenu.items.selection_item import SelectionItem
 
 
-@pytest.fixture
+@pytest.fixture()
 def selection_item():
-    yield SelectionItem("item", 1)
+    return SelectionItem("item", 1)
 
 
 def test_selection_item(selection_item: SelectionItem):

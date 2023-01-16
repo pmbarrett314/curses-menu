@@ -7,7 +7,7 @@ from typing import Callable
 
 def null_input_factory() -> Callable[[int], None]:
     """Create a lambda that takes a single input and does nothing."""
-    return lambda input_: None
+    return lambda _: None
 
 
 def clear_terminal() -> None:
@@ -27,5 +27,5 @@ def soft_clear_terminal() -> None:
     if sys.platform.startswith("win"):  # pragma: no cover all
         # enables ANSI escape codes to work properly in bare cmd.exe
         os.system("")
-    print(chr(27) + "[2J", end="")
-    print(chr(27) + "[1;1H", end="")
+    print(chr(27) + "[2J", end="")  # noqa: T201
+    print(chr(27) + "[1;1H", end="")  # noqa: T201

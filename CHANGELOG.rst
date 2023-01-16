@@ -1,3 +1,31 @@
+Version 0.6.11
+-------------
+* Fix issue with calling stty
+* Various dependency and testing updates
+
+Version 0.6.10
+-------------
+* Testing automatic deployment
+
+Version 0.6.9
+-------------
+* Update dev dependencies
+* Fix dependabot complaint in test/doc dependency
+
+Version 0.6.8
+-------------
+* Added some more pre-commit checks
+* Update dependencies for security fix in documentation build
+
+Version 0.6.7
+-------------
+* Test on release python 3.11
+* Fix readme
+
+Version 0.6.5
+-------------
+* Fix bug caused by not having Deprecated as install dependency.
+
 Version 0.6.5
 -------------
 

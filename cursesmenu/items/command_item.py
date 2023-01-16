@@ -36,13 +36,14 @@ class CommandItem(ExternalItem):
         command: str,
         arguments: Optional[List[str]] = None,
         menu: Optional[CursesMenu] = None,
+        *,
         should_exit: bool = False,
         override_index: Optional[str] = None,
         stdout_filepath: Optional[PathType] = None,
-        **kwargs: Any,
-    ):
+        **kwargs: Any,  # noqa: ANN401
+    ) -> None:
         """Initialize the menu."""
-        super(CommandItem, self).__init__(
+        super().__init__(
             text=text,
             menu=menu,
             should_exit=should_exit,
@@ -60,9 +61,9 @@ class CommandItem(ExternalItem):
 
     def _get_args_list(self) -> List[str]:
         args = [self.command] + self.arguments
-        if not sys.platform.startswith("win"):  # pragma: no cover windows
+        if not sys.platform.startswith("win"):  # pragma: no-cover-windows
             return [" ".join(args)]
-        else:  # pragma: no cover macos # pragma: no cover linux
+        else:  # pragma: no-cover-nonwindows
             return args
 
     def action(self) -> None:
@@ -72,7 +73,10 @@ class CommandItem(ExternalItem):
         if self.stdout_filepath:
             with open(self.stdout_filepath, "w") as stdout:
                 completed_process = subprocess.run(
-                    args, shell=True, stdout=stdout, **self.kwargs
+                    args,
+                    shell=True,
+                    stdout=stdout,
+                    **self.kwargs,
                 )
         else:
             completed_process = subprocess.run(args, shell=True, **self.kwargs)

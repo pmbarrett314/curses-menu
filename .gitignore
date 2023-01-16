@@ -246,3 +246,6 @@ fabric.properties
 screendumps/
 
 coverage.lcov
+/.cov/
+
+.ruff-cache

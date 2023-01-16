@@ -1,7 +1,7 @@
 import os
 import pathlib
 import sys
-from typing import List
+from typing import Generator, List
 
 import pexpect
 import pexpect.popen_spawn
@@ -9,6 +9,8 @@ import pyte
 import pytest
 
 TEST_DIR_PATH = pathlib.Path(__file__).parent.absolute()
+BASIC_MENU_PATH = TEST_DIR_PATH.joinpath("example_menus", "basic_menu.py")
+ITEM_MENU_PATH = TEST_DIR_PATH.joinpath("example_menus", "menu_with_items.py")
 
 on_bad_platform = sys.platform.startswith("win") or (
     "PYCHARM_HOSTED" in os.environ and "TOX_WORK_DIR" not in os.environ
@@ -19,7 +21,7 @@ on_bad_platform = sys.platform.startswith("win") or (
     on_bad_platform,
     reason="Screen capture doesn't work on Windows",
 )
-class MenuTester:
+class MenuTester:  # pragma: no-cover-windows
     def su(self, rows: int, cols: int, filepath: pathlib.Path):
         self.rows = rows
         self.cols = cols
@@ -50,12 +52,12 @@ class MenuTester:
             cmd = "{} {}".format(cmd, " ".join(args))
             return pexpect.popen_spawn.PopenSpawn(cmd, encoding="utf-8", env=env)
 
-    def emulate_ansi_terminal(self, raw_output: str, clean=True):
+    def emulate_ansi_terminal(self, raw_output: str, *, clean=True):
         if raw_output in [pexpect.EOF, pexpect.TIMEOUT]:  # pragma: no cover all
             return ""
         self.stream.feed(raw_output)
 
-        lines = self.screen.display
+        lines: List[str] | Generator[str, None, None] = self.screen.display
         self.screen.reset()
 
         if clean:  # pragma: no cover all
@@ -65,15 +67,15 @@ class MenuTester:
         return "\n".join(lines) + "\n"
 
 
-class TestBasicMenu(MenuTester):
+class TestBasicMenu(MenuTester):  # pragma: no-cover-windows
     def setup_method(
         self,
         _,
         rows=10,
         cols=40,
-        filepath=TEST_DIR_PATH.joinpath("example_menus", "basic_menu.py"),
+        filepath=BASIC_MENU_PATH,
     ):
-        super(TestBasicMenu, self).su(rows, cols, filepath)
+        super().su(rows, cols, filepath)
 
     def test_basic_menu(self):
         child = self.spawn_process(self.shell_command, [])
@@ -91,15 +93,15 @@ class TestBasicMenu(MenuTester):
         child.expect(pexpect.EOF, timeout=5)
 
 
-class TestMenuWithItems(MenuTester):
+class TestMenuWithItems(MenuTester):  # pragma: no-cover-windows
     def setup_method(
         self,
-        method,
+        _,
         rows=10,
         cols=40,
-        filepath=TEST_DIR_PATH.joinpath("example_menus", "menu_with_items.py"),
+        filepath=ITEM_MENU_PATH,
     ):
-        super(TestMenuWithItems, self).su(rows, cols, filepath)
+        super().su(rows, cols, filepath)
 
     def test_basic_menu(self):
         child = self.spawn_process(self.shell_command, [])

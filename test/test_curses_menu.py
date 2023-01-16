@@ -8,15 +8,15 @@ from cursesmenu.items import ExitItem, MenuItem
 pytestmark = pytest.mark.usefixtures("mock_cursesmenu_curses", "mock_clear")
 
 
-@pytest.fixture
+@pytest.fixture()
 def sample_items():
     item0 = MenuItem("item0")
     item1 = MenuItem("item1")
     return [item0, item1]
 
 
-@pytest.fixture
-def sample_menu(sample_items, mock_cursesmenu_curses_vary_window_size):
+@pytest.fixture()
+def sample_menu(sample_items, mock_cursesmenu_curses_vary_window_size):  # noqa: ARG001
     menu = CursesMenu("menu", "TestSampleMenu")
     menu.items.append(sample_items[0])
     menu.items.append(sample_items[1])
@@ -27,7 +27,7 @@ def sample_menu(sample_items, mock_cursesmenu_curses_vary_window_size):
     menu.join(timeout=10)
 
 
-@pytest.fixture
+@pytest.fixture()
 def empty_menu():
     menu = CursesMenu("menu", "empty menu", show_exit_item=False)
     menu.start()
@@ -37,7 +37,7 @@ def empty_menu():
     menu.join(timeout=10)
 
 
-@pytest.fixture
+@pytest.fixture()
 def big_menu():
     menu = CursesMenu("Test Menu")
     for i in range(100):
@@ -58,7 +58,7 @@ def test_empty_menu(empty_menu: CursesMenu):
     assert not empty_menu.is_alive()
 
 
-def test_big_menu(big_menu: CursesMenu):
+def test_big_menu(big_menu: CursesMenu):  # noqa: ARG001
     pass
 
 
@@ -135,7 +135,7 @@ def test_exit(sample_menu: CursesMenu):
 
 def test_basic_menu():
     menu = CursesMenu("Test Menu")
-    menu.get_input = menu._exit
+    menu.get_input = menu._exit_with_return
     menu.show()
 
 
@@ -155,7 +155,7 @@ def test_append_while_running(sample_menu: CursesMenu):
 
 def test_init():
     menu1 = CursesMenu()
-    menu2 = CursesMenu("menu2", "test_init", True)
+    menu2 = CursesMenu("menu2", "test_init", show_exit_item=True)
     menu3 = CursesMenu(title="menu3", subtitle="test_init", show_exit_item=False)
 
     assert menu1.title == ""
@@ -170,8 +170,8 @@ def test_init():
 def test_null_screens_main_loop():
     menu = CursesMenu("menu", "empty menu", show_exit_item=False)
     CursesMenu.stdscr = None
-    menu.get_input = menu._exit
-    with pytest.raises(Exception):
+    menu.get_input = menu._exit_with_return
+    with pytest.raises((AttributeError, AssertionError)):
         menu._main_loop()
 
 

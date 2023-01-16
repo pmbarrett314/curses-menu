@@ -1,8 +1,8 @@
 import sys
 
-if sys.version_info[:2] >= (3, 8):  # pragma: no cover all
+if sys.version_info[:2] >= (3, 8):  # pragma: py-lt-38
     from importlib import metadata
-else:  # pragma: no cover all
+else:  # pragma: py-gte-38
     import importlib_metadata as metadata
 
 from . import items

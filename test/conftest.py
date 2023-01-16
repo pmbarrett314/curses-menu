@@ -57,12 +57,12 @@ def mock_curses_(rows, cols):
     return f
 
 
-@pytest.fixture
+@pytest.fixture()
 def mock_curses_window_size(window_rows, window_cols):
     return mock_curses_(window_rows, window_cols)
 
 
-@pytest.fixture
+@pytest.fixture()
 def mock_curses():
     return mock_curses_(99999999, 99999999)
 

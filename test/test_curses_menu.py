@@ -8,14 +8,14 @@ from cursesmenu.items import ExitItem, MenuItem
 pytestmark = pytest.mark.usefixtures("mock_cursesmenu_curses", "mock_clear")
 
 
-@pytest.fixture
+@pytest.fixture()
 def sample_items():
     item0 = MenuItem("item0")
     item1 = MenuItem("item1")
     return [item0, item1]
 
 
-@pytest.fixture
+@pytest.fixture()
 def sample_menu(sample_items, mock_cursesmenu_curses_vary_window_size):  # noqa: ARG001
     menu = CursesMenu("menu", "TestSampleMenu")
     menu.items.append(sample_items[0])
@@ -27,7 +27,7 @@ def sample_menu(sample_items, mock_cursesmenu_curses_vary_window_size):  # noqa:
     menu.join(timeout=10)
 
 
-@pytest.fixture
+@pytest.fixture()
 def empty_menu():
     menu = CursesMenu("menu", "empty menu", show_exit_item=False)
     menu.start()
@@ -37,7 +37,7 @@ def empty_menu():
     menu.join(timeout=10)
 
 
-@pytest.fixture
+@pytest.fixture()
 def big_menu():
     menu = CursesMenu("Test Menu")
     for i in range(100):
@@ -171,7 +171,7 @@ def test_null_screens_main_loop():
     menu = CursesMenu("menu", "empty menu", show_exit_item=False)
     CursesMenu.stdscr = None
     menu.get_input = menu._exit_with_return
-    with pytest.raises(Exception):
+    with pytest.raises((AttributeError, AssertionError)):
         menu._main_loop()
 
 

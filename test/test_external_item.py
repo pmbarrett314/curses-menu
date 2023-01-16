@@ -10,14 +10,14 @@ pytestmark = pytest.mark.usefixtures(
 )
 
 
-@pytest.fixture
+@pytest.fixture()
 def external_items():
     item0 = ExternalItem("item0", should_exit=True)
     item1 = ExternalItem("item1", should_exit=True)
     return [item0, item1]
 
 
-@pytest.fixture
+@pytest.fixture()
 def menu_with_external_items(external_items):
     menu = CursesMenu("menu", "Test External Items")
     menu.items.append(external_items[0])

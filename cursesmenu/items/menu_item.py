@@ -48,7 +48,6 @@ class MenuItem:
 
     def set_up(self) -> None:
         """Perform setup for the item."""
-        pass
 
     def action(self) -> None:
         """
@@ -59,11 +58,9 @@ class MenuItem:
         hierarchies where the superclass handles some setup and cleanup for its
         subclasses.
         """
-        pass
 
     def clean_up(self) -> None:
         """Perform cleanup for the item."""
-        pass
 
     def get_return(self) -> Any:  # noqa: ANN401
         """

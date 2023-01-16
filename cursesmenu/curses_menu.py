@@ -350,7 +350,8 @@ class CursesMenu:
                 index_text = index_text.zfill(pad_width)
 
         text_style = self.highlight if self.current_option == index else self.normal
-        assert self.screen is not None and text_style is not None
+        assert self.screen is not None
+        assert text_style is not None
 
         self.screen.addstr(
             MIN_SIZE - 1 + index,

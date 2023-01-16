@@ -128,8 +128,10 @@ jobs:
       - pre-commit
       - black-format
       - flake8-lint
+      - ruff-lint
       - mypy
       - test
+
     steps:
       - uses: actions/checkout@v3
       - run: pipx install poetry

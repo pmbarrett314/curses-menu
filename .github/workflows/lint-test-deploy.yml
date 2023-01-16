@@ -62,7 +62,7 @@ jobs:
       - run: poetry run mypy .
 
   test:
-    name: Run tests with pytst through poetry
+    name: Pytest via poetry
 
     strategy:
       matrix:

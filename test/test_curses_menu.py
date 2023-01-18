@@ -41,7 +41,7 @@ def empty_menu():
 def big_menu():
     menu = CursesMenu("Test Menu")
     for i in range(100):
-        menu.items.append(MenuItem("item{}".format(i), should_exit=True))
+        menu.items.append(MenuItem(f"item{i}", should_exit=True))
     menu.start()
     menu.wait_for_start(timeout=10)
     yield menu

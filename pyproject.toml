@@ -58,7 +58,7 @@ extend-ignore = ["D", "PD", "S101", "ANN101", "ANN102", "UP015", "RET505", "PLR2
 # RET505 (superfluous else return) I disagree with this, I think the explicit else adds clarity.
 # Similar hooks not disabled currently because they don't apply.
 # PLR2004 interesting ideas about magic constants, but a little too aggressive
-per-file-ignores={"test/*"=["ANN","D"],"test/conftest.py"=["SIM117"]}
+per-file-ignores={"test/*"=["ANN","D"],"test/conftest.py"=["SIM117"],"docs/*"=["INP001"]}
 # Don't be pedantic about types and documentation in tests.
 # conftest.py has some nested withs for clarity, don't complain about that.
 target-version="py37"

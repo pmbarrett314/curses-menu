@@ -1,4 +1,8 @@
-on: [ push, pull_request ]
+on:
+  push:
+    branches: [master, develop]
+  pull_request:
+  workflow-dispatch:
 
 name: Tests
 
@@ -17,7 +21,7 @@ jobs:
           python-version: "3.11"
       - uses: pre-commit/action@v3.0.0
         env:
-          SKIP: "mypy,flake8,ruff,black"
+          SKIP: "mypy,flake8,ruff,black,poetry-lock"
 
   black-format:
     name: Check format with black

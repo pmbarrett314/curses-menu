@@ -61,7 +61,7 @@ def test_create(create_item: CommandItem, delete_item: CommandItem):
     create_item.action()
     assert create_item.get_return() == 0
     assert test_file_path.is_file()
-    with open(test_file_path, "r") as f:
+    with test_file_path.open("r") as f:
         assert f.read().strip() == "hello"
     delete_item.action()
     assert delete_item.get_return() == 0

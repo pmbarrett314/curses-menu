@@ -1,9 +1,14 @@
 """Item that exits a menu or returns to the menu's parent."""
 
-from typing import Optional
+from __future__ import annotations
 
-from cursesmenu.curses_menu import CursesMenu
+from typing import TYPE_CHECKING
+
 from cursesmenu.items.menu_item import MenuItem
+
+if TYPE_CHECKING:
+
+    from cursesmenu.curses_menu import CursesMenu
 
 
 class ExitItem(MenuItem):
@@ -17,9 +22,9 @@ class ExitItem(MenuItem):
 
     def __init__(
         self,
-        menu: Optional[CursesMenu] = None,
+        menu: CursesMenu | None = None,
         *,
-        override_index: Optional[str] = None,
+        override_index: str | None = None,
     ) -> None:
         """Initialize the exit item."""
         super().__init__(

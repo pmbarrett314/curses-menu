@@ -4,12 +4,17 @@ A parser for the format of menu that this library started out as.
 Kept around for compatibility, and because it's a nice format for simple menus.
 """
 
+from __future__ import annotations
+
 from enum import Enum
-from typing import Any, Dict
+from typing import TYPE_CHECKING
 
 from cursesmenu import CursesMenu
 from cursesmenu.items import CommandItem, ExitItem, FunctionItem, SubmenuItem
 from cursesmenu.items.selection_item import SelectionItem
+
+if TYPE_CHECKING:
+    from typing import Any
 
 
 class MenuItemType(Enum):
@@ -22,7 +27,7 @@ class MenuItemType(Enum):
     NUMBER = "number"
 
 
-def parse_old_menu(menu_data: Dict[str, Any]) -> CursesMenu:
+def parse_old_menu(menu_data: dict[str, Any]) -> CursesMenu:
     """
     Take an old-style menuData dictionary and return a CursesMenu.
 

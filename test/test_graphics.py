@@ -1,12 +1,17 @@
+from __future__ import annotations
+
 import os
 import pathlib
 import sys
-from typing import Generator, List
+from typing import TYPE_CHECKING
 
 import pexpect
 import pexpect.popen_spawn
 import pyte
 import pytest
+
+if TYPE_CHECKING:
+    from typing import Generator
 
 TEST_DIR_PATH = pathlib.Path(__file__).parent.absolute()
 BASIC_MENU_PATH = TEST_DIR_PATH.joinpath("example_menus", "basic_menu.py")
@@ -34,7 +39,7 @@ class MenuTester:  # pragma: no-cover-windows
     def bottom_row(self):
         return "m" + ("q" * (self.cols - 2)) + "j"
 
-    def spawn_process(self, cmd: str, args: List[str]):
+    def spawn_process(self, cmd: str, args: list[str]):
         env = os.environ.copy()
         env.update({"LINES": str(self.rows), "COLUMNS": str(self.cols)})
         if not sys.platform.startswith("win32"):
@@ -57,7 +62,7 @@ class MenuTester:  # pragma: no-cover-windows
             return ""
         self.stream.feed(raw_output)
 
-        lines: List[str] | Generator[str, None, None] = self.screen.display
+        lines: list[str] | Generator[str, None, None] = self.screen.display
         self.screen.reset()
 
         if clean:  # pragma: no cover all

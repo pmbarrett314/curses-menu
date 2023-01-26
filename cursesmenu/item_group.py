@@ -1,17 +1,9 @@
 """A group of items that belong to a CursesMenu."""
 
+from __future__ import annotations
+
 import sys
-from typing import (
-    TYPE_CHECKING,
-    Any,
-    Iterable,
-    Iterator,
-    List,
-    Optional,
-    Union,
-    cast,
-    overload,
-)
+from typing import TYPE_CHECKING, Any, Iterable, cast, overload  # noqa: TCH003
 
 if sys.version_info >= (3, 9):  # pragma: py-lt-39
     from collections.abc import MutableSequence
@@ -19,6 +11,8 @@ else:  # pragma: py-gte-39
     from typing import MutableSequence
 
 if TYPE_CHECKING:
+    from typing import Iterator, Union
+
     from cursesmenu.curses_menu import CursesMenu
     from cursesmenu.items.menu_item import MenuItem
 else:
@@ -37,12 +31,12 @@ class ItemGroup(MutableSequence[MenuItem]):
     def __init__(
         self,
         menu: CursesMenu,
-        items: Optional[Iterable[MenuItem]] = None,
+        items: Iterable[MenuItem] | None = None,
     ) -> None:
         """Initialize the group."""
         if items is None:
             items = []
-        self.items: List[MenuItem] = list(items)
+        self.items: list[MenuItem] = list(items)
         self.menu = menu
 
         for item in items:
@@ -62,7 +56,7 @@ class ItemGroup(MutableSequence[MenuItem]):
     def __getitem__(self, i: slice) -> "ItemGroup":
         ...
 
-    def __getitem__(self, i: Union[int, slice]) -> Union[MenuItem, "ItemGroup"]:
+    def __getitem__(self, i: int | slice) -> Union[MenuItem, "ItemGroup"]:
         if isinstance(i, slice):
             return ItemGroup(self.menu, self.items[i])
         else:
@@ -78,11 +72,11 @@ class ItemGroup(MutableSequence[MenuItem]):
 
     def __setitem__(
         self,
-        i: Union[int, slice],
-        item: Union[MenuItem, Iterable[MenuItem]],
+        i: int | slice,
+        item: MenuItem | Iterable[MenuItem],
     ) -> None:
         """Set an item."""
-        from cursesmenu.items.menu_item import MenuItem
+        from cursesmenu.items.menu_item import MenuItem  # noqa: TCH001
 
         if isinstance(i, int):
             item = cast(MenuItem, item)
@@ -104,7 +98,7 @@ class ItemGroup(MutableSequence[MenuItem]):
     def __delitem__(self, i: slice) -> None:
         ...
 
-    def __delitem__(self, i: Union[int, slice]) -> None:
+    def __delitem__(self, i: int | slice) -> None:
         """Delete an item."""
         del self.items[i]
         self.menu.adjust_screen_size()

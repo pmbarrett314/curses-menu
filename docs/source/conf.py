@@ -10,14 +10,14 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-import os
-import sys
-from typing import List
+from __future__ import annotations
 
-sys.path.insert(
-    0,
-    os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "cursesmenu")),
-)
+import pathlib
+import sys
+
+FILE_PATH = pathlib.Path(__file__)
+PROJECT_DIR = FILE_PATH.parent.joinpath("..", "..", "cursesmenu").resolve()
+sys.path.insert(0, str(PROJECT_DIR))
 
 # -- Project information -----------------------------------------------------
 
@@ -42,7 +42,7 @@ templates_path = ["_templates"]
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
-exclude_patterns: List[str] = []
+exclude_patterns: list[str] = []
 
 # -- Options for HTML output -------------------------------------------------
 

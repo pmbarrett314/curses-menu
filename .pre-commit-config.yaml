@@ -62,10 +62,9 @@ repos:
       - id: flake8
 
   - repo: https://github.com/charliermarsh/ruff-pre-commit
-    rev: v0.0.225
+    rev: v0.0.235
     hooks:
       - id: ruff
-        args: ["--force-exclude"]
 
   - repo: https://github.com/PyCQA/pydocstyle
     rev: 6.3.0
@@ -93,7 +92,7 @@ repos:
         additional_dependencies: [ types-Deprecated ]
 
   - repo: https://github.com/RobertCraigie/pyright-python
-    rev: v1.1.290
+    rev: v1.1.291
     hooks:
       - id: pyright
         additional_dependencies:

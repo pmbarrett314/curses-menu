@@ -1,11 +1,12 @@
 """Base class for menu items."""
+from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, Optional
+from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
+    from typing import Any
+
     from cursesmenu.curses_menu import CursesMenu
-else:
-    CursesMenu = Any
 
 
 class MenuItem:
@@ -22,10 +23,10 @@ class MenuItem:
     def __init__(
         self,
         text: str,
-        menu: Optional[CursesMenu] = None,
+        menu: CursesMenu | None = None,
         *,
         should_exit: bool = False,
-        override_index: Optional[str] = None,
+        override_index: str | None = None,
     ) -> None:
         """Initialize the menu item."""
         self.text = text

@@ -23,7 +23,7 @@ jobs:
           python-version: "3.11"
       - uses: pre-commit/action@v3.0.0
         env:
-          SKIP: "mypy,flake8,ruff,black,poetry-lock"
+          SKIP: "mypy,ruff,black,poetry-lock"
 
   black-format:
     name: Check format with black
@@ -31,15 +31,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: psf/black@stable
-  flake8-lint:
-    runs-on: ubuntu-latest
-    name: Lint with flake8
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
-        with:
-          python-version: "3.11"
-      - uses: py-actions/flake8@v2
   ruff-lint:
     name: Lint with ruff
     runs-on: ubuntu-latest
@@ -72,7 +63,6 @@ jobs:
     needs:
       - pre-commit
       - black-format
-      - flake8-lint
       - ruff-lint
       - mypy
 
@@ -139,7 +129,6 @@ jobs:
     needs:
       - pre-commit
       - black-format
-      - flake8-lint
       - ruff-lint
       - mypy
       - test

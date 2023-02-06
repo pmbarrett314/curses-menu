@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import sys
-from typing import TYPE_CHECKING, Any, Iterable, cast, overload  # noqa: TCH003
+from typing import TYPE_CHECKING, Any, Iterable, cast, overload
 
 if sys.version_info >= (3, 9):  # pragma: py-lt-39
     from collections.abc import MutableSequence

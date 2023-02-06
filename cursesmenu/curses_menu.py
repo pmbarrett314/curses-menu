@@ -268,7 +268,7 @@ class CursesMenu:
                 try:  # noqa: SIM105
                     curses.start_color()
                 except:  # noqa: E722 # pragma: no cover all
-                    pass
+                    pass  # noqa: S110
                 self._main_loop()
             finally:
                 # I currently don't remember whether there's a situation where stdscr
@@ -321,7 +321,6 @@ class CursesMenu:
 
         self.refresh_screen()
         if self._debug_screens:  # pragma: no cover all
-
             with _SCREENDUMP_DIR.joinpath(f"{self.title}-{time.time()}").open(
                 "wb",
             ) as f:

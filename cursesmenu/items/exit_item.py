@@ -7,7 +7,6 @@ from typing import TYPE_CHECKING
 from cursesmenu.items.menu_item import MenuItem
 
 if TYPE_CHECKING:
-
     from cursesmenu.curses_menu import CursesMenu
 
 

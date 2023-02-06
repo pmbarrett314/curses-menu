@@ -44,11 +44,11 @@ profile = "black"
 multi_line_output = 3
 
 [tool.ruff]
-select =["ALL"]
+select = ["ALL"]
 # DTZ (flake8-datetimez): shouldn't matter
 # ERA (eradicate) currently passes byt if it becomes an issue I might disable it
-extend-exclude=["examples/*", "stubs/*"]
-extend-ignore = ["D", "PD", "S101", "ANN101", "ANN102", "UP015", "RET505", "PLR2004"]
+extend-exclude = ["examples/*", "stubs/*"]
+extend-ignore = ["D", "PD", "S101", "ANN101", "ANN102", "UP015", "RET505", "PLR2004", "PLR0913", "PLR0915"]
 # D (pydocstyle): not ready to commit to this yet
 # PD (pandas-vet): not using pandas
 # S101 (assert used): ignored because we use assert for type narrowing and tests
@@ -58,10 +58,11 @@ extend-ignore = ["D", "PD", "S101", "ANN101", "ANN102", "UP015", "RET505", "PLR2
 # RET505 (superfluous else return) I disagree with this, I think the explicit else adds clarity.
 # Similar hooks not disabled currently because they don't apply.
 # PLR2004 interesting ideas about magic constants, but a little too aggressive
-per-file-ignores={"test/*"=["ANN","D"],"test/conftest.py"=["SIM117"],"docs/*"=["INP001"]}
-# Don't be pedantic about types and documentation in tests.
+# PLR0913 and PLR0915 are a little too opinionated for my tastes
+per-file-ignores = { "test/*" = ["ANN", "D", "SLF001"], "test/conftest.py" = ["SIM117"], "docs/*" = ["INP001"] }
+# Don't be pedantic about types and documentation in tests. Assume tests can access private members
 # conftest.py has some nested withs for clarity, don't complain about that.
-target-version="py37"
+target-version = "py37"
 
 
 [tool.coverage.report]
@@ -94,7 +95,7 @@ py-lt-39 = "sys_version_info < (3, 9)"
 
 [tool.pytest.ini_options]
 required_plugins = ["pytest-cov"]
-addopts = ["-Werror", "-vv", "--cov", "--cov-append", "--cov-report=term-missing", "--cov-report=xml:.cov/coverage.xml","--cov-fail-under=100","--no-cov-on-fail"]
+addopts = ["-Werror", "-vv", "--cov", "--cov-append", "--cov-report=term-missing", "--cov-report=xml:.cov/coverage.xml", "--cov-fail-under=100", "--no-cov-on-fail"]
 
 [tool.pydocstyle]
 add_ignore = "D105"

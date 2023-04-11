@@ -48,7 +48,7 @@ select = ["ALL"]
 # DTZ (flake8-datetimez): shouldn't matter
 # ERA (eradicate) currently passes byt if it becomes an issue I might disable it
 extend-exclude = ["examples/*", "stubs/*"]
-extend-ignore = ["D", "PD", "S101", "ANN101", "ANN102", "UP015", "RET505", "PLR2004", "PLR0913", "PLR0915"]
+extend-ignore = ["D", "PD", "S101", "ANN101", "ANN102", "UP015", "RET505", "PLR2004", "PLR0913", "PLR0915", "PLC1901"]
 # D (pydocstyle): not ready to commit to this yet
 # PD (pandas-vet): not using pandas
 # S101 (assert used): ignored because we use assert for type narrowing and tests
@@ -59,6 +59,7 @@ extend-ignore = ["D", "PD", "S101", "ANN101", "ANN102", "UP015", "RET505", "PLR2
 # Similar hooks not disabled currently because they don't apply.
 # PLR2004 interesting ideas about magic constants, but a little too aggressive
 # PLR0913 and PLR0915 are a little too opinionated for my tastes
+# PLC1901 (prefer comparing strings using falsiness) disabled because I prefer the explcit comparison
 per-file-ignores = { "test/*" = ["ANN", "D", "SLF001"], "test/conftest.py" = ["SIM117"], "docs/*" = ["INP001"] }
 # Don't be pedantic about types and documentation in tests. Assume tests can access private members
 # conftest.py has some nested withs for clarity, don't complain about that.
@@ -132,6 +133,8 @@ Deprecated = "^1.2.13"
 [tool.poetry.group.docs]
 
 [tool.poetry.group.docs.dependencies]
+#Sphinx pinned <6.0 since they dropped support for Python 3.7 in that version
+#Python 3.7 EoL is 27 Jun 2023, can update this dependency then.
 Sphinx = "^5.1.1"
 sphinx-rtd-theme = "^1.0.0"
 sphinx-autodoc-typehints = "^1.19.1"
@@ -152,5 +155,5 @@ coverage-conditional-plugin = "^0.8.0"
 
 [tool.poetry.group.type.dependencies]
 types-Deprecated = "^1.2.9"
-mypy = "^0.991"
+mypy = "<1.3.0"
 pytest = "^7.1.2"

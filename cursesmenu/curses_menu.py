@@ -19,7 +19,7 @@ from cursesmenu.item_group import ItemGroup
 
 if TYPE_CHECKING:
     # noinspection PyCompatibility,PyProtectedMember
-    from typing import Callable, DefaultDict, Optional
+    from typing import Callable, DefaultDict
 
     from _curses import window
 
@@ -68,7 +68,7 @@ class CursesMenu:
     is currently active (E.G. when switching between menus)
     """
 
-    currently_active_menu: Optional["CursesMenu"] = None
+    currently_active_menu: CursesMenu | None = None
     stdscr: Window | None = None
 
     def __init__(
@@ -78,6 +78,7 @@ class CursesMenu:
         *,
         show_exit_item: bool = True,
         zero_pad: bool = False,
+        external_stdscr: Window | None = None,
         _debug_screens: bool = False,
     ) -> None:
         """Initialize the menu."""
@@ -86,6 +87,7 @@ class CursesMenu:
         self.zero_pad = zero_pad
 
         self.screen: Window | None = None
+        self.external_stdscr = external_stdscr
 
         # highlight should be initialized to black-on-white, but bold is a fine
         # fallback that doesn't need the screen initialized first
@@ -149,7 +151,7 @@ class CursesMenu:
         subtitle: str = "",
         *,
         show_exit_item: bool = False,
-    ) -> "CursesMenu":
+    ) -> CursesMenu:
         """
         Create a menu from a list of strings.
 
@@ -249,7 +251,7 @@ class CursesMenu:
         self._main_thread.start()
 
     def _wrap_start(self) -> None:
-        if self.parent is None:
+        if self.parent is None and self.external_stdscr is None:
             cursesmenu.utils.soft_clear_terminal()
 
             # We only want to fully clear the screen at the exit of the outermost\
@@ -267,8 +269,8 @@ class CursesMenu:
                 # noinspection PyBroadException
                 try:  # noqa: SIM105
                     curses.start_color()
-                except:  # noqa: E722 # pragma: no cover all
-                    pass  # noqa: S110
+                except:  # noqa: E722,S110 # pragma: no cover all
+                    pass
                 self._main_loop()
             finally:
                 # I currently don't remember whether there's a situation where stdscr
@@ -284,6 +286,8 @@ class CursesMenu:
                 ):  # pragma: no cover all
                     os.system("[ -t 0 ] && stty echo")
         else:
+            if self.external_stdscr is not None:  # pragma: no cover all
+                CursesMenu.stdscr = self.external_stdscr
             self._main_loop()
 
     def _main_loop(self) -> None:

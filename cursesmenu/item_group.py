@@ -11,7 +11,7 @@ else:  # pragma: py-gte-39
     from typing import MutableSequence
 
 if TYPE_CHECKING:
-    from typing import Iterator, Union
+    from typing import Iterator
 
     from cursesmenu.curses_menu import CursesMenu
     from cursesmenu.items.menu_item import MenuItem
@@ -53,10 +53,10 @@ class ItemGroup(MutableSequence[MenuItem]):
         ...
 
     @overload
-    def __getitem__(self, i: slice) -> "ItemGroup":
+    def __getitem__(self, i: slice) -> ItemGroup:
         ...
 
-    def __getitem__(self, i: int | slice) -> Union[MenuItem, "ItemGroup"]:
+    def __getitem__(self, i: int | slice) -> MenuItem | ItemGroup:
         if isinstance(i, slice):
             return ItemGroup(self.menu, self.items[i])
         else:
@@ -76,7 +76,7 @@ class ItemGroup(MutableSequence[MenuItem]):
         item: MenuItem | Iterable[MenuItem],
     ) -> None:
         """Set an item."""
-        from cursesmenu.items.menu_item import MenuItem  # noqa: TCH001
+        from cursesmenu.items.menu_item import MenuItem
 
         if isinstance(i, int):
             item = cast(MenuItem, item)
@@ -111,7 +111,7 @@ class ItemGroup(MutableSequence[MenuItem]):
         """Get the number of items in the group."""
         return len(self.items)
 
-    def __add__(self, other: "ItemGroup") -> "ItemGroup":
+    def __add__(self, other: ItemGroup) -> ItemGroup:
         """
         Add two groups together.
 

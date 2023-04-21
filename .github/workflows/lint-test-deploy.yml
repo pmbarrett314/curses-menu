@@ -57,6 +57,28 @@ jobs:
           cache: 'poetry'
       - run: poetry install
       - run: poetry run mypy .
+  initial-test:
+    name: Test One Version First
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: pipx install poetry
+      - uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
+          cache: 'poetry'
+      - run: poetry --version
+      - run: poetry install
+      - run: poetry run pytest
+        name: Run tests
+      - run: poetry run coverage lcov
+        name: Generate coverage report for this run
+      - name: Upload coverage report for this run to coveralls
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.github_token }}
+          path-to-lcov: .cov/coverage.lcov
+          parallel: true
 
   test:
     name: Pytest via poetry
@@ -65,6 +87,7 @@ jobs:
       - black-format
       - ruff-lint
       - mypy
+      - initial-test
 
     strategy:
       matrix:
@@ -73,7 +96,10 @@ jobs:
         exclude:
           - os: windows-latest
             python-version: pypy3
-    continue-on-error: ${{ (matrix.python-version == 'pypy3.11' && matrix.os == 'windows-latest') || matrix.python-version == 'pypy3.8' || (matrix.python-version == 'pypy3.9' && matrix.os == 'windows-latest') || matrix.python-version=='3.12.0-alpha.4' }}
+          - os: ubuntu-latest
+            python-version: 3.11
+            #we already did this one
+    continue-on-error: ${{ (matrix.python-version == 'pypy3.11' && matrix.os == 'windows-latest') || matrix.python-version == 'pypy3.8' || (matrix.python-version == 'pypy3.9' && matrix.os == 'windows-latest') || matrix.python-version=='3.12.0-alpha7' }}
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3

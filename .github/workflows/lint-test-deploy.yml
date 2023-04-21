@@ -126,6 +126,8 @@ jobs:
     name: Build and publish Python distributions to PyPI and TestPyPI
     runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/tags')
+    permissions:
+      id-token: write
     needs:
       - pre-commit
       - black-format
@@ -135,14 +137,5 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - run: pipx install poetry
-      - uses: actions/setup-python@v4
-        with:
-          python-version: "3.11"
-          cache: 'poetry'
-      - run: poetry --version
-      - run: poetry install
-      - name: Build and publish to pypi
-        uses: JRubics/poetry-publish@v1.15
-        with:
-          pypi_token: ${{ secrets.PYPI_TOKEN }}
+      - name: Publish package distributions to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1

@@ -1,9 +1,14 @@
 """A class for a menu item with an integer return value."""
+from __future__ import annotations
 
-from typing import Optional
+from typing import TYPE_CHECKING, Any
 
-from cursesmenu import CursesMenu
 from cursesmenu.items import MenuItem
+
+if TYPE_CHECKING:
+    from cursesmenu import CursesMenu
+else:
+    CursesMenu = Any
 
 
 class SelectionItem(MenuItem):
@@ -13,10 +18,10 @@ class SelectionItem(MenuItem):
         self,
         text: str,
         index: int,
-        menu: Optional[CursesMenu] = None,
+        menu: CursesMenu | None = None,
         *,
         should_exit: bool = False,
-        override_index: Optional[str] = None,
+        override_index: str | None = None,
     ) -> None:
         """Initialize the item."""
         super().__init__(

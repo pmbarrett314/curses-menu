@@ -1,8 +1,12 @@
 """Utility functions for curses-menu."""
+from __future__ import annotations
 
 import os
 import sys
-from typing import Callable
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from typing import Callable
 
 
 def null_input_factory() -> Callable[[int], None]:

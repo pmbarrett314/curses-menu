@@ -1,3 +1,8 @@
+Version 0.6.12
+-------------
+* Updating deployment workflow
+* Various dependency and testing updates
+
 Version 0.6.11
 -------------
 * Fix issue with calling stty

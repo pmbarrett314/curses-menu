@@ -1,4 +1,4 @@
-from typing import List
+from __future__ import annotations
 
 import pytest
 
@@ -41,7 +41,7 @@ def empty_menu():
 def big_menu():
     menu = CursesMenu("Test Menu")
     for i in range(100):
-        menu.items.append(MenuItem("item{}".format(i), should_exit=True))
+        menu.items.append(MenuItem(f"item{i}", should_exit=True))
     menu.start()
     menu.wait_for_start(timeout=10)
     yield menu
@@ -62,7 +62,7 @@ def test_big_menu(big_menu: CursesMenu):  # noqa: ARG001
     pass
 
 
-def test_go_down(sample_menu: CursesMenu, sample_items: List[MenuItem]):
+def test_go_down(sample_menu: CursesMenu, sample_items: list[MenuItem]):
     sample_menu.go_down()
     assert sample_menu.current_option == 1
     assert sample_menu.current_item is sample_items[1]
@@ -74,7 +74,7 @@ def test_go_down(sample_menu: CursesMenu, sample_items: List[MenuItem]):
     assert sample_menu.current_item is sample_items[0]
 
 
-def test_go_up(sample_menu: CursesMenu, sample_items: List[MenuItem]):
+def test_go_up(sample_menu: CursesMenu, sample_items: list[MenuItem]):
     sample_menu.go_up()
     assert sample_menu.current_option == 2
     assert type(sample_menu.current_item) == ExitItem
@@ -86,7 +86,7 @@ def test_go_up(sample_menu: CursesMenu, sample_items: List[MenuItem]):
     assert sample_menu.current_item is sample_items[0]
 
 
-def test_go_to(sample_menu: CursesMenu, sample_items: List[MenuItem]):
+def test_go_to(sample_menu: CursesMenu, sample_items: list[MenuItem]):
     sample_menu.go_to(ord("2"))
     assert sample_menu.current_option == 1
     assert sample_menu.current_item is sample_items[1]
@@ -105,7 +105,7 @@ def test_go_to_empty(empty_menu: CursesMenu):
     empty_menu.go_to(ord("1"))
 
 
-def test_select(sample_menu: CursesMenu, sample_items: List[MenuItem]):
+def test_select(sample_menu: CursesMenu, sample_items: list[MenuItem]):
     sample_menu.select()
     assert sample_menu.current_option == 0
     assert sample_menu.current_item is sample_items[0]

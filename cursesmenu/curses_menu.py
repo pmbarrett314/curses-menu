@@ -1,5 +1,7 @@
 """Top level class and functions for a curses-based menu."""
 
+from __future__ import annotations
+
 import atexit
 import curses
 import os
@@ -8,7 +10,7 @@ import shutil
 import threading
 import time
 from collections import defaultdict
-from typing import TYPE_CHECKING, Any, Callable, DefaultDict, List, Optional, cast
+from typing import TYPE_CHECKING, Any, cast
 
 from deprecated import deprecated
 
@@ -17,6 +19,8 @@ from cursesmenu.item_group import ItemGroup
 
 if TYPE_CHECKING:
     # noinspection PyCompatibility,PyProtectedMember
+    from typing import Callable, DefaultDict
+
     from _curses import window
 
     Window = window
@@ -28,6 +32,7 @@ else:
 MIN_SIZE = 6  # Top bar, space, title, space, subtitle, space, bottom bar
 
 PROJECT_ROOT = pathlib.Path(__file__).parent.parent.absolute()
+_SCREENDUMP_DIR = PROJECT_ROOT.joinpath("screendumps")
 
 
 class CursesMenu:
@@ -63,8 +68,8 @@ class CursesMenu:
     is currently active (E.G. when switching between menus)
     """
 
-    currently_active_menu: Optional["CursesMenu"] = None
-    stdscr: Optional[Window] = None
+    currently_active_menu: CursesMenu | None = None
+    stdscr: Window | None = None
 
     def __init__(
         self,
@@ -80,7 +85,7 @@ class CursesMenu:
         self.subtitle = subtitle
         self.zero_pad = zero_pad
 
-        self.screen: Optional[Window] = None
+        self.screen: Window | None = None
 
         # highlight should be initialized to black-on-white, but bold is a fine
         # fallback that doesn't need the screen initialized first
@@ -106,7 +111,7 @@ class CursesMenu:
         # TODO: Should this be a property
         self.returned_value = None
 
-        self.parent: Optional[CursesMenu] = None
+        self.parent: CursesMenu | None = None
 
         self.user_input_handlers: DefaultDict[int, Callable[[int], None]] = defaultdict(
             cursesmenu.utils.null_input_factory,
@@ -139,12 +144,12 @@ class CursesMenu:
     @classmethod
     def make_selection_menu(
         cls,
-        selections: List[str],
+        selections: list[str],
         title: str = "",
         subtitle: str = "",
         *,
         show_exit_item: bool = False,
-    ) -> "CursesMenu":
+    ) -> CursesMenu:
         """
         Create a menu from a list of strings.
 
@@ -169,7 +174,7 @@ class CursesMenu:
     @classmethod
     def get_selection(
         cls,
-        selections: List[str],
+        selections: list[str],
         title: str = "",
         subtitle: str = "",
     ) -> int:
@@ -196,7 +201,7 @@ class CursesMenu:
         return self.items + self.end_items
 
     @property
-    def current_item(self) -> Optional[MenuItem]:
+    def current_item(self) -> MenuItem | None:
         """Get the currently selected MenuItem."""
         if not self.all_items:
             return None
@@ -204,7 +209,7 @@ class CursesMenu:
             return self.all_items[self.current_option]
 
     @property
-    def selected_item(self) -> Optional[MenuItem]:
+    def selected_item(self) -> MenuItem | None:
         """Get the most recently selected MenuItem."""
         if self.selected_option == -1:
             return None
@@ -262,7 +267,7 @@ class CursesMenu:
                 # noinspection PyBroadException
                 try:  # noqa: SIM105
                     curses.start_color()
-                except:  # noqa: E722 # pragma: no cover all
+                except:  # noqa: E722,S110 # pragma: no cover all
                     pass
                 self._main_loop()
             finally:
@@ -316,25 +321,20 @@ class CursesMenu:
 
         self.refresh_screen()
         if self._debug_screens:  # pragma: no cover all
-            with open(
-                PROJECT_ROOT.joinpath("screendumps", f"{self.title}-{time.time()}"),
+            with _SCREENDUMP_DIR.joinpath(f"{self.title}-{time.time()}").open(
                 "wb",
             ) as f:
                 self.screen.putwin(f)
-            with open(
-                PROJECT_ROOT.joinpath(
-                    "screendumps",
-                    f"stdscr-{self.title}-{time.time()}",
-                ),
-                "wb",
-            ) as f:
+            with _SCREENDUMP_DIR.joinpath(
+                f"stdscr-{self.title}-{time.time()}",
+            ).open("wb") as f:
                 self.screen.putwin(f)
 
     def draw_item(
         self,
         index: int,
         item: MenuItem,
-        index_text: Optional[str] = None,
+        index_text: str | None = None,
     ) -> None:
         """
         Draw an individual item.
@@ -487,7 +487,7 @@ class CursesMenu:
         self.screen.clear()
         self.refresh_screen()
 
-    def join(self, timeout: Optional[int] = None) -> Any:  # noqa: ANN401
+    def join(self, timeout: int | None = None) -> Any:  # noqa: ANN401
         """
         Block until the menu exits.
 
@@ -505,7 +505,7 @@ class CursesMenu:
         """
         return self._running.is_set()
 
-    def wait_for_start(self, timeout: Optional[int] = None) -> bool:
+    def wait_for_start(self, timeout: int | None = None) -> bool:
         """
         Block until the menu starts.
 
@@ -530,7 +530,7 @@ class CursesMenu:
         """
         return self._main_thread.is_alive()
 
-    def exit(self, timeout: Optional[int] = None) -> Any:  # noqa: A003, ANN401
+    def exit(self, timeout: int | None = None) -> Any:  # noqa: A003, ANN401
         """
         Signal the menu to exit and block until it does.
 

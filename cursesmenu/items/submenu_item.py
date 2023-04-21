@@ -1,13 +1,15 @@
 """A menu item that opens a submenu."""
 
-from typing import TYPE_CHECKING, Any, Optional
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
 
 from cursesmenu.items.menu_item import MenuItem
 
 if TYPE_CHECKING:
+    from typing import Any
+
     from cursesmenu.curses_menu import CursesMenu
-else:
-    CursesMenu = Any
 
 
 class SubmenuItem(MenuItem):
@@ -23,15 +25,15 @@ class SubmenuItem(MenuItem):
     def __init__(
         self,
         text: str,
-        submenu: Optional[CursesMenu] = None,
-        menu: Optional[CursesMenu] = None,
+        submenu: CursesMenu | None = None,
+        menu: CursesMenu | None = None,
         *,
         should_exit: bool = False,
-        override_index: Optional[str] = None,
+        override_index: str | None = None,
     ) -> None:
         """Initialize the item."""
-        self._submenu: Optional[CursesMenu] = submenu
-        self._menu: Optional[CursesMenu] = menu
+        self._submenu: CursesMenu | None = submenu
+        self._menu: CursesMenu | None = menu
         if self._submenu:
             self._submenu.parent = menu
         super().__init__(
@@ -42,24 +44,24 @@ class SubmenuItem(MenuItem):
         )
 
     @property
-    def submenu(self) -> Optional[CursesMenu]:
+    def submenu(self) -> CursesMenu | None:
         """Get the submenu associated with this item."""
         return self._submenu
 
     @submenu.setter
-    def submenu(self, submenu: Optional[CursesMenu]) -> None:
+    def submenu(self, submenu: CursesMenu | None) -> None:
         """Set the submenu and update its parent."""
         self._submenu = submenu
         if self._submenu is not None:
             self._submenu.parent = self._menu
 
     @property  # type: ignore[override]
-    def menu(self) -> Optional[CursesMenu]:  # type: ignore[override]
+    def menu(self) -> CursesMenu | None:  # type: ignore[override]
         """Get the menu that this item belongs to."""
         return self._menu
 
     @menu.setter
-    def menu(self, menu: Optional[CursesMenu]) -> None:
+    def menu(self, menu: CursesMenu | None) -> None:
         """Set the menu for the item and update the submenu's parent."""
         self._menu = menu
         if self._submenu is not None:

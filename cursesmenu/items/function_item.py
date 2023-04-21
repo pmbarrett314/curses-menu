@@ -1,13 +1,15 @@
 """A menu item that executes a Python function with arguments."""
 
-from typing import TYPE_CHECKING, Any, Callable, Dict, List, Optional
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
 
 from cursesmenu.items.external_item import ExternalItem
 
 if TYPE_CHECKING:
+    from typing import Any, Callable
+
     from cursesmenu.curses_menu import CursesMenu
-else:
-    CursesMenu = Any
 
 
 class FunctionItem(ExternalItem):
@@ -26,12 +28,12 @@ class FunctionItem(ExternalItem):
         self,
         text: str,
         function: Callable[..., Any],
-        args: Optional[List[Any]] = None,
-        kwargs: Optional[Dict[Any, Any]] = None,
-        menu: Optional[CursesMenu] = None,
+        args: list[Any] | None = None,
+        kwargs: dict[Any, Any] | None = None,
+        menu: CursesMenu | None = None,
         *,
         should_exit: bool = False,
-        override_index: Optional[str] = None,
+        override_index: str | None = None,
     ) -> None:
         """Initialize the item."""
         super().__init__(
@@ -43,10 +45,10 @@ class FunctionItem(ExternalItem):
         self.function = function
         if args is None:
             args = []
-        self.args: List[Any] = args
+        self.args: list[Any] = args
         if kwargs is None:
             kwargs = {}
-        self.kwargs: Dict[Any, Any] = kwargs
+        self.kwargs: dict[Any, Any] = kwargs
 
         self.return_value: Any = None
 

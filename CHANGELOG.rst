@@ -1,4 +1,4 @@
-Version 0.6.13
+Version 0.6.14
 -------------
 * Updating deployment workflow
 * Various dependency and testing updates

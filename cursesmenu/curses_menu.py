@@ -78,7 +78,6 @@ class CursesMenu:
         *,
         show_exit_item: bool = True,
         zero_pad: bool = False,
-        external_stdscr: Window | None = None,
         _debug_screens: bool = False,
     ) -> None:
         """Initialize the menu."""
@@ -87,7 +86,6 @@ class CursesMenu:
         self.zero_pad = zero_pad
 
         self.screen: Window | None = None
-        self.external_stdscr = external_stdscr
 
         # highlight should be initialized to black-on-white, but bold is a fine
         # fallback that doesn't need the screen initialized first
@@ -251,7 +249,7 @@ class CursesMenu:
         self._main_thread.start()
 
     def _wrap_start(self) -> None:
-        if self.parent is None and self.external_stdscr is None:
+        if self.parent is None:
             cursesmenu.utils.soft_clear_terminal()
 
             # We only want to fully clear the screen at the exit of the outermost\
@@ -286,8 +284,6 @@ class CursesMenu:
                 ):  # pragma: no cover all
                     os.system("[ -t 0 ] && stty echo")
         else:
-            if self.external_stdscr is not None:  # pragma: no cover all
-                CursesMenu.stdscr = self.external_stdscr
             self._main_loop()
 
     def _main_loop(self) -> None:

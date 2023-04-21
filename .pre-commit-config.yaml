@@ -57,7 +57,7 @@ repos:
   #      args: [--py37-plus]
 
   - repo: https://github.com/charliermarsh/ruff-pre-commit
-    rev: v0.0.261
+    rev: v0.0.262
     hooks:
       - id: ruff
 
@@ -87,7 +87,7 @@ repos:
         additional_dependencies: [ types-Deprecated ]
 
   - repo: https://github.com/RobertCraigie/pyright-python
-    rev: v1.1.302
+    rev: v1.1.304
     hooks:
       - id: pyright
         additional_dependencies:

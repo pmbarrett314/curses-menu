@@ -48,7 +48,7 @@ select = ["ALL"]
 # DTZ (flake8-datetimez): shouldn't matter
 # ERA (eradicate) currently passes byt if it becomes an issue I might disable it
 extend-exclude = ["examples/*", "stubs/*"]
-extend-ignore = ["D", "PD", "S101", "ANN101", "ANN102", "UP015", "RET505", "PLR2004", "PLR0913", "PLR0915", "PLC1901"]
+extend-ignore = ["D", "PD", "S101", "ANN101", "ANN102", "UP015", "RET505", "PLR2004", "PLR0913", "PLR0915", "PLC1901", "S602", "S605", "S607"]
 # D (pydocstyle): not ready to commit to this yet
 # PD (pandas-vet): not using pandas
 # S101 (assert used): ignored because we use assert for type narrowing and tests
@@ -60,6 +60,7 @@ extend-ignore = ["D", "PD", "S101", "ANN101", "ANN102", "UP015", "RET505", "PLR2
 # PLR2004 interesting ideas about magic constants, but a little too aggressive
 # PLR0913 and PLR0915 are a little too opinionated for my tastes
 # PLC1901 (prefer comparing strings using falsiness) disabled because I prefer the explcit comparison
+# S60X (possible security issues with subrpocess) these need more investigation.
 per-file-ignores = { "test/*" = ["ANN", "D", "SLF001"], "test/conftest.py" = ["SIM117"], "docs/*" = ["INP001"] }
 # Don't be pedantic about types and documentation in tests. Assume tests can access private members
 # conftest.py has some nested withs for clarity, don't complain about that.

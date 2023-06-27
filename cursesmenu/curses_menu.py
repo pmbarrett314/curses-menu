@@ -19,7 +19,7 @@ from cursesmenu.item_group import ItemGroup
 
 if TYPE_CHECKING:
     # noinspection PyCompatibility,PyProtectedMember
-    from typing import Callable, DefaultDict
+    from typing import Callable
 
     from _curses import window
 
@@ -113,7 +113,7 @@ class CursesMenu:
 
         self.parent: CursesMenu | None = None
 
-        self.user_input_handlers: DefaultDict[int, Callable[[int], None]] = defaultdict(
+        self.user_input_handlers: defaultdict[int, Callable[[int], None]] = defaultdict(
             cursesmenu.utils.null_input_factory,
         )
         self.user_input_handlers.update(

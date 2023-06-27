@@ -1,3 +1,7 @@
+Version 0.7.0
+-------------
+* Drop Python 3.7
+
 Version 0.6.14
 -------------
 * Updating deployment workflow

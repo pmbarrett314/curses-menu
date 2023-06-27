@@ -3,7 +3,7 @@ from __future__ import annotations
 import os
 import pathlib
 import sys
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, cast
 
 import pexpect
 import pexpect.popen_spawn
@@ -57,10 +57,10 @@ class MenuTester:  # pragma: no-cover-windows
             cmd = "{} {}".format(cmd, " ".join(args))
             return pexpect.popen_spawn.PopenSpawn(cmd, encoding="utf-8", env=env)
 
-    def emulate_ansi_terminal(self, raw_output: str, *, clean=True):
-        if raw_output in [pexpect.EOF, pexpect.TIMEOUT]:  # pragma: no cover all
+    def emulate_ansi_terminal(self, raw_output: str | None, *, clean=True):
+        if raw_output in [pexpect.EOF, pexpect.TIMEOUT, None]:  # pragma: no cover all
             return ""
-        self.stream.feed(raw_output)
+        self.stream.feed(cast(str, raw_output))
 
         lines: list[str] | Generator[str, None, None] = self.screen.display
         self.screen.reset()

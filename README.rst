@@ -17,7 +17,7 @@ http://curses-menu.readthedocs.org/en/latest/
 Installation
 ~~~~~~~~~~~~
 
-Tested on Python 3.7+ pypy and pypy3.
+Tested on Python 3.8+ pypy and pypy3.
 
 The curses library comes bundled with python on Linux and MacOS. Windows
 users can visit http://www.lfd.uci.edu/~gohlke/pythonlibs/#curses and

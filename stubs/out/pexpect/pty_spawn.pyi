@@ -34,7 +34,7 @@ class spawn(SpawnBase):
         searchwindowsize: Incomplete | None = ...,
         logfile: Incomplete | None = ...,
         cwd: Incomplete | None = ...,
-        env: Incomplete | None = ...,
+        env: dict[str, str] | None = ...,
         ignore_sighup: bool = ...,
         echo: bool = ...,
         preexec_fn: Incomplete | None = ...,

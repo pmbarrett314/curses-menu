@@ -131,7 +131,7 @@ Deprecated = "^1.2.13"
 
 [tool.poetry.group.docs.dependencies]
 Sphinx = { version = "^7.0.0", python = ">=3.9,<4.0" }
-sphinx-rtd-theme = "^1.0.0"
+sphinx-rtd-theme = ">=2.0.0rc3"
 sphinx-autodoc-typehints = "^1.19.1"
 
 [tool.poetry.group.test]

@@ -28,4 +28,4 @@ build:
       # https://python-poetry.org/docs/managing-dependencies/#dependency-groups
       - poetry install --with docs
     post_install:
-      - pip install "Sphinx<=6.0.0,>=5.0.0"
+      - pip install "Sphinx<=8.0.0,>=7.0.0"

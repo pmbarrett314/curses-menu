@@ -104,7 +104,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
           cache: 'poetry'
       - run: poetry --version
-      - run: poetry install
+      - run: poetry install --only main,test
       - run: poetry run pytest
         name: Run tests
       - run: poetry run coverage lcov

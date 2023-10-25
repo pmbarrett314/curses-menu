@@ -17,7 +17,7 @@ jobs:
     name: Various quality checks with pre-commit
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: actions/setup-python@v4
         with:
           python-version: "3.11"
@@ -29,7 +29,7 @@ jobs:
     name: Lint with ruff
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: actions/setup-python@v4
         with:
           python-version: "3.11"
@@ -45,7 +45,7 @@ jobs:
     name: Type check with mypy
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - run: pipx install poetry
       - uses: actions/setup-python@v4
         with:
@@ -57,7 +57,7 @@ jobs:
     name: Test One Version First
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - run: pipx install poetry
       - uses: actions/setup-python@v4
         with:
@@ -97,7 +97,7 @@ jobs:
     continue-on-error: ${{ matrix.python-version=='3.13.0-alpha.1' || (matrix.python-version == 'pypy3.11' && matrix.os == 'windows-latest') || matrix.python-version == 'pypy3.8' || (matrix.python-version == 'pypy3.9' && matrix.os == 'windows-latest') || (matrix.python-version == '3.12' && matrix.os == 'windows-latest')}}
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - run: pipx install poetry
       - uses: actions/setup-python@v4
         with:
@@ -156,7 +156,7 @@ jobs:
       - test
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - run: pipx install poetry
       - uses: actions/setup-python@v4
         with:

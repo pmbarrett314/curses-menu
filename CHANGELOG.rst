@@ -1,3 +1,8 @@
+Version 0.8.0
+-------------
+*Changed parameter name in itemGroup
+*Dev dependencies updated
+
 Version 0.7.0
 -------------
 * Drop Python 3.7

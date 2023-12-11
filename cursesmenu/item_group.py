@@ -42,10 +42,10 @@ class ItemGroup(MutableSequence[MenuItem]):
         for item in items:
             item.menu = self.menu
 
-    def insert(self, index: int, item: MenuItem) -> None:
+    def insert(self, index: int, value: MenuItem) -> None:
         """Insert an item."""
-        item.menu = self.menu
-        self.items.insert(index, item)
+        value.menu = self.menu
+        self.items.insert(index, value)
         self.menu.adjust_screen_size()
 
     @overload

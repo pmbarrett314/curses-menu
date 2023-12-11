@@ -82,10 +82,16 @@ class CommandItem(ExternalItem):
                     args,
                     shell=True,
                     stdout=stdout,
+                    check=False,
                     **self.kwargs,
                 )
         else:
-            completed_process = subprocess.run(args, shell=True, **self.kwargs)
+            completed_process = subprocess.run(
+                args,
+                shell=True,
+                check=False,
+                **self.kwargs,
+            )
         self.exit_status = completed_process.returncode
 
     def get_return(self) -> int | None:

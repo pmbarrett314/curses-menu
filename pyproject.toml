@@ -4,7 +4,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "curses-menu"
-version = "0.7.1"
+version = "0.8.0"
 description = "A simple console menu system using curses"
 authors = ["Paul Barrett <pmbarrett314@gmail.com>"]
 license = "MIT"
@@ -33,21 +33,13 @@ classifiers = [
 include = ["*.rst", "*.md", "*.txt", "tox.ini", "docs/Makefile", "test/**/*.py", "docs/**/*.rst", "docs/**/*.py"]
 exclude = ["docs/_build"]
 
-[tool.black]
-line-length = 88
-target-version = ['py310']
-include = '\.pyi?$'
-
-[tool.isort]
-profile = "black"
-multi_line_output = 3
-
 [tool.ruff]
+line-length = 88
 select = ["ALL"]
 # DTZ (flake8-datetimez): shouldn't matter
 # ERA (eradicate) currently passes byt if it becomes an issue I might disable it
 extend-exclude = ["examples/*", "stubs/*"]
-extend-ignore = ["D", "PD", "TD", "S101", "ANN101", "ANN102", "UP015", "RET505", "PLR2004", "PLR0913", "PLR0915", "PLC1901", "S602", "S605", "S607", "FIX002"]
+extend-ignore = ["D", "PD", "TD", "S101", "ANN101", "ANN102", "UP015", "RET505", "PLR2004", "PLR0913", "PLR0915", "PLC1901", "S602", "S605", "S607", "FIX002", 'COM812', 'COM819', 'E501', 'ISC001', 'Q000', 'Q001', 'Q002', 'Q003', 'W191']
 # D (pydocstyle): not ready to commit to this yet
 # PD (pandas-vet): not using pandas
 # TD (flake8-todos): currently don't really care to have exactly formatted todos
@@ -63,10 +55,15 @@ extend-ignore = ["D", "PD", "TD", "S101", "ANN101", "ANN102", "UP015", "RET505",
 # PLC1901 (prefer comparing strings using falsiness) disabled because I prefer the explcit comparison
 # S60X (possible security issues with subrpocess) these need more investigation.
 # FIX002 (flake8-fix me to do comments): TO DO comments are okay
+# 'COM812', 'COM819', 'E501', 'ISC001', 'Q000', 'Q001', 'Q002', 'Q003', 'W191' ignored by ruff format reccomendation
 per-file-ignores = { "test/*" = ["ANN", "D", "SLF001"], "test/conftest.py" = ["SIM117"], "docs/*" = ["INP001"] }
 # Don't be pedantic about types and documentation in tests. Assume tests can access private members
 # conftest.py has some nested withs for clarity, don't complain about that.
 target-version = "py38"
+
+fixable = ["I"]
+fix = true
+
 
 
 [tool.coverage.report]
@@ -133,8 +130,8 @@ Deprecated = "^1.2.13"
 [tool.poetry.group.docs]
 
 [tool.poetry.group.docs.dependencies]
-Sphinx = "^6.0.0"
-sphinx-rtd-theme = "^1.0.0"
+Sphinx = { version = "^7.0.0", python = ">=3.9,<4.0" }
+sphinx-rtd-theme = "^2.0.0"
 sphinx-autodoc-typehints = "^1.19.1"
 
 [tool.poetry.group.test]
@@ -153,5 +150,5 @@ coverage-conditional-plugin = "^0.9.0"
 
 [tool.poetry.group.type.dependencies]
 types-Deprecated = "^1.2.9"
-mypy = "<1.5.0"
+mypy = "<1.8.0"
 pytest = "^7.1.2"

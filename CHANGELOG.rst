@@ -1,3 +1,7 @@
+Version 0.8.1
+-------------
+* Fixed dependencies on Windows
+
 Version 0.8.0
 -------------
 *Changed parameter name in itemGroup

@@ -94,7 +94,7 @@ jobs:
           - os: ubuntu-latest
             python-version: 3.11
             #we already did this one
-    continue-on-error: ${{ contains(matrix.python-version,'3.13') || contains(matrix.python-version, 'pypy') && matrix.os == 'windows-latest') || matrix.python-version == 'pypy3.8'}}
+    continue-on-error: ${{ contains(matrix.python-version,'3.13') || (contains(matrix.python-version, 'pypy') && matrix.os == 'windows-latest') || matrix.python-version == 'pypy3.8'}}
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4

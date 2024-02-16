@@ -49,7 +49,7 @@ class MenuTester:  # pragma: no-cover-windows
                 echo=False,
                 encoding="utf-8",
                 dimensions=(self.rows, self.cols),
-                env=env,  # pyright: ignore [reportGeneralTypeIssues]
+                env=env,  # pyright: ignore [reportGeneralTypeIssues,reportArgumentType]
             )
         else:  # pragma: no cover all
             # this currently doesn't work on windows but I'm keeping this around

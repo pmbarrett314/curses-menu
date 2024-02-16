@@ -31,13 +31,13 @@ repos:
       - id: rst-inline-touching-normal
 
   - repo: https://github.com/bwhmather/ssort
-    rev: v0.11.6
+    rev: 0.12.4
     hooks:
       - id: ssort
         exclude: '^cursesmenu/curses_menu.py$'
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.1.7
+    rev: v0.2.1
     hooks:
       - id: ruff
       - id: ruff-format
@@ -57,13 +57,13 @@ repos:
         additional_dependencies: [ black==22.6.0 ]
 
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.7.1
+    rev: v1.8.0
     hooks:
       - id: mypy
         additional_dependencies: [ types-Deprecated ]
 
   - repo: https://github.com/RobertCraigie/pyright-python
-    rev: v1.1.339
+    rev: v1.1.350
     hooks:
       - id: pyright
         additional_dependencies:

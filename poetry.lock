@@ -896,13 +896,13 @@ files = [
 
 [[package]]
 name = "tox"
-version = "4.12.1"
+version = "4.13.0"
 description = "tox is a generic virtualenv management and test command line tool"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "tox-4.12.1-py3-none-any.whl", hash = "sha256:c07ea797880a44f3c4f200ad88ad92b446b83079d4ccef89585df64cc574375c"},
-    {file = "tox-4.12.1.tar.gz", hash = "sha256:61aafbeff1bd8a5af84e54ef6e8402f53c6a6066d0782336171ddfbf5362122e"},
+    {file = "tox-4.13.0-py3-none-any.whl", hash = "sha256:1143c7e2489c68026a55d3d4ae84c02c449f073b28e62f80e3e440a3b72a4afa"},
+    {file = "tox-4.13.0.tar.gz", hash = "sha256:dd789a554c16c4b532924ba393c92fc8991323c4b3d466712bfecc8c9b9f24f7"},
 ]
 
 [package.dependencies]
@@ -920,6 +920,24 @@ virtualenv = ">=20.25"
 [package.extras]
 docs = ["furo (>=2023.9.10)", "sphinx (>=7.2.6)", "sphinx-argparse-cli (>=1.11.1)", "sphinx-autodoc-typehints (>=1.25.2)", "sphinx-copybutton (>=0.5.2)", "sphinx-inline-tabs (>=2023.4.21)", "sphinxcontrib-towncrier (>=0.2.1a0)", "towncrier (>=23.11)"]
 testing = ["build[virtualenv] (>=1.0.3)", "covdefaults (>=2.3)", "detect-test-pollution (>=1.2)", "devpi-process (>=1)", "diff-cover (>=8.0.2)", "distlib (>=0.3.8)", "flaky (>=3.7)", "hatch-vcs (>=0.4)", "hatchling (>=1.21)", "psutil (>=5.9.7)", "pytest (>=7.4.4)", "pytest-cov (>=4.1)", "pytest-mock (>=3.12)", "pytest-xdist (>=3.5)", "re-assert (>=1.1)", "time-machine (>=2.13)", "wheel (>=0.42)"]
+
+[[package]]
+name = "tox-uv"
+version = "1.2.0"
+description = "Integration of uv with tox."
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "tox_uv-1.2.0-py3-none-any.whl", hash = "sha256:a3e9d1db13fcdcd0a7dc8dceaf8f1955aaeb4334055fea58a6c6d5e572bc71cd"},
+    {file = "tox_uv-1.2.0.tar.gz", hash = "sha256:ba32516b82a67eac16d40d971bd38882540b8302d41f614d9dee0fd25a69a600"},
+]
+
+[package.dependencies]
+tox = ">=4.13,<5"
+uv = ">=0.1.2,<1"
+
+[package.extras]
+test = ["covdefaults (>=2.3)", "devpi-process (>=1)", "pytest (>=8.0.1)", "pytest-cov (>=4.1)", "pytest-mock (>=3.12)"]
 
 [[package]]
 name = "types-deprecated"
@@ -945,13 +963,13 @@ files = [
 
 [[package]]
 name = "urllib3"
-version = "2.2.0"
+version = "2.2.1"
 description = "HTTP library with thread-safe connection pooling, file post, and more."
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "urllib3-2.2.0-py3-none-any.whl", hash = "sha256:ce3711610ddce217e6d113a2732fafad960a03fd0318c91faa79481e35c11224"},
-    {file = "urllib3-2.2.0.tar.gz", hash = "sha256:051d961ad0c62a94e50ecf1af379c3aba230c66c710493493560c0c223c49f20"},
+    {file = "urllib3-2.2.1-py3-none-any.whl", hash = "sha256:450b20ec296a467077128bff42b73080516e71b56ff59a60a02bef2232c4fa9d"},
+    {file = "urllib3-2.2.1.tar.gz", hash = "sha256:d0570876c61ab9e520d776c38acbbb5b05a776d3f9ff98a5c8fd5162a444cf19"},
 ]
 
 [package.extras]
@@ -959,6 +977,31 @@ brotli = ["brotli (>=1.0.9)", "brotlicffi (>=0.8.0)"]
 h2 = ["h2 (>=4,<5)"]
 socks = ["pysocks (>=1.5.6,!=1.5.7,<2.0)"]
 zstd = ["zstandard (>=0.18.0)"]
+
+[[package]]
+name = "uv"
+version = "0.1.4"
+description = "An extremely fast Python package installer and resolver, written in Rust."
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "uv-0.1.4-py3-none-macosx_10_12_x86_64.macosx_11_0_arm64.macosx_10_12_universal2.whl", hash = "sha256:e2af44da5440befc924ee34c9a007810aeb127af15fdd774540d34b204309fa3"},
+    {file = "uv-0.1.4-py3-none-macosx_10_12_x86_64.whl", hash = "sha256:372fcb4cf7e9db97ca748276277b4b983db02237136a7742a9ec10d6636807ee"},
+    {file = "uv-0.1.4-py3-none-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:60cd9198c06812393163e332a6c3dcdbc172c772c28a9788ada8e094de36e127"},
+    {file = "uv-0.1.4-py3-none-manylinux_2_17_ppc64.manylinux2014_ppc64.whl", hash = "sha256:a099b44b9fbf3224030e5ea3c2c4f5af86f3beabc75f77a4b9111c5a3fd4fd0f"},
+    {file = "uv-0.1.4-py3-none-manylinux_2_17_ppc64le.manylinux2014_ppc64le.whl", hash = "sha256:0c40172441db8765959418cc46780ffa31b0600bf02611871bdf90aabc2a8e92"},
+    {file = "uv-0.1.4-py3-none-manylinux_2_17_s390x.manylinux2014_s390x.whl", hash = "sha256:66494eb9dab95568678dc405c0e2a442ae65b6d3bca03f68fcb939321865dadb"},
+    {file = "uv-0.1.4-py3-none-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:febb1838820129df52529e2b6bab28a478555d9134051e33ef547df2d0380702"},
+    {file = "uv-0.1.4-py3-none-manylinux_2_28_aarch64.whl", hash = "sha256:0c1999c25b806bd6f90d3362d7a202eb4379bdfa15026d42195965ab90d1504b"},
+    {file = "uv-0.1.4-py3-none-manylinux_2_28_armv7l.whl", hash = "sha256:da88895b9b2d6370cc2bfadeb17d935c6bf9a31fa85e4a5ea71e044f9d7c6ca1"},
+    {file = "uv-0.1.4-py3-none-musllinux_1_2_aarch64.whl", hash = "sha256:ba4481f0e6a826e3b3fb306712ad0e0fc3976b12e02490a9982effc09272f4f1"},
+    {file = "uv-0.1.4-py3-none-musllinux_1_2_armv7l.whl", hash = "sha256:8cf5e8dd66ca7b433b0b0af0d22026105cf4d3c8c55d163b569294f9b0a00f1f"},
+    {file = "uv-0.1.4-py3-none-musllinux_1_2_i686.whl", hash = "sha256:0b7804d105675ff9226ee7b00c3b98b907f50c81cc19dd46acb53ad410af1b0b"},
+    {file = "uv-0.1.4-py3-none-musllinux_1_2_x86_64.whl", hash = "sha256:16f8b1cad64f225fa5d249fed07ea49c7f4d9de1de14bd95f29d9e17f1fb9965"},
+    {file = "uv-0.1.4-py3-none-win32.whl", hash = "sha256:d18532d74ab33463b37605491a4be65616340f11f7d467daf3c80a99812d503f"},
+    {file = "uv-0.1.4-py3-none-win_amd64.whl", hash = "sha256:db3391a7e301b882ae8dc0ef1adf7eaa957d202d4ae02316d0120caafe6f5982"},
+    {file = "uv-0.1.4.tar.gz", hash = "sha256:61aae7beeea068dac5834abeb0b31ae7353c1b127b1f638b7332a4bfa65e4720"},
+]
 
 [[package]]
 name = "virtualenv"
@@ -1111,4 +1154,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8"
-content-hash = "e0564d8cf50dbf4cd1176f6c5f5c3f3a46b0958f776216b9747c02cb5455ad0d"
+content-hash = "e4cb1d118254c0c1eba14f40be87908886b1441b2f5e88ecca60c9e7fb3e33f4"

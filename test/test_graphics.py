@@ -40,7 +40,7 @@ class MenuTester:  # pragma: no-cover-windows
         return "m" + ("q" * (self.cols - 2)) + "j"
 
     def spawn_process(self, cmd: str, args: list[str]):
-        env = os.environ.copy()
+        env = os.environ
         env.update({"LINES": str(self.rows), "COLUMNS": str(self.cols)})
         if not sys.platform.startswith("win32"):
             return pexpect.spawn(
@@ -49,7 +49,7 @@ class MenuTester:  # pragma: no-cover-windows
                 echo=False,
                 encoding="utf-8",
                 dimensions=(self.rows, self.cols),
-                env=env,  # pyright: ignore [reportGeneralTypeIssues]
+                env=env,  # pyright: ignore [reportGeneralTypeIssues,reportArgumentType]
             )
         else:  # pragma: no cover all
             # this currently doesn't work on windows but I'm keeping this around
@@ -57,7 +57,12 @@ class MenuTester:  # pragma: no-cover-windows
             cmd = "{} {}".format(cmd, " ".join(args))
             return pexpect.popen_spawn.PopenSpawn(cmd, encoding="utf-8", env=env)
 
-    def emulate_ansi_terminal(self, raw_output: str | None, *, clean=True):
+    def emulate_ansi_terminal(
+        self,
+        raw_output: str | type[pexpect.EOF | pexpect.TIMEOUT] | None,
+        *,
+        clean=True,
+    ):
         if raw_output in [pexpect.EOF, pexpect.TIMEOUT, None]:  # pragma: no cover all
             return ""
         self.stream.feed(cast(str, raw_output))

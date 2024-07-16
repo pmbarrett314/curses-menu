@@ -19,9 +19,8 @@ from cursesmenu.item_group import ItemGroup
 
 if TYPE_CHECKING:
     # noinspection PyCompatibility,PyProtectedMember
-    from typing import Callable
-
     from _curses import window
+    from typing import Callable
 
     Window = window
     from cursesmenu.items.menu_item import MenuItem
@@ -530,7 +529,7 @@ class CursesMenu:
         """
         return self._main_thread.is_alive()
 
-    def exit(self, timeout: int | None = None) -> Any:  # noqa: A003, ANN401
+    def exit(self, timeout: int | None = None) -> Any:  # noqa: ANN401
         """
         Signal the menu to exit and block until it does.
 

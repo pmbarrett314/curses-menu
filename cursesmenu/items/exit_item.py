@@ -44,7 +44,7 @@ class ExitItem(MenuItem):
         if self.menu and self.menu.parent:
             # TODO: implement an item that exits the whole menu
             #  hierarchy from a submenu.
-            self.text = "Return to %s menu" % self.menu.parent.title
+            self.text = f"Return to {self.menu.parent.title} menu"
         else:
             self.text = "Exit"
         return super().show(index_text)

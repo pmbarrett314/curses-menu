@@ -34,7 +34,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install ruff
       - name: Ruff Lint
-        run: ruff .
+        run: ruff check .
       - name: Ruff Format
         run: ruff format .
   mypy:
@@ -92,6 +92,7 @@ jobs:
             #we already did this one
     continue-on-error: ${{ contains(matrix.python-version,'3.13') || (contains(matrix.python-version, 'pypy') && matrix.os == 'windows-latest') || matrix.python-version == 'pypy3.8'}}
     runs-on: ${{ matrix.os }}
+    if: ${{ github.actor != 'dependabot[bot]' }}
     steps:
       - uses: actions/checkout@v4
       - run: pipx install poetry

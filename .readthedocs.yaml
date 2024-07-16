@@ -4,15 +4,12 @@
 
 # Required
 version: 2
-
 # Build documentation in the docs/ directory with Sphinx
 sphinx:
-   configuration: docs/source/conf.py
-
+  configuration: docs/source/conf.py
 # If using Sphinx, optionally build your docs in additional formats such as PDF
 formats:
-   - pdf
-
+  - pdf
 build:
   os: "ubuntu-22.04"
   tools:

@@ -1,5 +1,10 @@
 Version 0.8.1
 -------------
+* Minor fixes
+* Dependency updates
+
+Version 0.8.1
+-------------
 * Fixed dependencies on Windows
 
 Version 0.8.0

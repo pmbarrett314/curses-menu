@@ -79,7 +79,3 @@ repos:
     rev: v0.13.0
     hooks:
       - id: yamlfmt
-  - repo: https://github.com/adrienverge/yamllint.git
-    rev: v1.29.0
-    hooks:
-      - id: yamllint

@@ -68,7 +68,7 @@ def test_go_down(sample_menu: CursesMenu, sample_items: list[MenuItem]):
     assert sample_menu.current_item is sample_items[1]
     sample_menu.go_down()
     assert sample_menu.current_option == 2
-    assert type(sample_menu.current_item) == ExitItem
+    assert isinstance(sample_menu.current_item, ExitItem)
     sample_menu.go_down()
     assert sample_menu.current_option == 0
     assert sample_menu.current_item is sample_items[0]
@@ -77,7 +77,7 @@ def test_go_down(sample_menu: CursesMenu, sample_items: list[MenuItem]):
 def test_go_up(sample_menu: CursesMenu, sample_items: list[MenuItem]):
     sample_menu.go_up()
     assert sample_menu.current_option == 2
-    assert type(sample_menu.current_item) == ExitItem
+    assert isinstance(sample_menu.current_item, ExitItem)
     sample_menu.go_up()
     assert sample_menu.current_option == 1
     assert sample_menu.current_item is sample_items[1]
@@ -116,7 +116,7 @@ def test_select(sample_menu: CursesMenu, sample_items: list[MenuItem]):
     sample_menu.go_down()
     sample_menu.select()
     assert sample_menu.current_option == 2
-    assert type(sample_menu.current_item) == ExitItem
+    assert isinstance(sample_menu.current_item, ExitItem)
     sample_menu.join(timeout=10)
     assert not sample_menu.is_alive()
 
@@ -124,7 +124,7 @@ def test_select(sample_menu: CursesMenu, sample_items: list[MenuItem]):
 def test_go_to_exit(sample_menu: CursesMenu):
     sample_menu.go_to_exit()
     assert sample_menu.current_option == 2
-    assert type(sample_menu.current_item) == ExitItem
+    assert isinstance(sample_menu.current_item, ExitItem)
 
 
 def test_exit(sample_menu: CursesMenu):

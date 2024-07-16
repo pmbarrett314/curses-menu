@@ -1,4 +1,5 @@
 """A  menu item that runs a shell command."""
+
 from __future__ import annotations
 
 import subprocess

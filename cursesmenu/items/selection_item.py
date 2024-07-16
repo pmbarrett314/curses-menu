@@ -1,4 +1,5 @@
 """A class for a menu item with an integer return value."""
+
 from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any

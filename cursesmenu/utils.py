@@ -1,4 +1,5 @@
 """Utility functions for curses-menu."""
+
 from __future__ import annotations
 
 import os

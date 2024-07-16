@@ -1,9 +1,9 @@
+import pytest
+
 import test.example_menus.basic_menu
 import test.example_menus.menu_with_items
 import test.example_menus.menu_with_lots_of_items
 import test.example_menus.zero_padded_menu_with_lots_of_items
-
-import pytest
 
 pytestmark = pytest.mark.usefixtures("mock_cursesmenu_curses", "mock_clear")
 

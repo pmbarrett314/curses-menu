@@ -49,12 +49,10 @@ class ItemGroup(MutableSequence[MenuItem]):
         self.menu.adjust_screen_size()
 
     @overload
-    def __getitem__(self, i: int) -> MenuItem:
-        ...
+    def __getitem__(self, i: int) -> MenuItem: ...
 
     @overload
-    def __getitem__(self, i: slice) -> ItemGroup:
-        ...
+    def __getitem__(self, i: slice) -> ItemGroup: ...
 
     def __getitem__(self, i: int | slice) -> MenuItem | ItemGroup:
         if isinstance(i, slice):
@@ -63,12 +61,10 @@ class ItemGroup(MutableSequence[MenuItem]):
             return self.items[i]
 
     @overload
-    def __setitem__(self, i: int, item: MenuItem) -> None:
-        ...
+    def __setitem__(self, i: int, item: MenuItem) -> None: ...
 
     @overload
-    def __setitem__(self, i: slice, item: Iterable[MenuItem]) -> None:
-        ...
+    def __setitem__(self, i: slice, item: Iterable[MenuItem]) -> None: ...
 
     def __setitem__(
         self,
@@ -91,12 +87,10 @@ class ItemGroup(MutableSequence[MenuItem]):
         self.menu.adjust_screen_size()
 
     @overload
-    def __delitem__(self, i: int) -> None:
-        ...
+    def __delitem__(self, i: int) -> None: ...
 
     @overload
-    def __delitem__(self, i: slice) -> None:
-        ...
+    def __delitem__(self, i: slice) -> None: ...
 
     def __delitem__(self, i: int | slice) -> None:
         """Delete an item."""

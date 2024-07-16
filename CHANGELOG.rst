@@ -1,4 +1,8 @@
-Version 0.8.1
+Version 0.8.3
+-------------
+* Minor fixes
+
+Version 0.8.2
 -------------
 * Minor fixes
 * Dependency updates

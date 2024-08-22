@@ -4,12 +4,12 @@ from cursesmenu import CursesMenu
 from cursesmenu.items import MenuItem
 
 
-@pytest.fixture()
+@pytest.fixture
 def basic_item():
     return MenuItem("item")
 
 
-@pytest.fixture()
+@pytest.fixture
 def item_with_menu():
     menu = CursesMenu()
     return MenuItem("item with menu", menu=menu)

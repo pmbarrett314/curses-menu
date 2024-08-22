@@ -4,12 +4,12 @@ from cursesmenu import CursesMenu
 from cursesmenu.items import ExitItem, SubmenuItem
 
 
-@pytest.fixture()
+@pytest.fixture
 def exit_item():
     return ExitItem()
 
 
-@pytest.fixture()
+@pytest.fixture
 def exit_item_with_parent():
     root_menu = CursesMenu("root_menu")
     submenu = CursesMenu("submenu")

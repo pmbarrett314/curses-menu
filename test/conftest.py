@@ -12,7 +12,7 @@ import pytest
 import cursesmenu.curses_menu  # noqa: F401
 
 
-@pytest.fixture()
+@pytest.fixture
 def mock_clear():
     with mock.patch("cursesmenu.utils.clear_terminal") as f:
         with mock.patch("cursesmenu.utils.soft_clear_terminal") as g:
@@ -57,29 +57,29 @@ def mock_curses_(rows, cols):
     return f
 
 
-@pytest.fixture()
+@pytest.fixture
 def mock_curses_window_size(window_rows, window_cols):
     return mock_curses_(window_rows, window_cols)
 
 
-@pytest.fixture()
+@pytest.fixture
 def mock_curses():
     return mock_curses_(99999999, 99999999)
 
 
-@pytest.fixture()
+@pytest.fixture
 def mock_cursesmenu_curses(mock_curses):
     with mock.patch("cursesmenu.curses_menu.curses", new=mock_curses) as f:
         yield f
 
 
-@pytest.fixture()
+@pytest.fixture
 def mock_cursesmenu_curses_vary_window_size(mock_curses_window_size):
     with mock.patch("cursesmenu.curses_menu.curses", new=mock_curses_window_size) as f:
         yield f
 
 
-@pytest.fixture()
+@pytest.fixture
 def mock_externalitem_curses(mock_curses):
     with mock.patch("cursesmenu.items.external_item.curses", new=mock_curses) as f:
         yield f

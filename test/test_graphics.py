@@ -11,7 +11,7 @@ import pyte
 import pytest
 
 if TYPE_CHECKING:
-    from typing import Generator
+    from collections.abc import Generator
 
 TEST_DIR_PATH = pathlib.Path(__file__).parent.absolute()
 BASIC_MENU_PATH = TEST_DIR_PATH.joinpath("example_menus", "basic_menu.py")

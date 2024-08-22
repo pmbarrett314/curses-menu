@@ -14,7 +14,7 @@ pytestmark = pytest.mark.usefixtures(
 test_file_path = pathlib.Path("test.txt")
 
 
-@pytest.fixture()
+@pytest.fixture
 def create_item():
     return CommandItem(
         "create_item",
@@ -24,7 +24,7 @@ def create_item():
     )
 
 
-@pytest.fixture()
+@pytest.fixture
 def delete_item():
     if sys.platform.startswith(
         "win",
@@ -34,7 +34,7 @@ def delete_item():
         return CommandItem("delete_item", "rm", arguments=["-f", str(test_file_path)])
 
 
-@pytest.fixture()
+@pytest.fixture
 def exit_item():
     return CommandItem("return_command_item", "exit", arguments=["42"])
 

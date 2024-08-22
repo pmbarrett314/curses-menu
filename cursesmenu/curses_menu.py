@@ -12,8 +12,6 @@ import time
 from collections import defaultdict
 from typing import TYPE_CHECKING, Any, cast
 
-from deprecated import deprecated
-
 import cursesmenu.utils
 from cursesmenu.item_group import ItemGroup
 
@@ -546,11 +544,6 @@ class CursesMenu:
             if max_row < MIN_SIZE + len(self.all_items):
                 self.screen.resize(self.menu_height, max_cols)
             self.draw()
-
-    @deprecated(reason="Use self.items.append.", version="0.6.0")
-    def append_item(self, item: MenuItem) -> None:
-        """Append an item to the list of items."""
-        self.items.append(item)
 
     def __repr__(self) -> str:
         """Get a string representation of the menu."""

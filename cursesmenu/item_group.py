@@ -2,16 +2,11 @@
 
 from __future__ import annotations
 
-import sys
-from typing import TYPE_CHECKING, Any, Iterable, cast, overload
-
-if sys.version_info >= (3, 9):  # pragma: py-lt-39
-    from collections.abc import MutableSequence
-else:  # pragma: py-gte-39
-    from typing import MutableSequence
+from collections.abc import Iterable, MutableSequence
+from typing import TYPE_CHECKING, Any, cast, overload
 
 if TYPE_CHECKING:
-    from typing import Iterator
+    from collections.abc import Iterator
 
     from cursesmenu.curses_menu import CursesMenu
     from cursesmenu.items.menu_item import MenuItem

@@ -21,10 +21,10 @@ classifiers = [
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3 :: Only",
-    "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: Implementation :: CPython",
     "Programming Language :: Python :: Implementation :: PyPy",
     "Topic :: Software Development :: Libraries :: Python Modules",
@@ -38,7 +38,7 @@ line-length = 88
 extend-exclude = ["examples/*", "stubs/*"]
 # Don't be pedantic about types and documentation in tests. Assume tests can access private members
 # conftest.py has some nested withs for clarity, don't complain about that.
-target-version = "py38"
+target-version = "py39"
 fix = true
 
 [tool.ruff.lint]
@@ -89,9 +89,6 @@ output = ".cov/coverage.lcov"
 [tool.coverage.coverage_conditional_plugin.rules]
 no-cover-nonwindows = "not sys.platform.startswith('win')"
 no-cover-windows = "sys.platform.startswith('win')"
-py-gte-39 = "sys_version_info >= (3, 9)"
-py-lt-39 = "sys_version_info < (3, 9)"
-
 
 [tool.pytest.ini_options]
 required_plugins = ["pytest-cov"]

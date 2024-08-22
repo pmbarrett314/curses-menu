@@ -1,6 +1,9 @@
 default_language_version:
-  python: python3.11
+  python: python3.12
 repos:
+  - repo: meta
+    hooks:
+      - id: check-useless-excludes
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.6.0
     hooks:
@@ -34,7 +37,7 @@ repos:
       - id: ssort
         exclude: '^cursesmenu/curses_menu.py$'
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.5.2
+    rev: v0.6.1
     hooks:
       - id: ruff
       - id: ruff-format
@@ -51,12 +54,12 @@ repos:
       - id: blacken-docs
         additional_dependencies: [black==22.6.0]
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.10.1
+    rev: v1.11.1
     hooks:
       - id: mypy
         additional_dependencies: [types-Deprecated]
   - repo: https://github.com/RobertCraigie/pyright-python
-    rev: v1.1.371
+    rev: v1.1.377
     hooks:
       - id: pyright
         additional_dependencies:

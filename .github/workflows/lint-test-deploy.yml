@@ -17,10 +17,10 @@ jobs:
       UV_CACHE_DIR: /tmp/.uv-cache
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - uses: pre-commit/action@v3.0.0
+      - uses: pre-commit/action@v3.0.1
         env:
           SKIP: "mypy,ruff"
   ruff:
@@ -96,7 +96,7 @@ jobs:
       - run: uv run coverage lcov
         name: Generate coverage report for this run
       - name: Upload coverage report for this run to coveralls
-        uses: coverallsapp/github-action@master
+        uses: coverallsapp/github-action@main
         with:
           github-token: ${{ secrets.github_token }}
           path-to-lcov: .cov/coverage.lcov
@@ -151,7 +151,7 @@ jobs:
       - run: uv run coverage lcov
         name: Generate coverage report for this run
       - name: Upload coverage report for this run to coveralls
-        uses: coverallsapp/github-action@master
+        uses: coverallsapp/github-action@main
         with:
           github-token: ${{ secrets.github_token }}
           path-to-lcov: .cov/coverage.lcov
@@ -196,7 +196,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: pipx install poetry
-      - uses: actions/setup-python@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: 3.11
           cache: 'poetry'

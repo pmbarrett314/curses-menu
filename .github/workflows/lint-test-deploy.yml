@@ -17,23 +17,12 @@ jobs:
       UV_CACHE_DIR: /tmp/.uv-cache
     steps:
       - uses: actions/checkout@v4
-      - name: Set up uv
-        run: curl -LsSf https://astral.sh/uv/install.sh | sh
-      - name: Set up Python
-        run: uv python install 3.12
-      - name: Restore uv cache
-        uses: actions/cache@v4
+      - uses: actions/setup-python@v4
         with:
-          path: /tmp/.uv-cache
-          key: uv-${{ runner.os }}-${{ hashFiles('uv.lock') }}
-          restore-keys: |
-            uv-${{ runner.os }}-${{ hashFiles('uv.lock') }}
-            uv-${{ runner.os }}
+          python-version: "3.12"
       - uses: pre-commit/action@v3.0.0
         env:
           SKIP: "mypy,ruff"
-      - name: Minimize uv cache
-        run: uv cache prune --ci
   ruff:
     name: Lint with ruff
     runs-on: ubuntu-latest

@@ -66,11 +66,6 @@ repos:
           - pyte
           - pexpect
           - importlib-metadata
-  - repo: https://github.com/python-poetry/poetry
-    rev: 1.8.0
-    hooks:
-      - id: poetry-check
-      - id: poetry-lock
   - repo: https://github.com/rhysd/actionlint
     rev: v1.7.1
     hooks:
@@ -79,3 +74,8 @@ repos:
     rev: v0.13.0
     hooks:
       - id: yamlfmt
+  - repo: https://github.com/macisamuele/language-formatters-pre-commit-hooks
+    rev: v2.14.0
+    hooks:
+      - id: pretty-format-ini
+        args: [--autofix]

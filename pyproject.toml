@@ -1,16 +1,15 @@
-[build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
-
-[tool.poetry]
+[project]
 name = "curses-menu"
 version = "0.8.3"
 description = "A simple console menu system using curses"
-authors = ["Paul Barrett <pmbarrett314@gmail.com>"]
-license = "MIT"
-repository = "http://github.com/pmbarrett314/curses-menu"
-packages = [{ include = "cursesmenu" }]
+authors = [
+    { name = "Paul Barrett", email = "pmbarrett314@gmail.com" },
+]
 readme = "README.rst"
+requires-python = ">=3.9"
+dependencies = [
+    "windows-curses>=2.3.3 ; platform_system == 'Windows'",
+]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Environment :: Console",
@@ -30,8 +29,17 @@ classifiers = [
     "Topic :: Software Development :: Libraries :: Python Modules",
     "Typing :: Typed",
 ]
-include = ["*.rst", "*.md", "*.txt", "tox.ini", "docs/Makefile", "test/**/*.py", "docs/**/*.rst", "docs/**/*.py"]
-exclude = ["docs/_build"]
+
+[project.urls]
+Homepage = "http://github.com/pmbarrett314/curses-menu"
+Documentation = "https://curses-menu.readthedocs.io/en/latest/"
+Repository = "http://github.com/pmbarrett314/curses-menu"
+Issues = "https://github.com/pmbarrett314/curses-menu/issues"
+Changelog = "https://github.com/pmbarrett314/curses-menu/blob/master/CHANGELOG.rst"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
 [tool.ruff]
 line-length = 88
@@ -78,7 +86,7 @@ exclude_lines = [
 
 [tool.coverage.run]
 source = ['test', 'cursesmenu']
-omit = ["cursesmenu/old_curses_menu.py"]
+omit = ["cursesmenu/old_curses_menu.py", ".tox"]
 branch = true
 data_file = ".cov/.coverage"
 plugins = ["coverage_conditional_plugin"]
@@ -119,32 +127,22 @@ no_implicit_reexport = true
 strict_equality = true
 strict_concatenate = true
 
+[tool.uv]
+dev-dependencies = [
+    "sphinx<=9.0.0; python_version >='3.10'",
+    "sphinx-rtd-theme==3.0.0rc1; python_version >= '3.10'",
+    "sphinx-autodoc-typehints<3.0.0; python_version>='3.10'",
+    "pytest<9.0.0",
+    "tox<5.0.0",
+    "tox-uv<2.0.0",
+    "pyte<0.8.2",
+    "pexpect<5.0.0",
+    "coverage[toml]<8",
+    "pytest-cov<6.0.0",
+    "coverage-conditional-plugin<0.10.0",
+    "mypy<1.12.0",
+    "ruff == 0.6.1"
+]
 
-[tool.poetry.dependencies]
-python = "^3.9"
-windows-curses = { version = "^2.3.2", platform = "win32" }
-
-[tool.poetry.group.docs]
-
-[tool.poetry.group.docs.dependencies]
-Sphinx = { version = "^8.0.0", python = ">=3.10"}
-sphinx-rtd-theme = { version= "^3.0.0rc1",  python = ">=3.10"}
-sphinx-autodoc-typehints = "^2.0.0"
-
-[tool.poetry.group.test]
-
-[tool.poetry.group.test.dependencies]
-pytest = "^8.0.0"
-tox = "^4.0.0"
-tox-uv = "^1.0.1"
-coverage = { version = "^7.0.0", extras = ["toml"] }
-pyte = "^0.8.1"
-pexpect = "^4.8.0"
-pytest-cov = "^5.0.0"
-coverage-conditional-plugin = "^0.9.0"
-
-[tool.poetry.group.type]
-
-[tool.poetry.group.type.dependencies]
-mypy = "<1.12.0"
-pytest = "^8.0.0"
+[tool.hatch.build.targets.wheel]
+packages = ["cursesmenu"]

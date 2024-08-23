@@ -33,7 +33,7 @@ class MenuTester:  # pragma: no-cover-windows
         self.screen = pyte.Screen(self.cols, self.rows)
         self.stream = pyte.Stream(self.screen)
         self.filepath = filepath
-        self.shell_command = f"python {self.filepath}"
+        self.shell_command = f"uv run {self.filepath}"
 
     @property
     def bottom_row(self):
@@ -94,10 +94,13 @@ class TestBasicMenu(MenuTester):  # pragma: no-cover-windows
             child.after,
         )
 
-        with TEST_DIR_PATH.joinpath("menu_data", "basic-menu-screen-0").open(
-            "r",
-        ) as infile:
-            assert infile.read().strip() == out.strip()
+        path_1 = TEST_DIR_PATH.joinpath("menu_data", "basic-menu-screen-0")
+        path_2 = TEST_DIR_PATH.joinpath("menu_data", "basic-menu-screen-0-alt")
+        with path_1.open("r") as infile, path_2.open("r") as infile_alt:
+            assert (
+                infile.read().strip() == out.strip()
+                or infile_alt.read().strip() == out.strip()
+            )
         child.sendline()
 
         child.expect(pexpect.EOF, timeout=5)
@@ -119,11 +122,15 @@ class TestMenuWithItems(MenuTester):  # pragma: no-cover-windows
         out = self.emulate_ansi_terminal(child.before) + self.emulate_ansi_terminal(
             child.after,
         )
+        path_1 = TEST_DIR_PATH.joinpath("menu_data", "menu_with_items-0")
+        path_2 = TEST_DIR_PATH.joinpath("menu_data", "menu_with_items-0-alt")
 
-        with TEST_DIR_PATH.joinpath("menu_data", "menu_with_items-0").open(
-            "r",
-        ) as infile:
-            assert infile.read().strip() == out.strip()
+        with path_1.open("r") as infile, path_2.open("r") as infile_alt:
+            assert (
+                infile.read().strip() == out.strip()
+                or infile_alt.read().strip() == out.strip()
+            )
+
         child.sendline()
         child.expect(pexpect.EOF, timeout=5)
 

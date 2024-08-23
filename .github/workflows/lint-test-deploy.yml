@@ -54,9 +54,9 @@ jobs:
             uv-${{ runner.os }}-${{ hashFiles('uv.lock') }}
             uv-${{ runner.os }}
       - name: Ruff Lint
-        run: uv tool ruff check .
+        run: uv run ruff check .
       - name: Ruff Format
-        run: uv tool ruff format .
+        run: uv run ruff format .
       - name: Minimize uv cache
         run: uv cache prune --ci
   mypy:
@@ -78,7 +78,7 @@ jobs:
           restore-keys: |
             uv-${{ runner.os }}-${{ hashFiles('uv.lock') }}
             uv-${{ runner.os }}
-      - run: uv tool mypy .
+      - run: uv run mypy .
       - name: Minimize uv cache
         run: uv cache prune --ci
   initial-test:
@@ -102,9 +102,9 @@ jobs:
             uv-${{ runner.os }}
       - name: Install the project
         run: uv sync --all-extras --dev
-      - run: uv tool pytest
+      - run: uv run pytest
         name: Run tests
-      - run: uv tool coverage lcov
+      - run: uv run coverage lcov
         name: Generate coverage report for this run
       - name: Upload coverage report for this run to coveralls
         uses: coverallsapp/github-action@master
@@ -157,9 +157,9 @@ jobs:
             uv-${{ runner.os }}
       - name: Install the project
         run: uv sync --all-extras --dev
-      - run: uv tool pytest
+      - run: uv run pytest
         name: Run tests
-      - run: uv tool coverage lcov
+      - run: uv run coverage lcov
         name: Generate coverage report for this run
       - name: Upload coverage report for this run to coveralls
         uses: coverallsapp/github-action@master

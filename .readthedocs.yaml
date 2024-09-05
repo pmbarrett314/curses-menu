@@ -18,5 +18,6 @@ build:
     post_create_environment:
       # Install uv
       - curl -LsSf https://astral.sh/uv/install.sh | sh
+      - uv sync --all-extras --dev
     post_install:
       - uv pip install "Sphinx<9.0.0" ""sphinx-autodoc-typehints<3.0.0" "sphinx-rtd-theme==3.0.0rc1"

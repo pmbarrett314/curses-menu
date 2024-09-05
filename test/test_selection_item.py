@@ -4,7 +4,7 @@ import pytest
 from cursesmenu.items.selection_item import SelectionItem
 
 
-@pytest.fixture()
+@pytest.fixture
 def selection_item():
     return SelectionItem("item", 1)
 

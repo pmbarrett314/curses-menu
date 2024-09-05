@@ -3,7 +3,6 @@ CursesMenu --- Standard menu class
 
 .. autoclass:: cursesmenu.CursesMenu
 
-    .. automethod:: cursesmenu.CursesMenu.append_item
 
     .. raw:: html
 

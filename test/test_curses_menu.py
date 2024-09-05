@@ -58,7 +58,7 @@ def test_empty_menu(empty_menu: CursesMenu):
     assert not empty_menu.is_alive()
 
 
-def test_big_menu(big_menu: CursesMenu):  # noqa: ARG001
+def test_big_menu(big_menu: CursesMenu):
     pass
 
 

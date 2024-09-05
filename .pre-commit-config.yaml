@@ -37,7 +37,7 @@ repos:
       - id: ssort
         exclude: '^cursesmenu/curses_menu.py$'
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.6.1
+    rev: v0.6.4
     hooks:
       - id: ruff
       - id: ruff-format
@@ -54,11 +54,11 @@ repos:
       - id: blacken-docs
         additional_dependencies: [black==22.6.0]
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.11.1
+    rev: v1.11.2
     hooks:
       - id: mypy
   - repo: https://github.com/RobertCraigie/pyright-python
-    rev: v1.1.377
+    rev: v1.1.379
     hooks:
       - id: pyright
         additional_dependencies:
@@ -66,6 +66,10 @@ repos:
           - pyte
           - pexpect
           - importlib-metadata
+  - repo: https://github.com/astral-sh/uv-pre-commit
+    rev: 0.4.5
+    hooks:
+      - id: uv-lock
   - repo: https://github.com/rhysd/actionlint
     rev: v1.7.1
     hooks:

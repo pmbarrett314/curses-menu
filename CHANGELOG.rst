@@ -1,3 +1,9 @@
+Version 0.9.0
+-------------
+* Use uv for packaging and building
+* Drop Python 3.8
+* Remove CursesMenu.append_item
+
 Version 0.8.3
 -------------
 * Minor fixes

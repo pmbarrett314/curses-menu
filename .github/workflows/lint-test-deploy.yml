@@ -27,12 +27,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Install uv
-        uses: astral-sh/setup-uv@v2
+        uses: astral-sh/setup-uv@v3
         with:
           version: ${{ vars.UV_VERSION }}
           enable-cache: true
-          cache-dependency-glob: "uv.lock"
-          github-token: ${{ secrets.GITHUB_TOKEN }}
       - name: Set up Python
         run: uv python install ${{ vars.MAIN_PYTHON }}
       - name: Ruff Lint
@@ -45,12 +43,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Install uv
-        uses: astral-sh/setup-uv@v2
+        uses: astral-sh/setup-uv@v3
         with:
           version: ${{ vars.UV_VERSION }}
           enable-cache: true
-          cache-dependency-glob: "uv.lock"
-          github-token: ${{ secrets.GITHUB_TOKEN }}
       - name: Set up Python
         run: uv python install ${{ vars.MAIN_PYTHON }}
       - run: uv run mypy .
@@ -60,12 +56,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Install uv
-        uses: astral-sh/setup-uv@v2
+        uses: astral-sh/setup-uv@v3
         with:
           version: ${{ vars.UV_VERSION }}
           enable-cache: true
-          cache-dependency-glob: "uv.lock"
-          github-token: ${{ secrets.GITHUB_TOKEN }}
       - name: Set up Python
         run: uv python install ${{ vars.MAIN_PYTHON }}
       - name: Install the project
@@ -101,12 +95,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Install uv
-        uses: astral-sh/setup-uv@v2
+        uses: astral-sh/setup-uv@v3
         with:
           version: ${{ vars.UV_VERSION }}
           enable-cache: true
-          cache-dependency-glob: "uv.lock"
-          github-token: ${{ secrets.GITHUB_TOKEN }}
       - name: Set up Python
         if: ${{ ! (contains(matrix.python-version,'3.13') || contains(matrix.python-version,'3.14')) }}
         run: uv python install ${{ matrix.python-version }}
@@ -164,12 +156,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Install uv
-        uses: astral-sh/setup-uv@v2
+        uses: astral-sh/setup-uv@v3
         with:
           version: ${{ vars.UV_VERSION }}
           enable-cache: true
-          cache-dependency-glob: "uv.lock"
-          github-token: ${{ secrets.GITHUB_TOKEN }}
       - name: Build package
         run: uv build
       - name: Publish package distributions to PyPI

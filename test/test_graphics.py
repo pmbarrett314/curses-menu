@@ -33,7 +33,7 @@ class MenuTester:  # pragma: no-cover-windows
         self.screen = pyte.Screen(self.cols, self.rows)
         self.stream = pyte.Stream(self.screen)
         self.filepath = filepath
-        self.shell_command = f"uv run {self.filepath}"
+        self.shell_command = f"uv run --cache-dir ./test-menu-uv-cache {self.filepath}"
 
     @property
     def bottom_row(self):

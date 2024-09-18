@@ -135,7 +135,7 @@ dev-dependencies = [
     "pytest<9.0.0",
     "tox<5.0.0",
     "tox-uv<2.0.0",
-    "pyte<0.8.2",
+    "pyte<0.8.3",
     "pexpect<5.0.0",
     "coverage[toml]<8",
     "pytest-cov<6.0.0",

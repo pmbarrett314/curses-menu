@@ -142,17 +142,32 @@ jobs:
           else
             exit 1
           fi
-  build-and-publish:
-    name: Build and publish Python distributions to PyPI and TestPyPI
+  check-semver-tag:
+    name: Check that tag matches semver
     runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/tags')
-    permissions:
-      id-token: write
+    outputs:
+      output1: ${{ steps.check-tag.outputs.match }}
     needs:
       - pre-commit
       - ruff
       - mypy
       - test
+    steps:
+      - name: Check Tag
+        id: check-tag
+        run: |
+          if [[ ${{ github.event.ref }} =~ ^refs/tags/[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+          echo "match=true" >> "$GITHUB_OUTPUT"
+          fi
+  build-and-publish:
+    name: Build and publish Python distributions to PyPI and TestPyPI
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags') && needs.check-semver-tag.outputs.output1 == 'true'
+    permissions:
+      id-token: write
+    needs:
+      - check-semver-tag
     steps:
       - uses: actions/checkout@v4
       - name: Install uv

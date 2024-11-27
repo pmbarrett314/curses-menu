@@ -130,7 +130,7 @@ strict_concatenate = true
 [tool.uv]
 dev-dependencies = [
     "sphinx<=9.0.0; python_version >='3.10'",
-    "sphinx-rtd-theme==3.0.0rc1; python_version >= '3.10'",
+    "sphinx-rtd-theme<4.0.0; python_version >= '3.10'",
     "sphinx-autodoc-typehints<3.0.0; python_version>='3.10'",
     "pytest<9.0.0",
     "tox<5.0.0",
@@ -141,8 +141,8 @@ dev-dependencies = [
     "pytest-cov<6.0.0",
     "coverage-conditional-plugin<0.10.0",
     "mypy<1.12.0",
-    "ruff == 0.6.5",
-    "uv == 0.4.12"
+    "ruff == 0.6.9",
+    "uv == 0.5.4"
 ]
 
 [tool.hatch.build.targets.wheel]

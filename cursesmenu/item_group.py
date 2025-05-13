@@ -67,14 +67,13 @@ class ItemGroup(MutableSequence[MenuItem]):
         item: MenuItem | Iterable[MenuItem],
     ) -> None:
         """Set an item."""
-        from cursesmenu.items.menu_item import MenuItem
 
         if isinstance(i, int):
-            item = cast(MenuItem, item)
+            item = cast("MenuItem", item)
             item.menu = self.menu
             self.items[i] = item
         else:
-            item = cast(Iterable[MenuItem], item)
+            item = cast("Iterable[MenuItem]", item)
             for it in item:
                 it.menu = self.menu
             self.items[i] = item

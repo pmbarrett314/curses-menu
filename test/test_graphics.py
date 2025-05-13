@@ -65,7 +65,7 @@ class MenuTester:  # pragma: no-cover-windows
     ):
         if raw_output in [pexpect.EOF, pexpect.TIMEOUT, None]:  # pragma: no cover all
             return ""
-        self.stream.feed(cast(str, raw_output))
+        self.stream.feed(cast("str", raw_output))
 
         lines: list[str] | Generator[str, None, None] = self.screen.display
         self.screen.reset()

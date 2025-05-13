@@ -133,7 +133,7 @@ class CursesMenu:
                 },
             )
         self.user_input_handlers.update(
-            {k: self.go_to for k in map(ord, map(str, range(1, 10)))},
+            dict.fromkeys(map(ord, map(str, range(1, 10))), self.go_to)
         )
 
         self._debug_screens = _debug_screens
@@ -190,7 +190,7 @@ class CursesMenu:
             subtitle=subtitle,
             show_exit_item=False,
         )
-        return cast(int, menu.show())
+        return cast("int", menu.show())
 
     @property
     def all_items(self) -> ItemGroup:

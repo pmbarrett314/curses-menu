@@ -7,9 +7,9 @@ from .submenu_item import SubmenuItem
 
 __all__ = [
     "CommandItem",
+    "ExitItem",
     "ExternalItem",
     "FunctionItem",
-    "SubmenuItem",
     "MenuItem",
-    "ExitItem",
+    "SubmenuItem",
 ]

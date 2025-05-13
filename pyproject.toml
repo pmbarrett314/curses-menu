@@ -52,7 +52,7 @@ fix = true
 
 [tool.ruff.lint]
 select = ["ALL"]
-extend-ignore = ["D", "PD", "TD", "S101", "ANN101", "ANN102", "UP015", "RET505", "PLR2004", "PLR0913", "PLR0915", "PLC1901", "S602", "S605", "S607", "FIX002", 'COM812', 'COM819', 'E501', 'ISC001', 'Q000', 'Q001', 'Q002', 'Q003', 'W191']
+extend-ignore = ["D", "PD", "TD", "S101", "UP015", "RET505", "PLR2004", "PLR0913", "PLR0915", "PLC1901", "S602", "S605", "S607", "FIX002", 'COM812', 'COM819', 'E501', 'ISC001', 'Q000', 'Q001', 'Q002', 'Q003', 'W191']
 # DTZ (flake8-datetimez): shouldn't matter
 # ERA (eradicate) currently passes byt if it becomes an issue I might disable it
 

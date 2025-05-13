@@ -27,10 +27,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Install uv
-        uses: astral-sh/setup-uv@v4
-        with:
-          version: ${{ vars.UV_VERSION }}
-          enable-cache: true
+        uses: astral-sh/setup-uv@v5
       - name: Set up Python
         run: uv python install ${{ vars.MAIN_PYTHON }}
       - name: Ruff Lint
@@ -43,10 +40,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Install uv
-        uses: astral-sh/setup-uv@v4
-        with:
-          version: ${{ vars.UV_VERSION }}
-          enable-cache: true
+        uses: astral-sh/setup-uv@v5
       - name: Set up Python
         run: uv python install ${{ vars.MAIN_PYTHON }}
       - run: uv run mypy .
@@ -56,10 +50,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Install uv
-        uses: astral-sh/setup-uv@v4
-        with:
-          version: ${{ vars.UV_VERSION }}
-          enable-cache: true
+        uses: astral-sh/setup-uv@v5
       - name: Set up Python
         run: uv python install ${{ vars.MAIN_PYTHON }}
       - name: Install the project
@@ -83,7 +74,7 @@ jobs:
       - initial-test
     strategy:
       matrix:
-        python-version: ["3.13", "3.12", "3.11", "3.10", "3.9", "3.8", "pypy3.10", "3.14.0-alpha.0"]
+        python-version: ["3.13", "3.12", "3.11", "3.10", "3.9", "3.8", "pypy3.10", "3.14.0-beta.1"]
         os: [ubuntu-latest, macos-latest, windows-latest]
         exclude:
           - os: ubuntu-latest
@@ -95,10 +86,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Install uv
-        uses: astral-sh/setup-uv@v4
-        with:
-          version: ${{ vars.UV_VERSION }}
-          enable-cache: true
+        uses: astral-sh/setup-uv@v5
       - name: Set up Python
         if: ${{ ! contains(matrix.python-version,'3.14') }}
         run: uv python install ${{ matrix.python-version }}
@@ -171,10 +159,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Install uv
-        uses: astral-sh/setup-uv@v4
-        with:
-          version: ${{ vars.UV_VERSION }}
-          enable-cache: true
+        uses: astral-sh/setup-uv@v5
       - name: Build package
         run: uv build
       - name: Publish package distributions to PyPI

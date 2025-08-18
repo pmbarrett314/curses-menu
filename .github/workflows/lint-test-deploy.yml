@@ -14,7 +14,7 @@ jobs:
     name: Various quality checks with pre-commit
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ vars.MAIN_PYTHON }}
@@ -25,7 +25,7 @@ jobs:
     name: Lint with ruff
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Install uv
         uses: astral-sh/setup-uv@v6
       - name: Set up Python
@@ -38,7 +38,7 @@ jobs:
     name: Type check with mypy
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Install uv
         uses: astral-sh/setup-uv@v6
       - name: Set up Python
@@ -48,7 +48,7 @@ jobs:
     name: Test One Version First
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Install uv
         uses: astral-sh/setup-uv@v6
       - name: Set up Python
@@ -84,7 +84,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     if: ${{ github.actor != 'dependabot[bot]' }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Install uv
         uses: astral-sh/setup-uv@v6
       - name: Set up Python
@@ -157,7 +157,7 @@ jobs:
     needs:
       - check-semver-tag
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Install uv
         uses: astral-sh/setup-uv@v6
       - name: Build package

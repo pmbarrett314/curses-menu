@@ -308,6 +308,24 @@ class CursesMenu:
 
         Adds border, title and subtitle, and items, then refreshes the screen.
         """
+        # Sync stdscr to the true terminal size before drawing.  On some
+        # terminal emulators (observed on WSL/Windows) widening does not produce
+        # KEY_RESIZE, leaving ncurses's internal COLS at the old smaller value.
+        # Every subsequent prefresh() then silently returns ERR because
+        # smaxcol > COLS-1.  Calling resizeterm() here keeps stdscr current on
+        # every redraw, not only when KEY_RESIZE fires.
+        if CursesMenu.stdscr is not None and self.screen is not None:
+            try:
+                term_size = os.get_terminal_size()
+                curses.resizeterm(term_size.lines, term_size.columns)
+                screen_rows, screen_cols = CursesMenu.stdscr.getmaxyx()
+                pad_rows, pad_cols = self.screen.getmaxyx()
+                need_rows = max(pad_rows, max(self.menu_height, screen_rows))
+                need_cols = max(pad_cols, screen_cols)
+                if need_rows > pad_rows or need_cols > pad_cols:
+                    self.screen.resize(need_rows, need_cols)
+            except (OSError, curses.error):
+                pass
         assert self.screen is not None
         self.screen.border()
         self.screen.addstr(2, 2, self.title, curses.A_STANDOUT)
@@ -361,14 +379,34 @@ class CursesMenu:
         """Refresh what's onscreen to match the cursor's position."""
         assert CursesMenu.stdscr is not None
         assert self.screen is not None
-        screen_rows, screen_cols = CursesMenu.stdscr.getmaxyx()
+
+        # Use the kernel ioctl directly so the dimensions are never stale.
+        try:
+            term_size = os.get_terminal_size()
+            screen_rows, screen_cols = term_size.lines, term_size.columns
+        except OSError:
+            screen_rows, screen_cols = CursesMenu.stdscr.getmaxyx()
+
+        pad_rows, pad_cols = self.screen.getmaxyx()
+        stdscr_rows, stdscr_cols = CursesMenu.stdscr.getmaxyx()
+
+        # prefresh() validates smaxrow/smaxcol against both the pad size and
+        # stdscr dimensions, returning ERR (silently raising curses.error) if
+        # either is exceeded.  Clamping here prevents that.  draw() calls
+        # resizeterm() first, so stdscr normally matches the terminal and the
+        # clamp is a no-op; the guard handles any mid-resize transient state.
+        usable_rows = min(screen_rows, pad_rows, stdscr_rows)
+        usable_cols = min(screen_cols, pad_cols, stdscr_cols)
+        if usable_rows <= 0 or usable_cols <= 0:
+            return
 
         if self.menu_height > screen_rows:
             top_row = min(self.menu_height - screen_rows, self.current_option)
         else:
             top_row = 0
+        top_row = min(top_row, max(0, pad_rows - usable_rows))
 
-        self.screen.refresh(top_row, 0, 0, 0, screen_rows - 1, screen_cols - 1)
+        self.screen.refresh(top_row, 0, 0, 0, usable_rows - 1, usable_cols - 1)
 
     def process_user_input(self) -> int:
         """
@@ -474,9 +512,31 @@ class CursesMenu:
     def on_resize(self, _: int = 0) -> None:
         """Handle a terminal resize event."""
         assert CursesMenu.stdscr is not None
-        screen_rows, screen_cols = CursesMenu.stdscr.getmaxyx()
+        # os.get_terminal_size() queries the kernel ioctl directly and is
+        # always current; stdscr.getmaxyx() lags until resizeterm() updates it.
+        try:
+            term_size = os.get_terminal_size()
+            screen_rows, screen_cols = term_size.lines, term_size.columns
+        except OSError:
+            screen_rows, screen_cols = CursesMenu.stdscr.getmaxyx()
         curses.resizeterm(screen_rows, screen_cols)
+        # Re-apply terminal settings that a resize event can disturb on some
+        # terminal emulators (observed on WSL/Windows and VSCode).
+        curses.noecho()
+        curses.cbreak()
+        CursesMenu.stdscr.keypad(True)  # noqa: FBT003
+        curses.curs_set(0)
+        # Recreate the pad at the new terminal size so refresh never exceeds
+        # the pad boundary.
+        pad_rows = max(self.menu_height, screen_rows)
+        self.screen = curses.newpad(pad_rows, screen_cols)
         self.draw()
+        # Discard any KEY_RESIZE events that were queued during a drag resize;
+        # without this, rapid SIGWINCH delivery can flood the input loop.
+        try:
+            curses.flushinp()
+        except curses.error:  # pragma: no cover
+            pass
 
     def clear_screen(self) -> None:
         """Clear the screen for this menu."""
